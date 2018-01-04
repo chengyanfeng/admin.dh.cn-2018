@@ -1,0 +1,17 @@
+<div id="pad-wrapper" class="form-page">
+    <div class="row-fluid form-wrapper">
+        <div class="span12 column">
+            <form operation="do_file_upload" object="index" enctype="multipart/form-data">
+                <div class="field-box">
+                    <label>文件：</label>
+                    <input name="file" id="file" class="span3 inline-input" type="file" value="" required/>
+                </div>
+                <div class="field-box">
+                    <input type="hidden" id="bind_input" value="{$input}">
+                    <input type="submit" class="btn-flat default" value="提 交">
+                    <input type="button" class="btn-flat gray" action="cancel" value="取 消">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

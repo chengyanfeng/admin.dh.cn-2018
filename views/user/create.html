@@ -1,0 +1,50 @@
+<div id="pad-wrapper" class="form-page">
+    <div class="row-fluid form-wrapper">
+        <div class="span12 column">
+            <form operation="add" object="user">
+                <div class="field-box">
+                    <label>名称：</label>
+                    <input name="name" id="name" class="span6 inline-input" type="text" value="" required />
+                </div>
+                <div class="field-box">
+                    <label>公司：</label>
+                    <input name="corp" id="corp" class="span6 inline-input" type="text" value="" required />
+                </div>
+                <div class="field-box">
+                    <label>邮箱：</label>
+                    <input name="email" id="email" class="span6 inline-input" type="text" value="" required />
+                </div>
+                <div class="field-box">
+                    <label>手机号：</label>
+                    <input name="mobile" id="mobile" class="span6 inline-input" type="text" value="" required />
+                </div>
+                <div class="field-box">
+                    <label>密码：</label>
+                    <input name="password" id="password" class="span6 inline-input" type="text" value="" required />
+                </div>
+                <div class="field-box">
+                    <label>状态：</label>
+                    <label class="radio" style="width: 90px">
+                        <input name="status" type="radio" value="0" checked/><span>未审核</span>
+                    </label>
+                    <label class="radio" style="width: 90px">
+                        <input name="status" type="radio" value="1" /><span>审核通过</span>
+                    </label>
+                </div>
+                <div class="field-box">
+                    <label>授权：</label>
+                    <label class="checkbox" style="margin-left: 10px;width: 90px">
+                        <input type="checkbox" name="is_dataI_user" value="1" title="dataI" /><span>dataI</span>
+                    </label>
+                    <label class="checkbox" style="width: 90px">
+                        <input type="checkbox" name="is_dataX_user" value="1" title="dataX"/><span>dataX</span>
+                    </label>
+                </div>
+                <div class="field-box">
+                    <input type="submit" class="btn-flat default" value="提 交">
+                    <input type="button" class="btn-flat gray" action="cancel" value="取 消">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
