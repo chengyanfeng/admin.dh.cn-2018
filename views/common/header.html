@@ -40,17 +40,30 @@
                     <div class="arrow_border"></div>
                 </div>
             {{else}}
-            <li> 
+            <li>
             {{end}}
             {{if compare .Sub nil}}
                 <a href="{{.Path}}"><span>{{.Name}}</span></a>
             {{else}}
-                <a href="#" class="dropdown-toggle" ><span>{{.Name}}</span></a>
-                <ul class="submenu" style="display:block">
+                <a href="#" class="dropdown-toggle" >
+
+                    <span>{{.Name}}</span></a>
+            {{ if eq .On 0}}
+                <ul class="submenu" >
+                    {{ else }}
+                    <ul class="active  submenu" >
+                        {{ end }}
                     {{- range .Sub}}
-                        <li>
-                            <a href="{{.Path}}">—{{.Name}}</a>
+                     {{ if eq .On 1}}
+
+                        <li class="active">
+                            <a href="{{.Path}}">{{.Name}}</a>
                         </li>
+                    {{else}}
+                    <li>
+                        <a href="{{.Path}}">{{.Name}}</a>
+                    </li>
+                    {{ end }}
                     {{- end}}
                 </ul>  
             {{end}}

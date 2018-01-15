@@ -319,6 +319,34 @@ i.table-delete{
 	width: 1000px;
 	margin: 0 0 0 -500px;
 }
+.modalcorp {
+	display: none;
+	top: 10%;
+	width: 1000px;
+	margin: 0 0 0 -500px;
+}
+
+.modalEditAndAdd {
+ 	top: 10%;
+ 	width: 500px;
+ 	left:1000px;
+ 	margin: 0 0 0 -500px;
+ }
+ .changeType {
+
+ 	top: 22%;
+ 	width: 500px;
+ 	left:1000px;
+ 	margin: 0 0 0 -500px;
+ }
+.modaluserscreen {
+	top: 15%;
+	left:70%;
+	width: 521px;
+	height:303px；
+	margin: 0 0 0 -500px;
+
+}
 
 .modal.loading .modal-header .loader {
 	height: 36px;

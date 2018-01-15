@@ -23,9 +23,9 @@
     /**
      * Dialog html markup
      */
-    var __DIALOG_HTML = "<div class='modal' style=\"display: none;\">" + 
+    var __DIALOG_HTML = "<div class='modal' id='dialogchange' style=\"display: none;\">" +
         "<div class='modal-header loading'>" +
-        "<a href='#' class='close'></a>" + 
+        "<a href='#' onclick='location.reload()' class='close'></a>" +
         "<span class='loader'></span><h3></h3>" + 
         "</div>" + 
         "<div class='modal-body'>" + 

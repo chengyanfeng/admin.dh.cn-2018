@@ -4,24 +4,42 @@ import (
 	"strings"
 	"strconv"
 	"common.dh.cn/utils"
+
 )
+
+var  sub=  []utils.P{
+
+	utils.P{
+		"On": 0,
+		"Path": "/user",
+		"Name": "用户管理",
+
+
+	},
+	utils.P{
+		"On": 0,
+		"Path": "/corp/list",
+		"Name": "团队管理",
+	},
+}
+
 
 var Menu = []utils.P{
 	utils.P{
 		"On": 0,
 		"Path": "/",
 		"Name": "首页",
+
+
 	},
 	utils.P{
 		"On": 0,
-		"Path": "/user",
-		"Name": "用户管理",
+		"Path": "/",
+		"Name": "账号管理",
+		"Sub": sub,
+
 	},
-	utils.P{
-		"On": 0,
-		"Path": "/corp",
-		"Name": "团队管理",
-	},
+
 }
 
 func PagerHtml(num int, totalpage int, perpage int, curpage int, mpurl string) string {

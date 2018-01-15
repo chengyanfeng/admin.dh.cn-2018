@@ -1,30 +1,32 @@
-<form object='user' class="search">
+<form object='user' class="search" name="用户">
     <div class="table-products section">
         <div class="row-fluid head">
             <div class="span12">
                 <h4>用户列表</h4>
+                <a class="btn-flat default" action='new' title="新增用户" style="margin-left:1020px;margin-top:-100px">新增用户</a>
             </div>
         </div>
-        <div class="row-fluid filter-block">
+        <div class="row-fluid filter-block" >
+
             <div class="filter-field">
                 <span>搜索:</span>
-                <input name="search" type="text" value="{{.search}}">
+                <input name="search" type="text" value="{{.search}}" >
             </div>
             <div class="filter-field">
                 <span>状态:</span>
-                <select  name="status" id="status" class="select2" style="width: 140px">
+                <select  name="status" id="status" value={{.status}} class="select2" style="width: 140px;height:30px">
                     <option value="">全部</option>
-                    <option value="0">未审核</option>
-                    <option value="1">审核通过</option>
-                    <option value="-1">已删除</option>
+                    <option value=0>未审核</option>
+                    <option value=1 selected>审核通过</option>
+                    <option value=-1>已删除</option>
                 </select>
             </div>
-            <div class="filter-field">
+            <div  class="filter-field" >
                 <span>授权产品:</span>
-                <select  name="auth" id="auth" class="select2" style="width: 140px">
+                <select  name="businesstype" id="Businesstype" value={{.status}} class="select2" style="width: 140px;height:30px">
                     <option value="">全部</option>
-                    <option value="Data-I">Data-I</option>
-                    <option value="Data-X">Data-X</option>
+                    <option value="is_data_i_user">Data-I</option>
+                    <option value="is_data_x_user">Data-X</option>
                 </select>
             </div>
             <div class="filter-field">
@@ -35,28 +37,82 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th style="width: 5%"><span class="line"></span><input type="checkbox"></th>
-                    <th style="width: 20%"><span class="line"></span>ID</th>
-                    <th style="width: 10%"><span class="line"></span>用户名</th>
-                    <th style="width: 20%"><span class="line"></span>邮箱</th>
-                    <th style="width: 20%"><span class="line"></span>手机号</th>
-                    <th style="width: 15%"><span class="line"></span>注册时间</th>
-                    <th style="width: 15%"><span class="line"></span>操作</th>
+                    <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
+                    <th style="width: 10%"><span class="line"></span>ID</th>
+                    <th style="width: 8%"><span class="line"></span>用户名</th>
+                    <th style="width: 8%"><span class="line"></span>手机号</th>
+                    <th style="width: 9%"><span class="line"></span>邮箱</th>
+                    <th style="width: 9%"><span class="line"></span>公司</th>
+                    <th style="width: 9%"><span class="line"></span>业务类型</th>
+                    <th style="width: 10%"><span class="line"></span>注册时间</th>
+                    <th style="width: 7%"><span class="line"></span>账号状态</th>
+                    <th style="width: 18%"><span class="line"></span>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {{- range .List}}
                     <tr>
-                        <td><input type="checkbox"></td>
+                        <td><input type="checkbox" class="list_delect"></td>
                         <td>{{.ObjectId}}</td>
                         <td>{{.Name}}</td>
-                        <td>{{.Email}}</td>
                         <td>{{.Mobile}}</td>
-                        <td>{{.CreateTime}}</td>
+                        <td>{{.Email}}</td>
+                        <td>{{.Corp}}</td>
+                        {{if  eq  .IsDataIUser 1 }}
+                            {{ if eq  .IsDataXUser 1}}
+                             <td>Data-I;Data-X</td>
+                                {{ else }}
+                                <td>Data-I</td>
+                            {{end}}
+                        {{ else  }}
+                            {{ if eq  .IsDataXUser 1}}
+                                <td>Data-X</td>
+                                {{ else }}
+                                 <td>无业务类型</td>
+                            {{end}}
+                        {{ end }}
+                        <td>{{.CreateTime}}
+                            {{if  eq .Status 1}}
+                        <td>通过{{.Status}}</td>
+                        {{  else if  eq .Status 0}}
+                        <td>待审核</td>
+                        {{  else if  eq .Status -1}}
+                        <td>已停用</td>
+                        {{ end }}
                         <td>
                             <ul class="actions" style="float: left;">
-                                <li><a action='edit' object-id="{{.ObjectId}}"  title="编辑用户">编辑</a></li>
-                                <li><a action='delete' object-id="{{.ObjectId}}" >删除</a></li>
+                                <a action='edit' object-id="{{.ObjectId}}"  title="编辑用户">编辑</a>
+                             {{if  eq .Status 1}}
+
+                                |
+                                <a action='update' object-id="{{.ObjectId}}" name="Down" username="{{.Name}}">停用</a>
+                                    {{else if  eq .Status 0 }}
+                                |
+                                <a action='update' object-id="{{.ObjectId}}"  username="{{.Name}}">审核</a>
+
+                                {{ else if  eq .Status -1 }}
+                                |
+                                <a action='update' object-id="{{.ObjectId}}" name ="Up"  username="{{.Name}}" >启用</a>
+                                {{ end }}
+                                {{if  eq  .IsDataIUser 1 }}
+                                    {{ if eq  .IsDataXUser 1}}
+                                |
+                                <a action='ManageCorp' object-id="{{.ObjectId}}" title="管理团队">管理团队</a>
+                                |
+                                <a action='userScreen' object-id="{{.ObjectId}}" title="管理大屏">管理大屏</a>
+                                             {{ else }}
+                                |
+                                <a action='userScreen' object-id="{{.ObjectId}}" title="管理大屏" >管理大屏</a>
+                                        {{end}}
+                                {{ else  }}
+                                    {{ if eq  .IsDataXUser 1}}
+                                |
+                                <a action='ManageCorp' object-id="{{.ObjectId}}" >管理团队</a>
+                                    {{ else }}
+
+                                    {{end}}
+                                {{ end }}
+
                             </ul>
                         </td>
                     </tr>
@@ -65,8 +121,13 @@
             </table>
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
-        <div class="pull-left" style="padding-left: 20px">
-                <a class="btn-flat default" action='new' title="新增用户">新增用户</a>
+        <div class="pull-left" style="padding-left: 20px;margin-top:3%">
+            {{ if   eq  0 (.List|len)  }}
+            {{else}}
+
+            <input type="button" id="listdelect" class="btn btn-lg" value="删除"  disabled="disabled" >
+            <input type="button" id="listchangetype" class="btn btn-lg"  title="批量修改业务类型" value="批量修改业务" disabled="disabled" >
+            {{end}}
         </div>
     </div>
 </form>
