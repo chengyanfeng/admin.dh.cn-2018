@@ -25,6 +25,10 @@ func init() {
 
 	//自动注入路由
 	beego.AutoRouter(&controllers.CorpController{})
+	beego.AutoRouter(&controllers.SourcetypeController{})
+	beego.AutoRouter(&controllers.ScreenController{})
+	beego.AutoRouter(&controllers.UserscreenController{})
+
 
 
 

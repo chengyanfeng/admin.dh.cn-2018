@@ -1,12 +1,11 @@
-<form object='corp' class="search" name="团队">
+<form object='screen' class="search" name="大屏膜版">
     <div class="table-products section">
         <div class="row-fluid head">
             <div class="span12">
-                <h4>团队列表</h4>
+                <h4>大屏膜版列表</h4>
             </div>
         </div>
         <div class="row-fluid filter-block" style="margin-left: 335px;">
-            <input type="button" id="listdelect" class="btn btn-lg" value="批量停用" style="margin-left:100px;" disabled="disabled" >
             <div class="filter-field">
                 <span>搜索:</span>
                 <input name="search" type="text" value="{{.search}}">
@@ -48,12 +47,9 @@
                 <tr>
                     <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
                     <th style="width: 8%"><span class="line"></span>ID</th>
-                    <th style="width: 10%"><span class="line" title="团队名称"></span>团队名称</th>
-                    <th style="width: 8%"><span class="line"></span>团队人数</th>
-                    <th style="width: 10%"><span class="line"></span>联系邮箱</th>
-                    <th style="width: 15%"><span class="line"></span>联系人手机号</th>
-                    <th style="width: 15%"><span class="line"></span>注册时间</th>
-                    <th style="width: 8%"><span class="line"></span>团队状态</th>
+                    <th style="width: 10%"><span class="line" title="膜版"></span>膜版名称</th>
+                    <th style="width: 8%"><span class="line"></span>更新时间</th>
+                    <th style="width: 10%"><span class="line"></span>状态</th>
                     <th style="width: 25%"><span class="line"></span>操作</th>
                 </tr>
                 </thead>
@@ -62,23 +58,20 @@
                     <tr>
                         <td><input type="checkbox" id="child" class="list_delect"></td>
                         <td>{{.ObjectId}}</td>
-                        <td>{{.CropName}}</td>
-                        <td>{{.CropCount}}</td>
-                        <td>{{.CropEmail}}</td>
-                        <td>{{.CropMobile}}</td>
+                        <td>{{.Name}}</td>
                         <td>{{.CreateTime}}</td>
-                        <td>{{.CropStatus}}</td>
+                        <td>{{.Status}}</td>
                         <td>
                             <ul class="actions" style="float: left;">
-                                {{ if eq .CropStatus 1 }}
-                                <li><a action='update' object-id="{{.ObjectId}}" value="-1" title="停用" name="{{.CropName}}"> 停用</a></li>|
-                                {{else if  eq .CropStatus -1 }}
-                                <li><a action='update' object-id="{{.ObjectId}}" value="1" title="启用" name="{{.CropName}}">启用</a></li>|
-                                {{else if  eq .CropStatus 0 }}
-                                <li><a action='update' object-id="{{.ObjectId}}" value="1" title="待审核" name="{{.CropName}}">待审核</a></li>|
+                                {{ if eq .Status 1 }}
+                                <li><a action='update' object-id="{{.ObjectId}}" value="-1" title="停用" name="{{.Name}}"> 停用</a></li>|
+                                {{else if  eq .Status -1 }}
+                                <li><a action='update' object-id="{{.ObjectId}}" value="1" title="启用" name="{{.Name}}">启用</a></li>|
+                                {{else if  eq .Status 0 }}
+                                <li><a action='update' object-id="{{.ObjectId}}" value="1" title="待审核" name="{{.Name}}">待审核</a></li>|
                                 {{ end }}
                                 <li><a action='edit' object-id="{{.ObjectId}}"  title="编辑团队">编辑</a></li>|
-                                <li><a action='BangDing'  Rmethod="getusercorp" object-id="{{.ObjectId}}" title="管理成员" >管理成员</a></li>
+                                <li><a action='delete'  object-id="{{.ObjectId}}" title="删除" name="{{.Name}}">删除</a></li>
 
                             </ul>
                         </td>
@@ -89,7 +82,7 @@
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
         <div class="pull-left" style="padding-left: 20px">
-                <a class="btn-flat default" action='new' title="添加团队">新增加团队</a>
+            <input type="button" id="listdelect" class="btn btn-lg" value="批量停用" style="margin-top:15px;" disabled="disabled" >
         </div>
     </div>
 </form>

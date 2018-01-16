@@ -62,6 +62,8 @@ func (c *CorpController) List() {
 				int,_:=strconv.Atoi(status)
 				mpurl=mpurl+"&status="+status
 				condor=cond.AndCond(condor).And("status",int)
+			}else {
+				c.Data["status"] = "nil"
 			}
 
 			number,_:=new(models.DhCorp).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).All(&list)
@@ -85,6 +87,9 @@ func (c *CorpController) List() {
 			int,_:=strconv.Atoi(status)
 			filters["status"]=int
 			mpurl=mpurl+"&status="+status
+		}else {
+
+			c.Data["status"] = "nil"
 		}
 
 		total,total_page,list = new(models.DhCorp).OrderPager(page-1, page_size, filters,"-create_time")

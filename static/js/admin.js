@@ -148,7 +148,7 @@ function common_list_init(){
     });
     form.delegate("a[action='delete']",'click',function () {
         var object_name = $(this).parents(".search").attr('object');
-        common_object_delete(object_name,$(this).attr('object-id'));
+        common_object_delete(object_name,$(this).attr('object-id'),$(this));
     });
 
 
@@ -175,11 +175,11 @@ function common_list_init(){
             var object_name = $(this).parents(".search").attr('object');
             if (object_name=="user"){
 
-                        common_update_status_avatar(object_name,$(this).attr('object-id'),$(this).attr('name'),$(this).attr('username'));
-}else{
+                     common_update_status_avatar(object_name,$(this).attr('object-id'),$(this).attr('name'),$(this).attr('username'));
+                    }else{
 
-common_update_status(object_name,$(this).attr('object-id'),$(this).attr('name'),$(this).attr('value'),$(this).attr('title'))
-}
+                common_update_status(object_name,$(this).attr('object-id'),$(this).attr('name'),$(this).attr('value'),$(this).attr('title'))
+                    }
         });
       <!--管理团队绑定-->
       form.delegate("a[action='ManageCorp']",'click',function () {
@@ -215,9 +215,7 @@ common_update_status(object_name,$(this).attr('object-id'),$(this).attr('name'),
          });
            <!--管理用户大屏---移除-->
                $('body').on('click', '#userScreen tbody td a[action="ManageScreenRemove"]',function(){
-
-            alert($("#addUserScreen").attr('user-id'))
-                    common_delect_userscreen($(this),$("#addUserScreen").attr('user-id'),$(this).attr('object-id'));
+            common_delect_userscreen($(this),$("#addUserScreen").attr('user-id'),$(this).attr('object-id'));
                })
 
             <!--管理团队成员绑定--通用-->
@@ -250,6 +248,12 @@ common_update_status(object_name,$(this).attr('object-id'),$(this).attr('name'),
                   var object_id = $("#pad-wrapper").attr('object-id');
                  common_manage_bangding($(this),object_name,object_id,"modalcorp",$("#selectCorp").val());
                })
+               <!-- 管理大屏-主页删除通用->
+                              $('body').on('click', '#remove',function(){
+                                 var object_name = $("#pad-wrapper").attr('object');
+                                 var object_id = $("#pad-wrapper").attr('object-id');
+                                common_manage_bangding($(this),object_name,object_id,"modalcorp",$("#selectCorp").val());
+                              })
 }
 
 
@@ -667,14 +671,15 @@ function common_window_custom(form){
 }
 
 /**
- * 对象删除操作
+ * 对象删除操作 通用
  * @param object_name
  * @param object_id
  */
-function common_object_delete(object_name,object_id){
+function common_object_delete(object_name,object_id,button){
+    var name=button.attr("name")
     common_ajax_get('/' + object_name + '/remove?id=' + object_id,function(){
         window.location.reload(true);
-    },true,"确定删除？");
+    },true,"确定删除"+name+"?");
 }
 /**
  * 用户膜版启动，停用，审核 操作
@@ -706,7 +711,7 @@ if (name=='Down'){
 function common_update_status(object_name,object_id,name,value,title){
 common_ajax_get('/' + object_name + '/update?id=' + object_id+'&status='+value,function(){
                     window.location.reload(true);
-                },true,"确定"+title+name+"通过？");
+                },true,"确定"+title+name+"?");
 
 }
 
@@ -1384,3 +1389,7 @@ function common_manage_changetype(button,object_name,object_id,modal){
 
 
    })
+
+
+
+

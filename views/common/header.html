@@ -47,7 +47,10 @@
             {{else}}
                 <a href="#" class="dropdown-toggle" >
 
-                    <span>{{.Name}}</span></a>
+                    <span>{{.Name}}</span>
+
+                </a>
+
             {{ if eq .On 0}}
                 <ul class="submenu" >
                     {{ else }}
@@ -65,7 +68,11 @@
                     </li>
                     {{ end }}
                     {{- end}}
-                </ul>  
+                        {{ if eq .On 0}}
+                        </ul>
+                            {{ else }}
+                            </ul>
+                                {{ end }}
             {{end}}
             </li>
         {{- end}}

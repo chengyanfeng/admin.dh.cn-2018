@@ -14,19 +14,48 @@
             </div>
             <div class="filter-field">
                 <span>状态:</span>
-                <select  name="status" id="status" value={{.status}} class="select2" style="width: 140px;height:30px">
-                    <option value="">全部</option>
-                    <option value=0>未审核</option>
-                    <option value=1 selected>审核通过</option>
-                    <option value=-1>已删除</option>
+
+                <select  name="status" id="status" value="{{.status}}" class="select2" style="width: 140px;height:30px">
+                    {{ if eq .status "nil"  }}
+                    <option value="" selected="selected" >全部</option>
+                    <option value=0  >未审核</option>
+                    <option value=1  >审核通过</option>
+                    <option value=-1 >已删除</option>
+                    {{ else if eq .status "0"}}
+                    <option value="" >全部</option>
+                    <option value=0  selected="selected" >未审核</option>
+                    <option value=1  >审核通过</option>
+                    <option value=-1  >已删除</option>
+                    {{ else if eq .status "1"}}
+                    <option value="" >全部</option>
+                    <option value=0  >未审核</option>
+                    <option value=1  selected="selected">审核通过</option>
+                    <option value=-1  >已删除</option>
+                    {{ else if eq .status "-1"}}
+                    <option value="" >全部</option>
+                    <option value=0  >未审核</option>
+                    <option value=1  >审核通过</option>
+                    <option value=-1  selected="selected" >已删除</option>
+                    {{ end }}
                 </select>
+
             </div>
             <div  class="filter-field" >
                 <span>授权产品:</span>
                 <select  name="businesstype" id="Businesstype" value={{.status}} class="select2" style="width: 140px;height:30px">
-                    <option value="">全部</option>
+                    {{ if eq .businesstype "nil"  }}
+                    <option value="" selected="selected">全部</option>
                     <option value="is_data_i_user">Data-I</option>
                     <option value="is_data_x_user">Data-X</option>
+                    {{  else  if eq .businesstype "is_data_i_user"  }}
+                    <option value="" >全部</option>
+                    <option value="is_data_i_user" selected="selected">Data-I</option>
+                    <option value="is_data_x_user">Data-X</option>
+                    {{  else  if eq .businesstype "is_data_x_user"  }}
+                    <option value="" >全部</option>
+                    <option value="is_data_i_user" selected="selected">Data-I</option>
+                    <option value="is_data_x_user">Data-X</option>
+                    {{end }}
                 </select>
             </div>
             <div class="filter-field">

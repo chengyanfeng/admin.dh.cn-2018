@@ -7,7 +7,7 @@ import (
 
 )
 
-var  sub=  []utils.P{
+var  accountSub=  []utils.P{
 
 	utils.P{
 		"On": 0,
@@ -22,8 +22,36 @@ var  sub=  []utils.P{
 		"Name": "团队管理",
 	},
 }
+var  datasourceSub=  []utils.P{
+
+	utils.P{
+		"On": 0,
+		"Path": "/sourcetype/list",
+		"Name": "数据源分类管理",
 
 
+	},
+	utils.P{
+		"On": 0,
+		"Path": "/sourcetype/list",
+		"Name": "数据源管理",
+	},
+}
+var  screenSub=  []utils.P{
+
+	utils.P{
+		"On": 0,
+		"Path": "/screen/list",
+		"Name": "膜版管理",
+
+
+	},
+	utils.P{
+		"On": 0,
+		"Path": "/userscreen/list",
+		"Name": "用户大屏管理",
+	},
+}
 var Menu = []utils.P{
 	utils.P{
 		"On": 0,
@@ -36,7 +64,21 @@ var Menu = []utils.P{
 		"On": 0,
 		"Path": "/",
 		"Name": "账号管理",
-		"Sub": sub,
+		"Sub": accountSub,
+
+	},
+	utils.P{
+		"On": 0,
+		"Path": "/",
+		"Name": "数据源管理",
+		"Sub": datasourceSub,
+
+	},
+	utils.P{
+		"On": 0,
+		"Path": "/",
+		"Name": "大屏管理",
+		"Sub": screenSub,
 
 	},
 

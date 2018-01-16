@@ -63,11 +63,15 @@ func (c *UserController) List() {
 				int,_:=strconv.Atoi(status)
 				mpurl=mpurl+"&status="+status
 				condor=cond.AndCond(condor).And("status",int)
+			}else{
+				c.Data["status"] = "nil"
 			}
 			if len(businesstype)>0{
 				c.Data["businesstype"] = businesstype
 				mpurl=mpurl+"&businesstype="+businesstype
 				condor=cond.AndCond(condor).And(businesstype,1)
+			}else {
+				c.Data["businesstype"] ="nil"
 			}
 			number,_:=new(models.DhUser).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).All(&list)
 			total,_=new(models.DhUser).Query().SetCond(condor).Count()
@@ -90,11 +94,15 @@ func (c *UserController) List() {
 			int,_:=strconv.Atoi(status)
 			filters["status"]=int
 			mpurl=mpurl+"&status="+status
+		}else{
+			c.Data["status"] = "nil"
 		}
 		if len(businesstype)>0{
 			c.Data["businesstype"] = businesstype
 			filters[businesstype]=1
 			mpurl=mpurl+"&businesstype="+businesstype
+		}else {
+			c.Data["businesstype"] ="nil"
 		}
 	total,total_page,list = new(models.DhUser).OrderPager(page-1, page_size, filters,"-create_time")
 	}
@@ -476,7 +484,7 @@ func (c *UserController) DelectUserScreen() {
 	dhrelation := map[string]interface{}{}
 	dhrelation["user_id"]=user_id
 	fmt.Println(id,"-------------------user_id--------")
-	dhrelation["relate_id"]="userScreen"
+	dhrelation["relate_type"]="userScreen"
 	dhrelation["object_id"]=id
 	user := new(models.DhUser).Find(id)
 	if user == nil {
