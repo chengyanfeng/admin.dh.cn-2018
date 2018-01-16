@@ -92,7 +92,7 @@ func (c *CorpController) List() {
 			c.Data["status"] = "nil"
 		}
 
-		total,total_page,list = new(models.DhCorp).OrderPager(page-1, page_size, filters,"-create_time")
+		total,total_page,list = new(models.DhCorp).OrderPager(page, page_size, filters,"-create_time")
 	}
 	data := []utils.P{}
 	if len(list) > 0 {

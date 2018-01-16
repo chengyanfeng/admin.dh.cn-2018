@@ -50,6 +50,7 @@ func (c *UserscreenController) List() {
 	filters["status__gte"]=0
 	search := c.GetString("search")
 	status:= c.GetString("status")
+	fmt.Println("aaaaaaaaaaaaaaaaaaaa")
 	if len(search)>0{
 		cond := orm.NewCondition()
 		if len(search)>0{

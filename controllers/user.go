@@ -18,23 +18,23 @@ type UserController struct {
 
 func (c *UserController) init(i int) {
 	c.Layout = "common/layout.html"
-    c.LayoutSections = make(map[string]string)
+	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "common/header.html"
 	c.LayoutSections["HtmlFooter"] = "common/footer.html"
 	for   k,v :=range Menu{
-		 if k!=i{
-		v["On"]=0
-		 }else {
-			 Menu[i]["On"]=1
-			 if Menu[i]["Sub"]!=nil{
+		if k!=i{
+			v["On"]=0
+		}else {
+			Menu[i]["On"]=1
+			if Menu[i]["Sub"]!=nil{
 				a:= Menu[i]["Sub"].(interface{})
 				b:= a.([]utils.P)
 				for _,v:=range b {
 					v["On"]=1
 				}
-			 }
-		 }
-	 }
+			}
+		}
+	}
 	c.Data["Menu"]=Menu
 }
 
@@ -45,7 +45,7 @@ func (c *UserController) List() {
 	var list []*models.DhUser
 	c.TplName = "user/index.html"
 	page,_ := c.GetInt64("page",1)
-	page_size,_ := c.GetInt64("page_size",3)
+	page_size,_ := c.GetInt64("page_size",5)
 	filters := map[string]interface{}{}
 	search := c.GetString("search")
 	status:= c.GetString("status")
@@ -57,7 +57,7 @@ func (c *UserController) List() {
 			c.Data["search"] = search
 			mpurl=mpurl+"&search="+search
 			condor := cond.Or("name__icontains", search).Or("corp__icontains", search).
-			Or("email__icontains", search).Or("mobile__icontains", search)
+				Or("email__icontains", search).Or("mobile__icontains", search)
 			if len(status)>0{
 				c.Data["status"] = status
 				int,_:=strconv.Atoi(status)
@@ -69,11 +69,13 @@ func (c *UserController) List() {
 			if len(businesstype)>0{
 				c.Data["businesstype"] = businesstype
 				mpurl=mpurl+"&businesstype="+businesstype
+				fmt.Println(businesstype,"----------------a-----------------")
 				condor=cond.AndCond(condor).And(businesstype,1)
 			}else {
+
 				c.Data["businesstype"] ="nil"
 			}
-			number,_:=new(models.DhUser).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).All(&list)
+			number,_:=new(models.DhUser).Query().Offset(page*page_size).Limit(page_size).SetCond(condor).All(&list)
 			total,_=new(models.DhUser).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1
@@ -90,6 +92,7 @@ func (c *UserController) List() {
 
 	}else {
 		if len(status)>0{
+
 			c.Data["status"] = status
 			int,_:=strconv.Atoi(status)
 			filters["status"]=int
@@ -104,9 +107,11 @@ func (c *UserController) List() {
 		}else {
 			c.Data["businesstype"] ="nil"
 		}
-	total,total_page,list = new(models.DhUser).OrderPager(page-1, page_size, filters,"-create_time")
+		fmt.Println(filters,"adsaijfoewjfoijdsfw")
+		total,total_page,list = new(models.DhUser).OrderPager(page, page_size, filters,"-create_time")
+	fmt.Println("list",list)
 	}
-		data := []utils.P{}
+	data := []utils.P{}
 	if len(list) > 0 {
 		for _, info := range list {
 			_user := utils.P{}
@@ -153,17 +158,17 @@ func (c *UserController) Add() {
 	user.Password = utils.Md5(c.GetString("password"), def.Md5Salt)
 	user.Auth = utils.Md5(c.GetString("email"), c.GetString("password"), rand.Intn(1000)*rand.Intn(1000))
 	if c.GetString("status") == "1" {
-		user.Status = 1 
+		user.Status = 1
 	} else {
 		user.Status = 0
 	}
 	if c.GetString("is_dataI_user") == "1" {
-		user.IsDataIUser = 1 
+		user.IsDataIUser = 1
 	} else {
 		user.IsDataIUser = 0
 	}
 	if c.GetString("is_dataX_user") == "1" {
-		user.IsDataXUser = 1 
+		user.IsDataXUser = 1
 	} else {
 		user.IsDataXUser = 0
 	}
@@ -188,17 +193,17 @@ func (c *UserController) Update() {
 	user.Email = c.GetString("email")
 	user.Mobile = c.GetString("mobile")
 	if c.GetString("status") == "1" {
-		user.Status = 1 
+		user.Status = 1
 	} else {
 		user.Status = 0
 	}
 	if c.GetString("is_dataI_user") == "1" {
-		user.IsDataIUser = 1 
+		user.IsDataIUser = 1
 	} else {
 		user.IsDataIUser = 0
 	}
 	if c.GetString("is_dataX_user") == "1" {
-		user.IsDataXUser = 1 
+		user.IsDataXUser = 1
 	} else {
 		user.IsDataXUser = 0
 	}
@@ -249,7 +254,7 @@ func (c *UserController) Listremove() {
 	if  len(argerr[0]) > 0 {
 		c.EchoJsonErr("删除失败")
 	}
-       c.EchoJsonOk()
+	c.EchoJsonOk()
 
 
 }
@@ -287,9 +292,9 @@ func (c *UserController) GetCorp() {
 	filtersAllCorp := map[string]interface{}{}
 	filtersAllCorp["status__gte"] = 0
 	corpName := c.GetString("corpName")
-		if corpName!=""&&corpName!="undefined"{
+	if corpName!=""&&corpName!="undefined"{
 		filtersAllCorp["name"]=corpName
-		}
+	}
 	user := new(models.DhUser).Find(id)
 	if user == nil {
 		c.EchoJsonErr("用户不存在")
@@ -348,30 +353,30 @@ func (c *UserController) DelectAndAddCorp() {
 	filtersUserCorp["object_id"]=object_id
 	filtersUserCorp["user_id"]=user_id
 	if title == "1"{
-	UserCorp := new(models.DhUserCorp).Find(filtersUserCorp)
-	if UserCorp == nil{
-		c.EchoJsonErr("团队不存在")
-		c.StopRun()
-	}
-
-	if UserCorp.Role =="1"{
-		UserCorpadminCount := map[string]interface{}{}
-		UserCorpadminCount["corp_id"]=corp_id
-		UserCorpadminCount["role"]=1
-	adminCount:=new(models.DhUserCorp).Count(UserCorpadminCount)
-		if adminCount<2{
-			c.EchoJsonErr("管理员唯一不可删除")
+		UserCorp := new(models.DhUserCorp).Find(filtersUserCorp)
+		if UserCorp == nil{
+			c.EchoJsonErr("团队不存在")
 			c.StopRun()
 		}
 
-		}
-	result := UserCorp.Delete(object_id)
-	if !result {
-		c.EchoJsonErr("删除失败")
-	} else {
-		c.EchoJsonOk()
+		if UserCorp.Role =="1"{
+			UserCorpadminCount := map[string]interface{}{}
+			UserCorpadminCount["corp_id"]=corp_id
+			UserCorpadminCount["role"]=1
+			adminCount:=new(models.DhUserCorp).Count(UserCorpadminCount)
+			if adminCount<2{
+				c.EchoJsonErr("管理员唯一不可删除")
+				c.StopRun()
+			}
 
-	}}
+		}
+		result := UserCorp.Delete(object_id)
+		if !result {
+			c.EchoJsonErr("删除失败")
+		} else {
+			c.EchoJsonOk()
+
+		}}
 	if title == "2" {
 		Corp := new(models.DhCorp).Find(object_id)
 		if Corp == nil{

@@ -45,16 +45,16 @@
                 <select  name="businesstype" id="Businesstype" value={{.status}} class="select2" style="width: 140px;height:30px">
                     {{ if eq .businesstype "nil"  }}
                     <option value="" selected="selected">全部</option>
-                    <option value="is_data_i_user">Data-I</option>
-                    <option value="is_data_x_user">Data-X</option>
-                    {{  else  if eq .businesstype "is_data_i_user"  }}
+                    <option value="is_dataI_user">Data-I</option>
+                    <option value="is_dataX_user">Data-X</option>
+                    {{  else  if eq .businesstype "is_dataI_user"  }}
                     <option value="" >全部</option>
-                    <option value="is_data_i_user" selected="selected">Data-I</option>
-                    <option value="is_data_x_user">Data-X</option>
-                    {{  else  if eq .businesstype "is_data_x_user"  }}
+                    <option value="is_dataI_user" selected="selected">Data-I</option>
+                    <option value="is_dataX_user">Data-X</option>
+                    {{  else  if eq .businesstype "is_dataX_user"  }}
                     <option value="" >全部</option>
-                    <option value="is_data_i_user" selected="selected">Data-I</option>
-                    <option value="is_data_x_user">Data-X</option>
+                    <option value="is_dataI_user" selected="selected">Data-I</option>
+                    <option value="is_dataX_user">Data-X</option>
                     {{end }}
                 </select>
             </div>
@@ -80,71 +80,71 @@
                 </thead>
                 <tbody>
                 {{- range .List}}
-                    <tr>
-                        <td><input type="checkbox" class="list_delect"></td>
-                        <td>{{.ObjectId}}</td>
-                        <td>{{.Name}}</td>
-                        <td>{{.Mobile}}</td>
-                        <td>{{.Email}}</td>
-                        <td>{{.Corp}}</td>
-                        {{if  eq  .IsDataIUser 1 }}
-                            {{ if eq  .IsDataXUser 1}}
-                             <td>Data-I;Data-X</td>
-                                {{ else }}
-                                <td>Data-I</td>
-                            {{end}}
-                        {{ else  }}
-                            {{ if eq  .IsDataXUser 1}}
-                                <td>Data-X</td>
-                                {{ else }}
-                                 <td>无业务类型</td>
-                            {{end}}
-                        {{ end }}
-                        <td>{{.CreateTime}}
+                <tr>
+                    <td><input type="checkbox" class="list_delect"></td>
+                    <td>{{.ObjectId}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Mobile}}</td>
+                    <td>{{.Email}}</td>
+                    <td>{{.Corp}}</td>
+                    {{if  eq  .IsDataIUser 1 }}
+                    {{ if eq  .IsDataXUser 1}}
+                    <td>Data-I;Data-X</td>
+                    {{ else }}
+                    <td>Data-I</td>
+                    {{end}}
+                    {{ else  }}
+                    {{ if eq  .IsDataXUser 1}}
+                    <td>Data-X</td>
+                    {{ else }}
+                    <td>无业务类型</td>
+                    {{end}}
+                    {{ end }}
+                    <td>{{.CreateTime}}
+                        {{if  eq .Status 1}}
+                    <td>通过{{.Status}}</td>
+                    {{  else if  eq .Status 0}}
+                    <td>待审核</td>
+                    {{  else if  eq .Status -1}}
+                    <td>已停用</td>
+                    {{ end }}
+                    <td>
+                        <ul class="actions" style="float: left;">
+                            <a action='edit' object-id="{{.ObjectId}}"  title="编辑用户">编辑</a>
                             {{if  eq .Status 1}}
-                        <td>通过{{.Status}}</td>
-                        {{  else if  eq .Status 0}}
-                        <td>待审核</td>
-                        {{  else if  eq .Status -1}}
-                        <td>已停用</td>
-                        {{ end }}
-                        <td>
-                            <ul class="actions" style="float: left;">
-                                <a action='edit' object-id="{{.ObjectId}}"  title="编辑用户">编辑</a>
-                             {{if  eq .Status 1}}
 
-                                |
-                                <a action='update' object-id="{{.ObjectId}}" name="Down" username="{{.Name}}">停用</a>
-                                    {{else if  eq .Status 0 }}
-                                |
-                                <a action='update' object-id="{{.ObjectId}}"  username="{{.Name}}">审核</a>
+                            |
+                            <a action='update' object-id="{{.ObjectId}}" name="Down" username="{{.Name}}">停用</a>
+                            {{else if  eq .Status 0 }}
+                            |
+                            <a action='update' object-id="{{.ObjectId}}"  username="{{.Name}}">审核</a>
 
-                                {{ else if  eq .Status -1 }}
-                                |
-                                <a action='update' object-id="{{.ObjectId}}" name ="Up"  username="{{.Name}}" >启用</a>
-                                {{ end }}
-                                {{if  eq  .IsDataIUser 1 }}
-                                    {{ if eq  .IsDataXUser 1}}
-                                |
-                                <a action='ManageCorp' object-id="{{.ObjectId}}" title="管理团队">管理团队</a>
-                                |
-                                <a action='userScreen' object-id="{{.ObjectId}}" title="管理大屏">管理大屏</a>
-                                             {{ else }}
-                                |
-                                <a action='userScreen' object-id="{{.ObjectId}}" title="管理大屏" >管理大屏</a>
-                                        {{end}}
-                                {{ else  }}
-                                    {{ if eq  .IsDataXUser 1}}
-                                |
-                                <a action='ManageCorp' object-id="{{.ObjectId}}" >管理团队</a>
-                                    {{ else }}
+                            {{ else if  eq .Status -1 }}
+                            |
+                            <a action='update' object-id="{{.ObjectId}}" name ="Up"  username="{{.Name}}" >启用</a>
+                            {{ end }}
+                            {{if  eq  .IsDataIUser 1 }}
+                            {{ if eq  .IsDataXUser 1}}
+                            |
+                            <a action='ManageCorp' object-id="{{.ObjectId}}" title="管理团队">管理团队</a>
+                            |
+                            <a action='userScreen' object-id="{{.ObjectId}}" title="管理大屏">管理大屏</a>
+                            {{ else }}
+                            |
+                            <a action='userScreen' object-id="{{.ObjectId}}" title="管理大屏" >管理大屏</a>
+                            {{end}}
+                            {{ else  }}
+                            {{ if eq  .IsDataXUser 1}}
+                            |
+                            <a action='ManageCorp' object-id="{{.ObjectId}}" >管理团队</a>
+                            {{ else }}
 
-                                    {{end}}
-                                {{ end }}
+                            {{end}}
+                            {{ end }}
 
-                            </ul>
-                        </td>
-                    </tr>
+                        </ul>
+                    </td>
+                </tr>
                 {{- end}}
                 </tbody>
             </table>
