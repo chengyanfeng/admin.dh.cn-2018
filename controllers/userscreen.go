@@ -39,6 +39,13 @@ func (c *UserscreenController) init(i int) {
 
 
 func (c *UserscreenController) List() {
+	defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
+		if err:=recover();err!=nil{
+			c.EchoJsonErr("出现异常")// 这里的err其实就是panic传入的内容，55
+		}
+
+	}()
+
 	var mpurl ="/userscreen?"
 	c.init(3)
 	var total,total_page int64
@@ -50,7 +57,7 @@ func (c *UserscreenController) List() {
 	filters["status__gte"]=0
 	search := c.GetString("search")
 	status:= c.GetString("status")
-	fmt.Println("aaaaaaaaaaaaaaaaaaaa")
+
 	if len(search)>0{
 		cond := orm.NewCondition()
 		if len(search)>0{
@@ -97,6 +104,9 @@ func (c *UserscreenController) List() {
 			filtersdxScreen["relate_type"]="userScreen"
 			dxScreen:= new(models.DhRelation).Find(filtersdxScreen)
 			user:=new(models.DhUser).Find(dxScreen.UserId)
+			if user==nil{
+				c.EchoJsonErr("用户查询失败")
+			}
 			Screen := utils.P{}
 			Screen["ObjectId"] = info.ObjectId
 			Screen["Name"] = info.Name
