@@ -39,9 +39,9 @@ func (c *UserscreenController) init(i int) {
 
 
 func (c *UserscreenController) List() {
-	defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
+	defer func(){
 		if err:=recover();err!=nil{
-			c.EchoJsonErr("出现异常")// 这里的err其实就是panic传入的内容，55
+			c.EchoJsonErr("出现异常")
 		}
 
 	}()
@@ -94,7 +94,7 @@ func (c *UserscreenController) List() {
 			c.Data["status"] = "nil"
 		}
 
-		total,total_page,list = new(models.DxScreen).OrderPager(page-1, page_size, filters,"-create_time")
+		total,total_page,list = new(models.DxScreen).OrderPager(page, page_size, filters,"-create_time")
 	}
 	data := []utils.P{}
 	if len(list) > 0 {
@@ -173,12 +173,12 @@ func (c *UserscreenController) Listremove() {
 func (c *UserscreenController) Remove() {
 	c.Require("id")
 	id := c.GetString("id")
-	dxScreenTemplate := new(models.DxScreenTemplate).Find(id)
-	if dxScreenTemplate == nil {
+	DxScreen := new(models.DxScreen).Find(id)
+	if DxScreen == nil {
 		c.EchoJsonErr("大屏膜版不存在")
 		c.StopRun()
 	}
-	result := dxScreenTemplate.Delete(id)
+	result := DxScreen.SoftDelete(id)
 	if !result {
 		c.EchoJsonErr("删除失败")
 	} else {

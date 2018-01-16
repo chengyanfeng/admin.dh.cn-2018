@@ -16,8 +16,8 @@
                     <tbody>
                     {{- range .userCorpData}}
                     <tr>
-                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.ObjectId}}</td>
-                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.ObjectId}}</td>
+                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Name}}</td>
+                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Email}}</td>
 
                         <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">
                             <select  name="userRole" id="userRole" title="改变用户角色" class="userRole" style="height:30px;width:90px">
@@ -43,9 +43,9 @@
                 <tbody>
                 {{- range .allCorpData}}
                 <tr>
-                    <td style="border-style:none;max-width: 50px;height:30px;overflow: hidden;text-overflow: ellipsis;">{{.ObjectId}}</td>
-                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Email}}</td>
+
                     <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Name}}</td>
+                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Email}}</td>
                     </td>
                     <td style="border-style:none"><a action='ManageRemoveAdd' object-id="{{.ObjectId}}" style="cursor:pointer" title="添加用户">添加用户</a>
                     </td>

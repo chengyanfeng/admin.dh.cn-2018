@@ -45,7 +45,7 @@ func (c *UserController) List() {
 	var list []*models.DhUser
 	c.TplName = "user/index.html"
 	page,_ := c.GetInt64("page",1)
-	page_size,_ := c.GetInt64("page_size",5)
+	page_size,_ := c.GetInt64("page_size",10)
 	filters := map[string]interface{}{}
 	search := c.GetString("search")
 	status:= c.GetString("status")
@@ -69,13 +69,12 @@ func (c *UserController) List() {
 			if len(businesstype)>0{
 				c.Data["businesstype"] = businesstype
 				mpurl=mpurl+"&businesstype="+businesstype
-				fmt.Println(businesstype,"----------------a-----------------")
 				condor=cond.AndCond(condor).And(businesstype,1)
 			}else {
 
 				c.Data["businesstype"] ="nil"
 			}
-			number,_:=new(models.DhUser).Query().Offset(page*page_size).Limit(page_size).SetCond(condor).All(&list)
+			number,_:=new(models.DhUser).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).All(&list)
 			total,_=new(models.DhUser).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1
@@ -107,7 +106,7 @@ func (c *UserController) List() {
 		}else {
 			c.Data["businesstype"] ="nil"
 		}
-		fmt.Println(filters,"adsaijfoewjfoijdsfw")
+
 		total,total_page,list = new(models.DhUser).OrderPager(page, page_size, filters,"-create_time")
 	fmt.Println("list",list)
 	}
@@ -306,12 +305,18 @@ func (c *UserController) GetCorp() {
 	UserCorpData := []utils.P{}
 	if len(userCorp) > 0 {
 		for _, info := range userCorp {
-			userCorp := utils.P{}
+			corp:=new(models.DhCorp).Find(info.CorpId)
+			if corp != nil{
+				userCorp := utils.P{}
 			userCorp["ObjectId"] = info.ObjectId
 			userCorp["CorpId"] = info.CorpId
 			userCorp["Role"] = info.Role
 			userCorp["Userid"] = info.UserId
+			userCorp["Name"]=corp.Name
+			userCorp["Email"]=corp.Email
+
 			UserCorpData = append(UserCorpData, userCorp)
+			}
 		}
 	}
 	c.Data["userCorpData"] = UserCorpData
@@ -421,7 +426,6 @@ func (c *UserController) DelectAndAddCorp() {
 }
 
 func (c *UserController) ListChangeType() {
-
 	c.Require("datas","changType-X","changType-I")
 	datas := c.GetString("datas")
 	changTypex,_ :=c.GetInt("changType-X")
@@ -440,7 +444,6 @@ func (c *UserController) ListChangeType() {
 		}
 	}
 	if errmasage[0]!="" {
-		fmt.Println(len(errmasage),"----------------------errmassage-----")
 		c.EchoJsonErr("部分更新失败")
 	}
 	c.EchoJsonOk()
@@ -451,8 +454,7 @@ func (c *UserController) GetUserScreen() {
 	id := c.GetString("id")
 	dhrelation := map[string]interface{}{}
 	dhrelation["user_id"]=id
-	fmt.Println(id,"-------------------user_id--------")
-	dhrelation["relate_id"]="userScreen"
+	dhrelation["relate_type"]="dx_screen"
 
 	user := new(models.DhUser).Find(id)
 	if user == nil {
@@ -460,6 +462,7 @@ func (c *UserController) GetUserScreen() {
 		c.StopRun()
 	}
 	userScreen := new(models.DhRelation).OrderList(dhrelation,"-create_time")
+
 	if userScreen == nil {
 		c.EchoJsonErr("用户无大屏数据")
 		c.StopRun()
@@ -470,10 +473,10 @@ func (c *UserController) GetUserScreen() {
 			alluserscreen := utils.P{}
 			alluserscreen["ObjectId"] = info.ObjectId
 			alluserscreen["Name"] = info.Name
+
 			userScreenData = append(userScreenData, alluserscreen)
 		}
 	}
-	fmt.Println(userScreenData,"------------------a-------------------")
 	c.Data["userScreenData"]=userScreenData
 	c.Data["name"]=user.Name
 	c.Data["userid"]=user.ObjectId
@@ -486,12 +489,14 @@ func (c *UserController) DelectUserScreen() {
 	c.Require("id","user_id")
 	id := c.GetString("id")
 	user_id := c.GetString("user_id")
+	fmt.Println(user_id,"--------------------user_id-------------")
+	fmt.Println(id,"--------------------id-------------")
+
 	dhrelation := map[string]interface{}{}
 	dhrelation["user_id"]=user_id
-	fmt.Println(id,"-------------------user_id--------")
-	dhrelation["relate_type"]="userScreen"
+	dhrelation["relate_type"]="dx_screen"
 	dhrelation["object_id"]=id
-	user := new(models.DhUser).Find(id)
+	user := new(models.DhUser).Find(user_id)
 	if user == nil {
 		c.EchoJsonErr("用户不存在")
 		c.StopRun()

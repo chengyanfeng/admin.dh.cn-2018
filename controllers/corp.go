@@ -46,7 +46,7 @@ func (c *CorpController) List() {
 	var total,total_page int64
 	var list []*models.DhCorp
 	page,_ := c.GetInt64("page",1)
-	page_size,_ := c.GetInt64("page_size",3)
+	page_size,_ := c.GetInt64("page_size",10)
 	search := c.GetString("search")
 	status:= c.GetString("status")
 	filters := map[string]interface{}{}
@@ -229,10 +229,10 @@ func (c *CorpController) GetUserCorp() {
 			CropUserData=append(CropUserData,users)
 		}
 	}
-	fmt.Println(filtersAllUser,"这是map")
+
 	DhUsers  :=new(models.DhUser).OrderList(filtersAllUser,"-create_time")
 	AllUserData := []utils.P{}
-	fmt.Println(DhUsers,"我们都是一家人")
+
 	if len(DhUsers) > 0 {
 		for _, info := range DhUsers {
 			user:=utils.P{}

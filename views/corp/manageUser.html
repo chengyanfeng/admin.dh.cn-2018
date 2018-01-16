@@ -42,9 +42,9 @@
                 <tbody>
                 {{- range .AllUserData}}
                 <tr>
-                    <td style="border-style:none;max-width: 50px;height:30px;overflow: hidden;text-overflow: ellipsis;">{{.userid}}</td>
-                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Email}}</td>
-                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Name}}</td>
+                    <td style="display:none">{{.userid}}</td>
+                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.name}}</td>
+                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.email}}</td>
                     </td>
                     <td style="border-style:none"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='1' style="cursor:pointer" style="cursor:pointer" title="添加用户"  headtitle="管理成员">添加用户</a>
 

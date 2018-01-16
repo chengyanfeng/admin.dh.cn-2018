@@ -2,7 +2,7 @@
     <div class="row-fluid form-wrapper">
         <div class="span12 column" style="position:relative;height:320px">
             <div class="form-group" style="position:absolute;height:30px;width:100%">
-                <a style="margin-left:10px;margin-top:-3px" user-id="{{.userid}}" id="addUserScreen" width="200px">{{.name}}所属团队</a>
+                <a style="margin-left:10px;margin-top:-3px" user-id="{{.userid}}" id="addUserScreen" width="200px">{{.name}}所有大屏</a>
             </div>
             <table operation="update" object="user" id="userScreen"  class="table table-bordered table-hover" style="position:absolute;margin-top:4%;border-left: 1px solid #dddddd !important;">
                     <thead>
@@ -11,7 +11,7 @@
                     <tbody>
                     {{- range .userScreenData}}
                     <tr>
-                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.ObjectId}}</td>
+                        <td style="display:none">{{.ObjectId}}</td>
                         <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Name}}</td>
                 <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;"><a action='ManageScreenRemove' object-id="{{.ObjectId}}" corpid = "{{.CorpId}}"style="cursor:pointer" title="移除用户">移除</a>
                         </td>
