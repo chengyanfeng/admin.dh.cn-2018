@@ -37,7 +37,6 @@ func (c *SourcetypeController) init(i int) {
 func (c *SourcetypeController) List() {
 	c.init(2)
 	var mpurl ="/sourcetype/list?"
-
 	c.TplName = "sourcetype/index.html"
 	var total,total_page int64
 	var list []*models.DiDatasourceGroup
