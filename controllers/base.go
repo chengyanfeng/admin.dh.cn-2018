@@ -42,7 +42,7 @@ var  screenSub=  []utils.P{
 	utils.P{
 		"On": 0,
 		"Path": "/screen/list",
-		"Name": "膜版管理",
+		"Name": "模版管理",
 
 
 	},
@@ -51,7 +51,15 @@ var  screenSub=  []utils.P{
 		"Path": "/userscreen/list",
 		"Name": "用户大屏管理",
 	},
+
 }
+ var  invicodeSub=  []utils.P{
+	utils.P{
+		"On": 0,
+		"Path": "/invitationcode/list",
+		"Name": "邀请码管理",
+	},
+ }
 var Menu = []utils.P{
 	utils.P{
 		"On": 0,
@@ -81,7 +89,12 @@ var Menu = []utils.P{
 		"Sub": screenSub,
 
 	},
-
+	utils.P{
+		"On": 0,
+		"Path": "/",
+		"Name": "邀请码管理",
+		"Sub": invicodeSub,
+	},
 }
 
 func PagerHtml(num int, totalpage int, perpage int, curpage int, mpurl string) string {

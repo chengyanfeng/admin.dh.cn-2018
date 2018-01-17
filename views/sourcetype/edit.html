@@ -3,24 +3,15 @@
     <div class="row-fluid form-wrapper">
         <div class="span12 column">
 
-            <form operation="update" object="corp">
+            <form operation="update" object="sourcetype">
                 <div class="field-box">
                     <label>团队名称：</label>
                     <input name="name" id="name" class="span6 inline-input" type="text" value="{{.object.Name}}" required />
                 </div>
                 <div class="field-box">
-                    <label>联系邮箱：</label>
-                    <input name="email" id="email" class="span6 inline-input" type="text" value="{{.object.Email}}" required />
-                </div>
-                <div class="field-box">
-                    <label>联系手机号：</label>
-                    <input name="mobile" id="mobile" class="span6 inline-input" type="text" value="{{.object.Mobile}}" required />
-                </div>
-                <div class="field-box">
                     <label>&nbsp;</label>
                     <input  name="id" id="id" type="hidden" value="{{.object.ObjectId}}" />
                 </div>
-
                 <div class="field-box">
                     <input type="submit" class="btn-flat default" value="提 交">
                     <input type="button" class="btn-flat gray" action="cancel" value="取 消">

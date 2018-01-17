@@ -74,7 +74,7 @@ func (c *UserController) List() {
 
 				c.Data["businesstype"] ="nil"
 			}
-			number,_:=new(models.DhUser).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).All(&list)
+			number,_:=new(models.DhUser).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total,_=new(models.DhUser).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1

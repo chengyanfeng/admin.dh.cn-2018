@@ -66,7 +66,7 @@ func (c *CorpController) List() {
 				c.Data["status"] = "nil"
 			}
 
-			number,_:=new(models.DhCorp).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).All(&list)
+			number,_:=new(models.DhCorp).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total,_=new(models.DhCorp).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1
@@ -97,11 +97,15 @@ func (c *CorpController) List() {
 	data := []utils.P{}
 	if len(list) > 0 {
 		for _, info := range list {
+			countfilter:=utils.P{}
 			_crop := utils.P{}
+			countfilter["corp_id"]=info.ObjectId
+			CropCount:=new(models.DhUserCorp).Count(countfilter)
 			_crop["ObjectId"] = info.ObjectId
 			_crop["CropName"] = info.Name
 			_crop["CropEmail"] = info.Email
 			_crop["CropMobile"] = info.Mobile
+			_crop["CropCount"] = CropCount
 			_crop["CreateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
 			_crop["CropStatus"] = info.Status
 			data = append(data, _crop)
@@ -175,6 +179,7 @@ func (c *CorpController) Add() {
 		c.EchoJsonOk()
 	}
 }
+
 
 func (c *CorpController) Remove() {
 	c.Require("id")

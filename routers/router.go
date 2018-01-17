@@ -28,6 +28,7 @@ func init() {
 	beego.AutoRouter(&controllers.SourcetypeController{})
 	beego.AutoRouter(&controllers.ScreenController{})
 	beego.AutoRouter(&controllers.UserscreenController{})
+	beego.AutoRouter(&controllers.InvitationCodeController{})
 
 
 

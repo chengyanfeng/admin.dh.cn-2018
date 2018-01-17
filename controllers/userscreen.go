@@ -74,7 +74,7 @@ func (c *UserscreenController) List() {
 				c.Data["status"] = "nil"
 			}
 
-			number,_:=new(models.DxScreen).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).All(&list)
+			number,_:=new(models.DxScreen).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total,_=new(models.DxScreen).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1
@@ -101,7 +101,7 @@ func (c *UserscreenController) List() {
 		for _, info := range list {
 			filtersdxScreen := map[string]interface{}{}
 			filtersdxScreen["relate_id"]=info.ObjectId
-			filtersdxScreen["relate_type"]="userScreen"
+			filtersdxScreen["relate_type"]="dx_screen"
 			dxScreen:= new(models.DhRelation).Find(filtersdxScreen)
 			user:=new(models.DhUser).Find(dxScreen.UserId)
 			if user==nil{

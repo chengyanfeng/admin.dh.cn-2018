@@ -11,7 +11,24 @@
 
                 <input name="search" type="text" value="{{.search}}" placeholder="名称，手机号，邮箱">
             </div>
-
+            <div  class="filter-field" >
+                <span>授权产品:</span>
+                <select  name="businesstype" id="Businesstype" value={{.status}} class="select2" style="width: 140px;height:30px">
+                    {{ if eq .businesstype "nil"  }}
+                    <option value="" selected="selected">全部</option>
+                    <option value="is_dataI_user">Data-I</option>
+                    <option value="is_dataX_user">Data-X</option>
+                    {{  else  if eq .businesstype "is_dataI_user"  }}
+                    <option value="" >全部</option>
+                    <option value="is_dataI_user" selected="selected">Data-I</option>
+                    <option value="is_dataX_user">Data-X</option>
+                    {{  else  if eq .businesstype "is_dataX_user"  }}
+                    <option value="" >全部</option>
+                    <option value="is_dataI_user" selected="selected">Data-I</option>
+                    <option value="is_dataX_user">Data-X</option>
+                    {{end }}
+                </select>
+            </div>
             <div class="filter-field">
                 <span>状态:</span>
                 <select  name="status" id="status" class="select2" style="width: 140px;height:30px">

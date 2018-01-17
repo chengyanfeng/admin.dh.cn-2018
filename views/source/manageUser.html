@@ -1,0 +1,63 @@
+<div id="pad-wrapper" class="form-page" object-id="{{.CorpId}}" object="corp">
+    <div class="row-fluid form-wrapper">
+        <div class="span12 column" style="position:relative;height:355px">
+            <div class="form-group" style="position:absolute;height:30px;width:100%">
+                <a style="margin-left:60px;margin-top:12px" object-id="{{.CorpId}}" id="addCorpUser" width="200px">{{.corpName}}所有的成员</a>
+                <input type="button" title="管理团队"  object-id="{{.CorpId}}" id="userSearch" Rmethod="getusercorp" value="搜索" style="position:absolute;margin-left:696px;left:696px;
+                margin:0;top:7px">
+                <input type="account" class="form-control"   id="selectCorp"     placeholder="搜索" name="auth" style="position:absolute;margin:0;left:740px;width:128px;top:7px">
+
+            </div>
+            <table operation="update" object="user" id="leftTable"  class="table table-bordered table-hover" style="position:absolute;width:45%;margin-top:4%;border-left: 1px solid #dddddd !important;">
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                    {{- range .CorpUserData}}
+                    <tr>
+                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.name}}</td>
+                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.email}}</td>
+
+                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">
+                            <select  name="role" id="role" title="改变用户角色" parametername='role'  redirectMethod='getusercorp' method='changeuserrole'  object-id="{{.objectId}}" headtitle="管理成员"  class="role" style="height:30px;width:90px">
+                              {{ if eq  .role "0"}}
+                                <option value="1" >管理员</option>
+                                <option value="0" selected>普通成员</option>
+                                {{ else }}
+                                <option value="1" selected>管理员</option>
+                                <option value="0">普通成员</option>
+                                {{ end }}
+                            </select>
+                        </td>
+                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='0' style="cursor:pointer" title="移除用户" headtitle="管理成员" >移除</a>
+                        </td>
+                    </tr>
+                    {{- end}}
+               </tbody>
+                </table>
+
+            <table operation="update" object="corp" id="rightTable"  class="table table-bordered table-hover" style="position:absolute;margin-left:50%;width:45%;margin-top:4%;border-left: 1px solid #dddddd !important;" >
+                <thead>
+                </thead>
+                <tbody>
+                {{- range .AllUserData}}
+                <tr>
+                    <td style="display:none">{{.userid}}</td>
+                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.name}}</td>
+                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.email}}</td>
+                    </td>
+                    <td style="border-style:none"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='1' style="cursor:pointer" style="cursor:pointer" title="添加用户"  headtitle="管理成员">添加用户</a>
+
+                    </td>
+                </tr>
+                {{- end}}
+                </tbody>
+                </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+

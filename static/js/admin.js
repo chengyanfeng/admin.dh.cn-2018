@@ -150,7 +150,10 @@ function common_list_init(){
         var object_name = $(this).parents(".search").attr('object');
         common_object_delete(object_name,$(this).attr('object-id'),$(this));
     });
-
+     form.delegate("a[action='add']",'click',function () {
+            var object_name = $(this).parents(".search").attr('object');
+            common_object_delete(object_name,$(this).attr('object-id'),$(this));
+        });
 
     form.delegate("a[action='publish']",'click',function () {
         var object_name = $(this).parents(".search").attr('object');
@@ -254,6 +257,13 @@ function common_list_init(){
                                  var object_id = $("#pad-wrapper").attr('object-id');
                                 common_manage_bangding($(this),object_name,object_id,"modalcorp",$("#selectCorp").val());
                               })
+            <!--邀请码--添加->
+                              form.delegate("a[action='addcode']",'click',function () {
+                             var object_name = $(this).parents(".search").attr('object');
+                             var  amount=  $("#codeamont").attr("value")
+
+                                 common_object_add(object_name,amount,$(this));
+             });
 }
 
 
@@ -681,6 +691,19 @@ function common_object_delete(object_name,object_id,button){
         window.location.reload(true);
     },true,"确定删除"+name+"?");
 }
+
+/**
+ * 对象添加操作 通用 无弹层
+ * @param object_name
+ * @param object_id
+ */
+function common_object_add(object_name,amount,button){
+    var name=button.attr("name")
+    common_ajax_get('/' + object_name + '/add?id=' + amount,function(){
+        window.location.reload(true);
+    },true,"确定添加"+amount+"个?");
+}
+
 /**
  * 用户膜版启动，停用，审核 操作
  * @param object_name
