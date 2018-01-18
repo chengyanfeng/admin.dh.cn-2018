@@ -46,7 +46,7 @@ func (c *ScreenController) List() {
 	var list []*models.DxScreenTemplate
 	c.TplName = "screen/index.html"
 	page,_ := c.GetInt64("page",1)
-	page_size,_ := c.GetInt64("page_size",3)
+	page_size,_ := c.GetInt64("page_size",10)
 	filters := map[string]interface{}{}
 	search := c.GetString("search")
 	status:= c.GetString("status")

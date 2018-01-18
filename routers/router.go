@@ -7,6 +7,9 @@ import (
 )
 
 func init() {
+
+
+	beego.AutoRouter(&controllers.LoginController{})
 	beego.Router("/", &controllers.MainController{},"get:Get")
 	beego.Router("/user", &controllers.UserController{},"get:List")
 	beego.Router("/user/create", &controllers.UserController{},"get:Create")
@@ -29,6 +32,7 @@ func init() {
 	beego.AutoRouter(&controllers.ScreenController{})
 	beego.AutoRouter(&controllers.UserscreenController{})
 	beego.AutoRouter(&controllers.InvitationCodeController{})
+	beego.AutoRouter(&controllers.SourceController{})
 
 
 

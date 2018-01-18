@@ -46,13 +46,13 @@ func (c *UserscreenController) List() {
 
 	}()
 
-	var mpurl ="/userscreen?"
+	var mpurl ="/userscreen/list?"
 	c.init(3)
 	var total,total_page int64
 	var list []*models.DxScreen
 	c.TplName = "userscreen/index.html"
 	page,_ := c.GetInt64("page",1)
-	page_size,_ := c.GetInt64("page_size",3)
+	page_size,_ := c.GetInt64("page_size",010)
 	filters := map[string]interface{}{}
 	filters["status__gte"]=0
 	search := c.GetString("search")

@@ -33,7 +33,7 @@ var  datasourceSub=  []utils.P{
 	},
 	utils.P{
 		"On": 0,
-		"Path": "/sourcetype/list",
+		"Path": "/source/list",
 		"Name": "数据源管理",
 	},
 }
