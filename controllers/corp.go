@@ -36,10 +36,13 @@ func (c *CorpController) init(i int) {
 			}
 		}
 	}
+	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
 
 func (c *CorpController) List() {
+	utils.S("name","chenyanfeng")
 	var mpurl ="/corp/list?"
 	c.init(1)
 	c.TplName = "corp/index.html"

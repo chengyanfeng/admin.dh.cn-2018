@@ -63,7 +63,7 @@ var  screenSub=  []utils.P{
 var Menu = []utils.P{
 	utils.P{
 		"On": 0,
-		"Path": "/",
+		"Path": "/main",
 		"Name": "首页",
 
 

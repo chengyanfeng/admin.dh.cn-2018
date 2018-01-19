@@ -11,24 +11,20 @@
                 <select  name="status" id="status" class="select2" style="width: 140px;height:30px">
                     {{if eq .status "nil"}}
                     <option value="" selected="selected" >全部</option>
-                    <option value="0" >未审核</option>
-                    <option value="1" >审核通过</option>
+                    <option value="0" >未使用</option>
+                    <option value="1" >已使用</option>
 
                     {{else if eq .status "0"}}
                     <option value=""  >全部</option>
-                    <option value="0" selected="selected">未审核</option>
-                    <option value="1" >审核通过</option>
+                    <option value="0" selected="selected">未使用</option>
+                    <option value="1" >已使用</option>
 
                     {{else if eq .status "1"}}
                     <option value=""  >全部</option>
-                    <option value="0" >未审核</option>
-                    <option value="1" selected="selected">审核通过</option>
-
-                    {{else if eq .status "-1"}}
-                    <option value=""  >全部</option>
                     <option value="0" >未使用</option>
-                    <option value="1" >已使用</option>
-                    <option value="-1" selected="selected">已删除</option>
+                    <option value="1" selected="selected">已使用</option>
+
+
                     {{end }}
                 </select>
             </div>
@@ -70,11 +66,12 @@
                         <td>{{.Code}}</td>
                         <td>{{.Name}}</td>
                         <td>{{.Email}}</td>
-                        {{if  eq .Status 1}}
                         <td>{{.CreateTime}}</td>
+                        {{if  eq .Status 1}}
+
                         <td>{{.UseTime}}</td>
                         {{  else if  eq .Status 0}}
-                        <td>暂无</td>
+
                         <td>暂无</td>
                         {{ end }}
 

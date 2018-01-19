@@ -34,6 +34,8 @@ func (c *UserscreenController) init(i int) {
 			}
 		}
 	}
+	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
 
@@ -184,4 +186,19 @@ func (c *UserscreenController) Remove() {
 	} else {
 		c.EchoJsonOk()
 	}
+}
+func (c *UserscreenController) Add() {
+	DxScreenTemplate := new(models.DxScreenTemplate)
+	DxScreenTemplate.Name = c.GetString("name")
+	DxScreenTemplate.Status = 0
+	result :=DxScreenTemplate.Save()
+	if !result {
+		c.EchoJsonErr("创建失败")
+	} else {
+		c.EchoJsonOk()
+	}
+}
+func (c *UserscreenController) Create(){
+
+	c.TplName="userscreen/create.html"
 }

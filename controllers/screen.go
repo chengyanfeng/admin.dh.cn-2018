@@ -35,6 +35,8 @@ func (c *ScreenController) init(i int) {
 			}
 		}
 	}
+	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
 
@@ -101,6 +103,7 @@ func (c *ScreenController) List() {
 			data = append(data, Screen)
 		}
 	}
+	fmt.Println(data,"------------------------data-------------")
 	c.Data["List"] = data
 	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page),mpurl)
 }

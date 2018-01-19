@@ -35,7 +35,10 @@ func (c *UserController) init(i int) {
 			}
 		}
 	}
+	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
+
 }
 
 func (c *UserController) List() {

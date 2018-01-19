@@ -40,14 +40,18 @@
     });
     function action_submit() {
         $('#login_f').ajaxSubmit({
-            url: "/login/check",
+            url: "/login",
             dataType: "json",
             timeout: 60000,
             success: function (data) {
-                if (data.code == 1) {
-                    location.href = "/";
+                if (data.code == 200) {
+               var url= window.location.href
+               let new_url = url + data.msg;
+               debugger
+               console.log(new_url, 'new_url')
+                window.location.href = new_url;
                 } else {
-                    alert(data.message);
+                    alert(data.msg);
                 }
             }
         });
