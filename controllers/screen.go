@@ -58,7 +58,6 @@ func (c *ScreenController) List() {
 			c.Data["search"] = search
 			mpurl=mpurl+"&search="+search
 			condor := cond.Or("name__icontains", search)
-
 			if len(status)>0{
 				c.Data["status"] = status
 				int,_:=strconv.Atoi(status)
