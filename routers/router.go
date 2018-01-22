@@ -16,6 +16,7 @@ func init() {
 	beego.InsertFilter("/*", beego.BeforeRouter, BaseFilter)
 	beego.Router("/main", &controllers.MainController{},"get:Get")
 	beego.Router("/user", &controllers.UserController{},"get:List")
+	beego.Router("/user/getuserdata", &controllers.UserController{},"get:GetUserData")
 	beego.Router("/user/create", &controllers.UserController{},"get:Create")
 	beego.Router("/user/edit", &controllers.UserController{},"get:Edit")
 	beego.Router("/user/add", &controllers.UserController{},"post:Add")

@@ -48,13 +48,13 @@
                 <thead>
                 <tr>
                     <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
-                    <th style="width: 8%"><span class="line"></span>ID</th>
-                    <th style="width: 10%"><span class="line" title="邀请码"></span>邀请码</th>
-                    <th style="width: 8%"><span class="line"></span>使用者姓名</th>
-                    <th style="width: 10%"><span class="line"></span>使用邮箱</th>
-                    <th style="width: 10%"><span class="line"></span>创建时间</th>
-                    <th style="width: 25%"><span class="line"></span>使用时间</th>
-                    <th style="width: 25%"><span class="line"></span>状态</th>
+                    <th style="display:none;"><span class="line"></span>ID</th>
+                    <th style="width: 15%"><span class="line" title="邀请码"></span>邀请码</th>
+                    <th style="width: 15%"><span class="line"></span>使用者姓名</th>
+                    <th style="width: 15%"><span class="line"></span>使用邮箱</th>
+                    <th style="width: 15%"><span class="line"></span>创建时间</th>
+                    <th style="width: 10%"><span class="line"></span>使用时间</th>
+                    <th style="width: 10%"><span class="line"></span>状态</th>
                     <th style="width: 10%"><span class="line"></span>操作</th>
                 </tr>
                 </thead>
@@ -62,7 +62,7 @@
                 {{- range .List}}
                     <tr>
                         <td><input type="checkbox" id="child" class="list_delect"></td>
-                        <td>{{.ObjectId}}</td>
+                        <td  style="display:none;">{{.ObjectId}}</td>
                         <td>{{.Code}}</td>
                         <td>{{.Name}}</td>
                         <td>{{.Email}}</td>
@@ -96,7 +96,10 @@
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
         <div class="pull-left" style="padding-left: 20px">
-            <input type="button" id="listdelect" class="btn btn-lg" value="批量删除" style="margin-top:15px;" disabled="disabled" >
+            {{ if   eq  0 (.List|len)  }}
+            {{else}}
+            <input type="button" id="listdelect" class="btn btn-lg" value="批量删除" style="margin-top:35px;" disabled="disabled" >
+            {{end }}
         </div>
     </div>
 </form>

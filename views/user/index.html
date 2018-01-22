@@ -68,7 +68,7 @@
                 <thead>
                 <tr>
                     <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
-                    <th style="width: 10%"><span class="line"></span>ID</th>
+                    <th style="display:none;"><span class="line"></span>ID</th>
                     <th style="width: 8%"><span class="line"></span>用户名</th>
                     <th style="width: 8%"><span class="line"></span>手机号</th>
                     <th style="width: 9%"><span class="line"></span>邮箱</th>
@@ -83,7 +83,7 @@
                 {{- range .List}}
                 <tr>
                     <td><input type="checkbox" class="list_delect"></td>
-                    <td>{{.ObjectId}}</td>
+                    <td style="display:none;">{{.ObjectId}}</td>
                     <td>{{.Name}}</td>
                     <td>{{.Mobile}}</td>
                     <td>{{.Email}}</td>

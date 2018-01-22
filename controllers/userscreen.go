@@ -54,7 +54,7 @@ func (c *UserscreenController) List() {
 	var list []*models.DxScreen
 	c.TplName = "userscreen/index.html"
 	page,_ := c.GetInt64("page",1)
-	page_size,_ := c.GetInt64("page_size",010)
+	page_size,_ := c.GetInt64("page_size",10)
 	filters := map[string]interface{}{}
 	filters["status__gte"]=0
 	search := c.GetString("search")
@@ -115,7 +115,8 @@ func (c *UserscreenController) List() {
 			Screen["CreateUserId"] = user.ObjectId
 			Screen["CreateUser"] = user.Name
 			Screen["Status"] = info.Status
-			Screen["Config"] = info.Config
+			 p:=*utils.JsonDecode([]byte(info.Config))
+			Screen["Config"] =utils.ToString(p["width"])+utils.ToString("*")+utils.ToString(p["height"])
 			Screen["CreateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
 			Screen["UpdateTime"] = info.UpdateTime.Format("2006-01-02 15:04:05")
 			data = append(data, Screen)

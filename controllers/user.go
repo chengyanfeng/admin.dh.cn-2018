@@ -287,7 +287,6 @@ func (c *UserController) UpdateStatusAva() {
 }
 
 func (c *UserController) GetCorp() {
-
 	c.Require("id")
 	id := c.GetString("id")
 	filtersUserCorp := map[string]interface{}{}
@@ -511,4 +510,8 @@ func (c *UserController) DelectUserScreen() {
 	}
 
 	c.EchoJsonOk()
+}
+
+func (c *UserController) GetUserData() {
+	c.EchoJsonOk("测试")
 }

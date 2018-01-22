@@ -64,19 +64,19 @@
                 <thead>
                 <tr>
                     <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
-                    <th style="width: 8%"><span class="line"></span>ID</th>
-                    <th style="width: 10%"><span class="line" title="数据源名称"></span>数据源名称</th>
-                    <th style="width: 8%"><span class="line"></span>分类</th>
-                    <th style="width: 10%"><span class="line"></span>更新时间</th>
-                    <th style="width: 8%"><span class="line"></span>状态</th>
-                    <th style="width: 25%"><span class="line"></span>操作</th>
+                    <th style="display:none;"><span class="line"></span>ID</th>
+                    <th style="width: 20%"><span class="line" title="数据源名称"></span>数据源名称</th>
+                    <th style="width: 20%"><span class="line"></span>分类</th>
+                    <th style="width: 20%"><span class="line"></span>更新时间</th>
+                    <th style="width: 20%"><span class="line"></span>状态</th>
+                    <th style="width: 20%"><span class="line"></span>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {{- range .List}}
                     <tr>
                         <td><input type="checkbox" id="child" class="list_delect"></td>
-                        <td>{{.ObjectId}}</td>
+                        <td style="display:none;">{{.ObjectId}}</td>
                         <td>{{.Name}}</td>
                         <td>{{.SourceType}}</td>
                         <td>{{.UpdateTime}}</td>
@@ -106,8 +106,10 @@
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
         <div class="pull-left" style="padding-left: 20px;margin-top:23px">
-            <input type="button" id="listdelect" class="btn btn-lg" value="批量删除" style="margin-left:5px;margin-top:15px" disabled="disabled" >
-
+            {{ if   eq  0 (.List|len)  }}
+            {{else}}
+            <input type="button" id="listdelect" class="btn btn-lg" value="批量删除" style="margin-left:5px;margin-top:35px" disabled="disabled" >
+        {{ end }}
         </div>
     </div>
 </form>

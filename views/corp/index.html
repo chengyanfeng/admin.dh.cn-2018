@@ -48,21 +48,21 @@
                 <thead>
                 <tr>
                     <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
-                    <th style="width: 8%"><span class="line"></span>ID</th>
+                    <th style="display:none;"><span class="line"></span>ID</th>
                     <th style="width: 10%"><span class="line" title="团队名称"></span>团队名称</th>
                     <th style="width: 8%"><span class="line"></span>团队人数</th>
-                    <th style="width: 10%"><span class="line"></span>联系邮箱</th>
+                    <th style="width: 20%"><span class="line"></span>联系邮箱</th>
                     <th style="width: 15%"><span class="line"></span>联系人手机号</th>
                     <th style="width: 15%"><span class="line"></span>注册时间</th>
                     <th style="width: 8%"><span class="line"></span>团队状态</th>
-                    <th style="width: 25%"><span class="line"></span>操作</th>
+                    <th style="width: 20%"><span class="line"></span>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {{- range .List}}
                     <tr>
                         <td><input type="checkbox" id="child" class="list_delect"></td>
-                        <td>{{.ObjectId}}</td>
+                        <td style="display:none;">{{.ObjectId}}</td>
                         <td>{{.CropName}}</td>
                         <td>{{.CropCount}}</td>
                         <td>{{.CropEmail}}</td>
