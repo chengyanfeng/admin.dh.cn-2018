@@ -418,6 +418,19 @@ func (c *UserController) DelectAndAddCorp() {
 			c.EchoJsonErr("团队不存在")
 			c.StopRun()
 		}
+		userCorpfilterrole:=map[string]interface{}{}
+		userCorpfilterrole["role"]="1"
+		userCorpfilterrole["object_id"]=object_id
+		if role =="0"{
+			fmt.Println(role,"---------------------------------进去---------------------------------")
+
+			number:=new(models.DhUserCorp).Count(userCorpfilterrole)
+		if number<2 {
+			c.EchoJsonOk("管理员唯一不可改变")
+			c.StopRun()
+
+		}
+		}
 		UserCorp.Role=role
 		result := UserCorp.Save()
 

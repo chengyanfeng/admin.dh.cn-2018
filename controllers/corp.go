@@ -303,7 +303,6 @@ func (c *CorpController) RemoveAndUser() {
 		c.EchoJsonOk()
 	}
 }
-
 func (c *CorpController)  ChangeUserRole() {
 	c.Require("id")
 	id := c.GetString("id")
@@ -314,6 +313,23 @@ func (c *CorpController)  ChangeUserRole() {
 		c.EchoJsonErr("团队不存在")
 		c.StopRun()
 	}
+	userCorpfilterrole:=map[string]interface{}{}
+	userCorpfilterrole["role"]="1"
+	userCorpfilterrole["object_id"]=id
+	if role =="0"{
+		fmt.Println(role,"---------------------------------进去---------------------------------")
+
+		number:=new(models.DhUserCorp).Count(userCorpfilterrole)
+		if number<2 {
+			c.EchoJsonOk("管理员唯一不可改变")
+			c.StopRun()
+
+		}
+	}
+
+
+
+
 	corp.Role=role
 	result:=corp.Save()
 	if !result {

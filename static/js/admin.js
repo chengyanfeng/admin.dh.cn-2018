@@ -911,7 +911,10 @@ function common_ajax_get_corp_screen(url, success_callback,confirm,confirm_info,
                 },
                 success: function(result) {
                     if (result.code == 200) {
-                        success_callback(result);
+                    if (result.msg!="ok"){
+                  common_error(result.msg);
+                  }
+                     success_callback(result);
                     } else {
                         common_error(result.msg);
                     }
