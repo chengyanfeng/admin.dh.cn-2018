@@ -294,7 +294,7 @@ func (c *UserController) GetCorp() {
 	filtersAllCorp["status__gte"] = 0
 	corpName := c.GetString("corpName")
 	if corpName!=""&&corpName!="undefined"{
-		filtersAllCorp["name"]=corpName
+		filtersAllCorp["name__contains"]=corpName
 	}
 	user := new(models.DhUser).Find(id)
 	if user == nil {
@@ -385,18 +385,27 @@ func (c *UserController) DelectAndAddCorp() {
 
 		}}
 	if title == "2" {
+		DhUserCorpfilter:=map[string]interface{}{}
 		Corp := new(models.DhCorp).Find(object_id)
 		if Corp == nil{
 			c.EchoJsonErr("团队不存在")
 			c.StopRun()
 		}
+
 		DhUserCorp:=new(models.DhUserCorp)
 		DhUserCorp.Role="0"
 		DhUserCorp.CorpId=Corp.ObjectId
 		DhUserCorp.UserId=user_id
+		DhUserCorpfilter["corpid"]=Corp.ObjectId
+		DhUserCorpfilter["userid"]=user_id
+		DhUserCorpflag:=new(models.DhUserCorp).Find(DhUserCorpfilter)
+		if DhUserCorpflag !=nil {
+			c.EchoJsonErr("用户已经添加到团队中")
+			c.StopRun()
+		}
 		result :=DhUserCorp.Save()
 		if !result {
-			c.EchoJsonErr("注册失败")
+			c.EchoJsonErr("添加用户失败")
 		} else {
 			c.EchoJsonOk()
 		}

@@ -208,7 +208,7 @@ func (c *CorpController) GetUserCorp() {
 	filtersAllUser["status__gte"] = 0
 	corpName := c.GetString("corpName")
 	if corpName!=""&&corpName!="undefined"{
-		filtersAllUser["name"]=corpName
+		filtersAllUser["name__contains"]=corpName
 	}
 	dhcorp := new(models.DhCorp).Find(id)
 	if dhcorp == nil {
@@ -285,10 +285,18 @@ func (c *CorpController) RemoveAndUser() {
 		c.EchoJsonOk()
 	}
 	}else  if removed=="1"{
+		usercorpfilter:=map[string]interface{}{}
 		usercorp:=new(models.DhUserCorp)
 		usercorp.UserId=user_id
 		usercorp.CorpId=id
 		usercorp.Role="3"
+		usercorpfilter["userid"]=user_id
+		usercorpfilter["corpid"]=id
+		usercorpflag:=new(models.DhUserCorp).Find(usercorpfilter)
+		if usercorpflag!=nil {
+			c.EchoJsonErr("用户已经存在团队中")
+			c.StopRun()
+		}
 		usercorp.Save()
 		c.EchoJsonOk()
 	}else{
