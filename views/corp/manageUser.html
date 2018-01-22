@@ -18,9 +18,9 @@
                     {{- range .CorpUserData}}
                     <tr  class="showlastone">
                         <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.name}}</td>
-                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.email}}</td>
+                        <td style="border-style:none;max-width: 100px;overflow: hidden;text-overflow: ellipsis;">{{.email}}</td>
 
-                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">
+                        <td style="border-style:none;max-width: 150px;overflow: hidden;text-overflow: ellipsis;">
                             <select  name="role" id="role" title="改变用户角色" parametername='role'  redirectMethod='getusercorp' method='changeuserrole'  object-id="{{.objectId}}" headtitle="管理成员"  class="role" style="height:30px;width:90px">
                               {{ if eq  .role "0"}}
                                 <option value="1" >管理员</option>
@@ -47,8 +47,8 @@
                 {{- range .AllUserData}}
                 <tr class="showlastone">
                     <td style="display:none" >{{.userid}}</td>
-                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.name}}</td>
-                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.email}}</td>
+                    <td style="border-style:none;max-width: 100px;overflow: hidden;text-overflow: ellipsis;">{{.name}}</td>
+                    <td style="border-style:none;max-width: 150px;overflow: hidden;text-overflow: ellipsis;">{{.email}}</td>
                     </td>
                     <td style="border-style:none;display:none"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='1' style="cursor:pointer" style="cursor:pointer" title="添加用户"  headtitle="管理成员">添加用户</a>
 
