@@ -256,7 +256,7 @@ function common_list_init(){
                                  var object_name = $("#pad-wrapper").attr('object');
                                  var object_id = $("#pad-wrapper").attr('object-id');
                                 common_manage_bangding($(this),object_name,object_id,"modalcorp",$("#selectCorp").val());
-                              })
+                              });
             <!--邀请码--添加->
                               form.delegate("a[action='addcode']",'click',function () {
                              var object_name = $(this).parents(".search").attr('object');
@@ -264,6 +264,18 @@ function common_list_init(){
 
                                  common_object_add(object_name,amount,$(this));
              });
+
+              <!-- 获取表格焦点-->
+                           $('body').on('mouseover',".showlastone", function(){
+                              $(this).children("td:last ").css("display","")
+
+                                console.log($(this).children("td:last").attr("test"))
+                           });
+                             <!-- 失去表格焦点-->
+                           $('body').on('mouseout',".showlastone", function(){
+                           $(this).children("td:last ").css("display","none")
+                                        });
+
 }
 
 

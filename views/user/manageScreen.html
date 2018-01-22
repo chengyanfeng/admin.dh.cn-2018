@@ -10,7 +10,7 @@
                     </thead>
                     <tbody>
                     {{- range .userScreenData}}
-                    <tr>
+                    <tr >
                         <td style="display:none">{{.ObjectId}}</td>
                         <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Name}}</td>
                 <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;"><a action='ManageScreenRemove' object-id="{{.ObjectId}}" corpid = "{{.CorpId}}"style="cursor:pointer" title="移除用户">移除</a>

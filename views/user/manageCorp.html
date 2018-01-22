@@ -16,7 +16,7 @@
                     </thead>
                     <tbody>
                     {{- range .userCorpData}}
-                    <tr>
+                    <tr class="showlastone">
                         <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Name}}</td>
                         <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Email}}</td>
 
@@ -31,7 +31,7 @@
                                 {{ end }}
                             </select>
                         </td>
-                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;"><a action='ManageRemoveAdd' object-id="{{.ObjectId}}" user-id="{{.Userid}}" corpid = "{{.CorpId}}"style="cursor:pointer" title="移除用户">移除</a>
+                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;display:none"><a action='ManageRemoveAdd' object-id="{{.ObjectId}}" user-id="{{.Userid}}" corpid = "{{.CorpId}}"style="cursor:pointer" title="移除用户">移除</a>
                         </td>
                     </tr>
                     {{- end}}
@@ -44,12 +44,12 @@
                 </thead>
                 <tbody>
                 {{- range .allCorpData}}
-                <tr>
+                <tr class="showlastone">
 
                     <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Name}}</td>
                     <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Email}}</td>
-                    </td>
-                    <td style="border-style:none"><a action='ManageRemoveAdd' object-id="{{.ObjectId}}" style="cursor:pointer" title="添加用户">添加用户</a>
+
+                    <td style="border-style:none;display :none"><a  action='ManageRemoveAdd' object-id="{{.ObjectId}}" style="cursor:pointer" title="添加用户">添加用户</a>
                     </td>
                 </tr>
                 {{- end}}
