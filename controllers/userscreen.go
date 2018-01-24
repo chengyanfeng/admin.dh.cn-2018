@@ -34,6 +34,8 @@ func (c *UserscreenController) init(i int) {
 			}
 		}
 	}
+	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
 
@@ -46,13 +48,13 @@ func (c *UserscreenController) List() {
 
 	}()
 
-	var mpurl ="/userscreen?"
+	var mpurl ="/userscreen/list?"
 	c.init(3)
 	var total,total_page int64
 	var list []*models.DxScreen
 	c.TplName = "userscreen/index.html"
 	page,_ := c.GetInt64("page",1)
-	page_size,_ := c.GetInt64("page_size",3)
+	page_size,_ := c.GetInt64("page_size",10)
 	filters := map[string]interface{}{}
 	filters["status__gte"]=0
 	search := c.GetString("search")
@@ -74,7 +76,7 @@ func (c *UserscreenController) List() {
 				c.Data["status"] = "nil"
 			}
 
-			number,_:=new(models.DxScreen).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).All(&list)
+			number,_:=new(models.DxScreen).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total,_=new(models.DxScreen).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1
@@ -101,7 +103,7 @@ func (c *UserscreenController) List() {
 		for _, info := range list {
 			filtersdxScreen := map[string]interface{}{}
 			filtersdxScreen["relate_id"]=info.ObjectId
-			filtersdxScreen["relate_type"]="userScreen"
+			filtersdxScreen["relate_type"]="dx_screen"
 			dxScreen:= new(models.DhRelation).Find(filtersdxScreen)
 			user:=new(models.DhUser).Find(dxScreen.UserId)
 			if user==nil{
@@ -113,7 +115,8 @@ func (c *UserscreenController) List() {
 			Screen["CreateUserId"] = user.ObjectId
 			Screen["CreateUser"] = user.Name
 			Screen["Status"] = info.Status
-			Screen["Config"] = info.Config
+			 p:=*utils.JsonDecode([]byte(info.Config))
+			Screen["Config"] =utils.ToString(p["width"])+utils.ToString("*")+utils.ToString(p["height"])
 			Screen["CreateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
 			Screen["UpdateTime"] = info.UpdateTime.Format("2006-01-02 15:04:05")
 			data = append(data, Screen)
@@ -184,4 +187,19 @@ func (c *UserscreenController) Remove() {
 	} else {
 		c.EchoJsonOk()
 	}
+}
+func (c *UserscreenController) Add() {
+	DxScreenTemplate := new(models.DxScreenTemplate)
+	DxScreenTemplate.Name = c.GetString("name")
+	DxScreenTemplate.Status = 0
+	result :=DxScreenTemplate.Save()
+	if !result {
+		c.EchoJsonErr("创建失败")
+	} else {
+		c.EchoJsonOk()
+	}
+}
+func (c *UserscreenController) Create(){
+
+	c.TplName="userscreen/create.html"
 }

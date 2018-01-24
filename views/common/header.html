@@ -17,7 +17,7 @@
     <link href="/static/css/jquery.ui.css" rel="stylesheet" type="text/css" />
     <link href="/static/css/sweetalert.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
+<body style="position:relative">
     <div class="navbar navbar-inverse">
         <div class="navbar-inner">
             <a class="brand" href="/">
@@ -25,7 +25,10 @@
             </a>
             <ul class="nav pull-right">
                 <li class="settings hidden-phone">
-                    <a href="/logout" class="dropdown-toggle hidden-phone">退出登录</a>
+        <a class="dropdown-toggle hidden-phone">欢迎{{ .Authname}}&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                </li>
+                <li class="settings hidden-phone">
+                    <a href="/" class="dropdown-toggle hidden-phone">退出登录</a>
                 </li>
             </ul>
         </div>

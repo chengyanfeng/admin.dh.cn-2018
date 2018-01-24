@@ -21,6 +21,8 @@ func (c *MainController) init(i int) {
 		}
 	}
 	c.Data["Menu"]=Menu
+	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	c.Data["Authname"]=Authname
 }
 
 func (c *MainController) Get() {

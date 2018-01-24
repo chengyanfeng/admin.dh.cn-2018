@@ -18,8 +18,8 @@
 			<div class="content-wrap">
 				<h6>登录系统</h6>
 				<form id="login_f" method="post">
-					<input class="span12" type="text" name="name" placeholder="请输入您的用户名" />
-					<input class="span12" type="password" name="password" placeholder="请输入您的密码" />
+					<input class="span12 " type="text" name="name" placeholder="请输入您的用户名" required/>
+					<input class="span12" type="password" name="password" placeholder="请输入您的密码" required/>
 					<input type="hidden" name="login_submit" value="login"/>
 					<div class="action" style="background-color: #FFFFFF;border-top: 0px">
 						<input type="submit" class="btn-flat primary signup" value="登  录">
@@ -40,14 +40,18 @@
     });
     function action_submit() {
         $('#login_f').ajaxSubmit({
-            url: "/do_login_check",
+            url: "/login",
             dataType: "json",
             timeout: 60000,
             success: function (data) {
-                if (data.code == 1) {
-                    location.href = "/";
+                if (data.code == 200) {
+               var url= window.location.href
+               let new_url = url + data.msg;
+               debugger
+               console.log(new_url, 'new_url')
+                window.location.href = new_url;
                 } else {
-                    alert(data.message);
+                    alert(data.msg);
                 }
             }
         });

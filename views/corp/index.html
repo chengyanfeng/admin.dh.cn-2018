@@ -9,7 +9,7 @@
             <div class="filter-field">
 
 
-                <input name="search" type="text" value="{{.search}}">
+                <input name="search" type="text" value="{{.search}}" placeholder="名称，手机号，邮箱">
             </div>
 
             <div class="filter-field">
@@ -19,28 +19,28 @@
                     <option value="" selected="selected" >全部</option>
                     <option value="0" >未审核</option>
                     <option value="1" >审核通过</option>
-                    <option value="-1" >已删除</option>
+                    <option value="-1" >已停用</option>
                     {{else if eq .status "0"}}
                     <option value=""  >全部</option>
                     <option value="0" selected="selected">未审核</option>
                     <option value="1" >审核通过</option>
-                    <option value="-1">已删除</option>
+                    <option value="-1">已停用</option>
                     {{else if eq .status "1"}}
                     <option value=""  >全部</option>
                     <option value="0" >未审核</option>
                     <option value="1" selected="selected">审核通过</option>
-                    <option value="-1" >已删除</option>
+                    <option value="-1" >已停用</option>
                     {{else if eq .status "-1"}}
                     <option value=""  >全部</option>
                     <option value="0" >未审核</option>
                     <option value="1" >审核通过</option>
-                    <option value="-1" selected="selected">已删除</option>
+                    <option value="-1" selected="selected">已停用</option>
                     {{end }}
                 </select>
             </div>
             <div class="filter-field">
-                <input type="submit" class="btn-flat primary" value="搜索" >
-                <a class="btn-flat default" action='new' title="添加团队" style="margin-left:490px">新增加团队</a>
+                <input type="submit" class="btn-flat primary" value="搜索"  >
+                <a class="btn-flat default" action='new' title="添加团队" style="margin-left:467px">新增加团队</a>
             </div>
         </div>
         <div class="row-fluid">
@@ -48,27 +48,34 @@
                 <thead>
                 <tr>
                     <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
-                    <th style="width: 8%"><span class="line"></span>ID</th>
+                    <th style="display:none;"><span class="line"></span>ID</th>
                     <th style="width: 10%"><span class="line" title="团队名称"></span>团队名称</th>
                     <th style="width: 8%"><span class="line"></span>团队人数</th>
-                    <th style="width: 10%"><span class="line"></span>联系邮箱</th>
+                    <th style="width: 20%"><span class="line"></span>联系邮箱</th>
                     <th style="width: 15%"><span class="line"></span>联系人手机号</th>
                     <th style="width: 15%"><span class="line"></span>注册时间</th>
                     <th style="width: 8%"><span class="line"></span>团队状态</th>
-                    <th style="width: 25%"><span class="line"></span>操作</th>
+                    <th style="width: 20%"><span class="line"></span>操作</th>
                 </tr>
                 </thead>
                 <tbody>
                 {{- range .List}}
                     <tr>
                         <td><input type="checkbox" id="child" class="list_delect"></td>
-                        <td>{{.ObjectId}}</td>
+                        <td style="display:none;">{{.ObjectId}}</td>
                         <td>{{.CropName}}</td>
                         <td>{{.CropCount}}</td>
                         <td>{{.CropEmail}}</td>
                         <td>{{.CropMobile}}</td>
                         <td>{{.CreateTime}}</td>
-                        <td>{{.CropStatus}}</td>
+
+                        {{if  eq .CropStatus 1}}
+                        <td>通过</td>
+                        {{  else if  eq .CropStatus 0}}
+                        <td>待审核</td>
+                        {{  else if  eq .CropStatus -1}}
+                        <td>已停用</td>
+                        {{ end }}
                         <td>
                             <ul class="actions" style="float: left;">
                                 {{ if eq .CropStatus 1 }}
@@ -89,7 +96,7 @@
             </table>
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
-        <div class="pull-left" style="padding-left: 20px">
+        <div class="pull-left" style="padding-left: 20px;margin-top:23px">
             <input type="button" id="listdelect" class="btn btn-lg" value="批量停用" style="margin-left:5px;margin-top:15px" disabled="disabled" >
 
         </div>

@@ -150,7 +150,10 @@ function common_list_init(){
         var object_name = $(this).parents(".search").attr('object');
         common_object_delete(object_name,$(this).attr('object-id'),$(this));
     });
-
+     form.delegate("a[action='add']",'click',function () {
+            var object_name = $(this).parents(".search").attr('object');
+            common_object_delete(object_name,$(this).attr('object-id'),$(this));
+        });
 
     form.delegate("a[action='publish']",'click',function () {
         var object_name = $(this).parents(".search").attr('object');
@@ -253,7 +256,26 @@ function common_list_init(){
                                  var object_name = $("#pad-wrapper").attr('object');
                                  var object_id = $("#pad-wrapper").attr('object-id');
                                 common_manage_bangding($(this),object_name,object_id,"modalcorp",$("#selectCorp").val());
-                              })
+                              });
+            <!--邀请码--添加->
+                              form.delegate("a[action='addcode']",'click',function () {
+                             var object_name = $(this).parents(".search").attr('object');
+                             var  amount=  $("#codeamont").attr("value")
+
+                                 common_object_add(object_name,amount,$(this));
+             });
+
+              <!-- 获取表格焦点-->
+                           $('body').on('mouseover',".showlastone", function(){
+                              $(this).children("td:last ").css("display","")
+
+                                console.log($(this).children("td:last").attr("test"))
+                           });
+                             <!-- 失去表格焦点-->
+                           $('body').on('mouseout',".showlastone", function(){
+                           $(this).children("td:last ").css("display","none")
+                                        });
+
 }
 
 
@@ -681,6 +703,19 @@ function common_object_delete(object_name,object_id,button){
         window.location.reload(true);
     },true,"确定删除"+name+"?");
 }
+
+/**
+ * 对象添加操作 通用 无弹层
+ * @param object_name
+ * @param object_id
+ */
+function common_object_add(object_name,amount,button){
+    var name=button.attr("name")
+    common_ajax_get('/' + object_name + '/add?id=' + amount,function(){
+        window.location.reload(true);
+    },true,"确定添加"+amount+"个?");
+}
+
 /**
  * 用户膜版启动，停用，审核 操作
  * @param object_name
@@ -876,7 +911,10 @@ function common_ajax_get_corp_screen(url, success_callback,confirm,confirm_info,
                 },
                 success: function(result) {
                     if (result.code == 200) {
-                        success_callback(result);
+                    if (result.msg!="ok"){
+                  common_error(result.msg);
+                  }
+                     success_callback(result);
                     } else {
                         common_error(result.msg);
                     }
@@ -1389,6 +1427,77 @@ function common_manage_changetype(button,object_name,object_id,modal){
 
 
    })
+
+
+
+
+ var pos = 0;
+    var LIST_ITEM_SIZE = 100;
+    //滚动条距底部的距离
+    var BOTTOM_OFFSET = 0;
+    createListItems();
+    $(document).ready(function () {
+        $("body #dialogchange").scroll(function () {
+            var $currentWindow = $(window);
+            //当前窗口的高度
+            var windowHeight = $currentWindow.height();
+            console.log("current widow height is " + windowHeight);
+            //当前滚动条从上往下滚动的距离
+            var scrollTop = $currentWindow.scrollTop();
+            console.log("current scrollOffset is " + scrollTop);
+            //当前文档的高度
+            var docHeight = $(document).height();
+            console.log("current docHeight is " + docHeight);
+
+            //当 滚动条距底部的距离 + 滚动条滚动的距离 >= 文档的高度 - 窗口的高度
+            //换句话说：（滚动条滚动的距离 + 窗口的高度 = 文档的高度）  这个是基本的公式
+            if ((BOTTOM_OFFSET + scrollTop) >= docHeight - windowHeight) {
+                createListItems();
+            }
+        });
+    });
+
+function createListItems() {
+        var mydocument = document;
+        var mylist = mydocument.getElementById("AllCorp");
+        var docFragments = mydocument.createDocumentFragment();
+        common_ajax_get_data("/"+"user"+"/getuserdata",function(){
+
+
+        for (var i = pos; i < pos + LIST_ITEM_SIZE; ++i) {
+            var liItem = mydocument.createElement("li");
+            liItem.innerHTML = "This is item " + i;
+            docFragments.appendChild(liItem);
+        }
+
+        pos += LIST_ITEM_SIZE;
+
+       /* mylist.appendChild(docFragments);*/
+    });
+}
+
+
+function common_ajax_get_data(url, success_callback) {
+
+     $.ajax({
+            type: "get",
+            dataType: "json",
+            url: url,
+            success: function (result) {
+                if (result.code == 200) {
+                    success_callback(result);
+                } else {
+                    common_error(result.msg);
+                }
+            },
+            error: function () {
+                common_error('接口异常');
+            }
+        });
+    }
+
+
+
 
 
 

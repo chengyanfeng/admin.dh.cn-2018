@@ -36,10 +36,13 @@ func (c *CorpController) init(i int) {
 			}
 		}
 	}
+	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
 
 func (c *CorpController) List() {
+	utils.S("name","chenyanfeng")
 	var mpurl ="/corp/list?"
 	c.init(1)
 	c.TplName = "corp/index.html"
@@ -66,7 +69,7 @@ func (c *CorpController) List() {
 				c.Data["status"] = "nil"
 			}
 
-			number,_:=new(models.DhCorp).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).All(&list)
+			number,_:=new(models.DhCorp).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total,_=new(models.DhCorp).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1
@@ -97,11 +100,15 @@ func (c *CorpController) List() {
 	data := []utils.P{}
 	if len(list) > 0 {
 		for _, info := range list {
+			countfilter:=utils.P{}
 			_crop := utils.P{}
+			countfilter["corp_id"]=info.ObjectId
+			CropCount:=new(models.DhUserCorp).Count(countfilter)
 			_crop["ObjectId"] = info.ObjectId
 			_crop["CropName"] = info.Name
 			_crop["CropEmail"] = info.Email
 			_crop["CropMobile"] = info.Mobile
+			_crop["CropCount"] = CropCount
 			_crop["CreateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
 			_crop["CropStatus"] = info.Status
 			data = append(data, _crop)
@@ -176,6 +183,7 @@ func (c *CorpController) Add() {
 	}
 }
 
+
 func (c *CorpController) Remove() {
 	c.Require("id")
 	id := c.GetString("id")
@@ -200,7 +208,7 @@ func (c *CorpController) GetUserCorp() {
 	filtersAllUser["status__gte"] = 0
 	corpName := c.GetString("corpName")
 	if corpName!=""&&corpName!="undefined"{
-		filtersAllUser["name"]=corpName
+		filtersAllUser["name__contains"]=corpName
 	}
 	dhcorp := new(models.DhCorp).Find(id)
 	if dhcorp == nil {
@@ -277,17 +285,24 @@ func (c *CorpController) RemoveAndUser() {
 		c.EchoJsonOk()
 	}
 	}else  if removed=="1"{
+		usercorpfilter:=map[string]interface{}{}
 		usercorp:=new(models.DhUserCorp)
 		usercorp.UserId=user_id
 		usercorp.CorpId=id
 		usercorp.Role="3"
+		usercorpfilter["userid"]=user_id
+		usercorpfilter["corpid"]=id
+		usercorpflag:=new(models.DhUserCorp).Find(usercorpfilter)
+		if usercorpflag!=nil {
+			c.EchoJsonErr("用户已经存在团队中")
+			c.StopRun()
+		}
 		usercorp.Save()
 		c.EchoJsonOk()
 	}else{
 		c.EchoJsonOk()
 	}
 }
-
 func (c *CorpController)  ChangeUserRole() {
 	c.Require("id")
 	id := c.GetString("id")
@@ -298,6 +313,23 @@ func (c *CorpController)  ChangeUserRole() {
 		c.EchoJsonErr("团队不存在")
 		c.StopRun()
 	}
+	userCorpfilterrole:=map[string]interface{}{}
+	userCorpfilterrole["role"]="1"
+	userCorpfilterrole["object_id"]=id
+	if role =="0"{
+		fmt.Println(role,"---------------------------------进去---------------------------------")
+
+		number:=new(models.DhUserCorp).Count(userCorpfilterrole)
+		if number<2 {
+			c.EchoJsonOk("管理员唯一不可改变")
+			c.StopRun()
+
+		}
+	}
+
+
+
+
 	corp.Role=role
 	result:=corp.Save()
 	if !result {

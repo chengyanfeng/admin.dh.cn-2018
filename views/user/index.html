@@ -8,8 +8,8 @@
         <div class="row-fluid filter-block" >
 
             <div class="filter-field">
-                <span>搜索:</span>
-                <input name="search" type="text" value="{{.search}}" >
+
+                <input name="search" type="text" value="{{.search}}" placeholder="用户名，电话号码，公司名称，邮箱">
             </div>
             <div class="filter-field">
                 <span>状态:</span>
@@ -19,22 +19,22 @@
                     <option value="" selected="selected" >全部</option>
                     <option value=0  >未审核</option>
                     <option value=1  >审核通过</option>
-                    <option value=-1 >已删除</option>
+                    <option value=-1 >已停用</option>
                     {{ else if eq .status "0"}}
                     <option value="" >全部</option>
                     <option value=0  selected="selected" >未审核</option>
                     <option value=1  >审核通过</option>
-                    <option value=-1  >已删除</option>
+                    <option value=-1  >已停用</option>
                     {{ else if eq .status "1"}}
                     <option value="" >全部</option>
                     <option value=0  >未审核</option>
                     <option value=1  selected="selected">审核通过</option>
-                    <option value=-1  >已删除</option>
+                    <option value=-1  >已停用</option>
                     {{ else if eq .status "-1"}}
                     <option value="" >全部</option>
                     <option value=0  >未审核</option>
                     <option value=1  >审核通过</option>
-                    <option value=-1  selected="selected" >已删除</option>
+                    <option value=-1  selected="selected" >已停用</option>
                     {{ end }}
                 </select>
 
@@ -68,7 +68,7 @@
                 <thead>
                 <tr>
                     <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
-                    <th style="width: 10%"><span class="line"></span>ID</th>
+                    <th style="display:none;"><span class="line"></span>ID</th>
                     <th style="width: 8%"><span class="line"></span>用户名</th>
                     <th style="width: 8%"><span class="line"></span>手机号</th>
                     <th style="width: 9%"><span class="line"></span>邮箱</th>
@@ -83,7 +83,7 @@
                 {{- range .List}}
                 <tr>
                     <td><input type="checkbox" class="list_delect"></td>
-                    <td>{{.ObjectId}}</td>
+                    <td style="display:none;">{{.ObjectId}}</td>
                     <td>{{.Name}}</td>
                     <td>{{.Mobile}}</td>
                     <td>{{.Email}}</td>
@@ -151,7 +151,7 @@
             </table>
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
-        <div class="pull-left" style="padding-left: 20px;margin-top:3%">
+        <div class="pull-left" style="padding-left: 20px;margin-top:35px">
             {{ if   eq  0 (.List|len)  }}
             {{else}}
 

@@ -35,7 +35,10 @@ func (c *UserController) init(i int) {
 			}
 		}
 	}
+	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
+
 }
 
 func (c *UserController) List() {
@@ -74,7 +77,7 @@ func (c *UserController) List() {
 
 				c.Data["businesstype"] ="nil"
 			}
-			number,_:=new(models.DhUser).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).All(&list)
+			number,_:=new(models.DhUser).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total,_=new(models.DhUser).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1
@@ -284,7 +287,6 @@ func (c *UserController) UpdateStatusAva() {
 }
 
 func (c *UserController) GetCorp() {
-
 	c.Require("id")
 	id := c.GetString("id")
 	filtersUserCorp := map[string]interface{}{}
@@ -292,7 +294,7 @@ func (c *UserController) GetCorp() {
 	filtersAllCorp["status__gte"] = 0
 	corpName := c.GetString("corpName")
 	if corpName!=""&&corpName!="undefined"{
-		filtersAllCorp["name"]=corpName
+		filtersAllCorp["name__contains"]=corpName
 	}
 	user := new(models.DhUser).Find(id)
 	if user == nil {
@@ -383,18 +385,27 @@ func (c *UserController) DelectAndAddCorp() {
 
 		}}
 	if title == "2" {
+		DhUserCorpfilter:=map[string]interface{}{}
 		Corp := new(models.DhCorp).Find(object_id)
 		if Corp == nil{
 			c.EchoJsonErr("团队不存在")
 			c.StopRun()
 		}
+
 		DhUserCorp:=new(models.DhUserCorp)
 		DhUserCorp.Role="0"
 		DhUserCorp.CorpId=Corp.ObjectId
 		DhUserCorp.UserId=user_id
+		DhUserCorpfilter["corpid"]=Corp.ObjectId
+		DhUserCorpfilter["userid"]=user_id
+		DhUserCorpflag:=new(models.DhUserCorp).Find(DhUserCorpfilter)
+		if DhUserCorpflag !=nil {
+			c.EchoJsonErr("用户已经添加到团队中")
+			c.StopRun()
+		}
 		result :=DhUserCorp.Save()
 		if !result {
-			c.EchoJsonErr("注册失败")
+			c.EchoJsonErr("添加用户失败")
 		} else {
 			c.EchoJsonOk()
 		}
@@ -406,6 +417,19 @@ func (c *UserController) DelectAndAddCorp() {
 		if UserCorp == nil{
 			c.EchoJsonErr("团队不存在")
 			c.StopRun()
+		}
+		userCorpfilterrole:=map[string]interface{}{}
+		userCorpfilterrole["role"]="1"
+		userCorpfilterrole["object_id"]=object_id
+		if role =="0"{
+			fmt.Println(role,"---------------------------------进去---------------------------------")
+
+			number:=new(models.DhUserCorp).Count(userCorpfilterrole)
+		if number<2 {
+			c.EchoJsonOk("管理员唯一不可改变")
+			c.StopRun()
+
+		}
 		}
 		UserCorp.Role=role
 		result := UserCorp.Save()
@@ -508,4 +532,8 @@ func (c *UserController) DelectUserScreen() {
 	}
 
 	c.EchoJsonOk()
+}
+
+func (c *UserController) GetUserData() {
+	c.EchoJsonOk("测试")
 }

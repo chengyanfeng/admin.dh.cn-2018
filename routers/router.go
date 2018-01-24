@@ -1,14 +1,22 @@
 package routers
 
 import (
+	. "admin.dh.cn/filter"
 	"admin.dh.cn/controllers"
 	"github.com/astaxie/beego"
 
 )
 
 func init() {
-	beego.Router("/", &controllers.MainController{},"get:Get")
+
+
+	beego.Router("/", &controllers.LoginController{},"get:Get")
+	beego.Router("/login", &controllers.LoginController{},"post:Login")
+	beego.Router("login/quit/",&controllers.LoginController{},"get:Quit")
+	beego.InsertFilter("/*", beego.BeforeRouter, BaseFilter)
+	beego.Router("/main", &controllers.MainController{},"get:Get")
 	beego.Router("/user", &controllers.UserController{},"get:List")
+	beego.Router("/user/getuserdata", &controllers.UserController{},"get:GetUserData")
 	beego.Router("/user/create", &controllers.UserController{},"get:Create")
 	beego.Router("/user/edit", &controllers.UserController{},"get:Edit")
 	beego.Router("/user/add", &controllers.UserController{},"post:Add")
@@ -28,6 +36,8 @@ func init() {
 	beego.AutoRouter(&controllers.SourcetypeController{})
 	beego.AutoRouter(&controllers.ScreenController{})
 	beego.AutoRouter(&controllers.UserscreenController{})
+	beego.AutoRouter(&controllers.InvitationCodeController{})
+	beego.AutoRouter(&controllers.SourceController{})
 
 
 
