@@ -41,7 +41,7 @@ func (c *SourcetypeController) List() {
 	var mpurl ="/sourcetype/list?"
 	c.TplName = "sourcetype/index.html"
 	var total,total_page int64
-	var list []*models.DiDatasourceGroup
+	var list []*models.DiDatasourceType
 	page,_ := c.GetInt64("page",1)
 	page_size,_ := c.GetInt64("page_size",10)
 	search := c.GetString("search")
@@ -49,6 +49,7 @@ func (c *SourcetypeController) List() {
 	filters := map[string]interface{}{}
 	if len(search)>0{
 		cond := orm.NewCondition()
+
 		if len(search)>0{
 			c.Data["search"] = search
 			mpurl=mpurl+"&search="+search
@@ -64,8 +65,8 @@ func (c *SourcetypeController) List() {
 				c.Data["status"] = "nil"
 			}
 
-			number,_:=new(models.DiDatasourceGroup).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
-			total,_=new(models.DiDatasourceGroup).Query().SetCond(condor).Count()
+			number,_:=new(models.DiDatasourceType).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
+			total,_=new(models.DiDatasourceType).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1
 			}else {
@@ -90,15 +91,17 @@ func (c *SourcetypeController) List() {
 			c.Data["status"] = "nil"
 		}
 
-		total,total_page,list = new(models.DiDatasourceGroup).OrderPager(page, page_size, filters,"-create_time")
+
+
+		total,total_page,list = new(models.DiDatasourceType).OrderPager(page, page_size, filters,"-create_time")
 	}
 	data := []utils.P{}
 	if len(list) > 0 {
 		for _, info := range list {
 			dhdatasource := utils.P{}
 			dhdataType := utils.P{}
-			dhdatasource["group_id"]=info.ObjectId
-			dhdatasourceCount:=new(models.DiDatasource).Count(dhdatasource)
+			dhdatasource["datasource_type_id"]=info.ObjectId
+			dhdatasourceCount:=new(models.DiDatasourceData).Count(dhdatasource)
 			dhdataType["ObjectId"] = info.ObjectId
 			dhdataType["Name"] = info.Name
 			dhdataType["SourceCount"] = dhdatasourceCount
@@ -110,29 +113,28 @@ func (c *SourcetypeController) List() {
 	c.Data["List"] = data
 	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page),mpurl)
 }
-
 func (c *SourcetypeController) Update() {
 	c.Require("id")
 	id := c.GetString("id")
 	name := c.GetString("name")
-	DiDatasourceGroup := new(models.DiDatasourceGroup).Find(id)
-	if DiDatasourceGroup == nil {
+	DiDatasourceType := new(models.DiDatasourceType).Find(id)
+	if DiDatasourceType == nil {
 		c.EchoJsonErr("分类组不存在")
 		c.StopRun()
 	}
 	if name!=""{
-		DiDatasourceGroup.Name=name
+		DiDatasourceType.Name=name
 	}
 	if c.GetString("status") == "1" {
 		int,_:=strconv.Atoi(c.GetString("status"))
-		DiDatasourceGroup.Status = int
+		DiDatasourceType.Status = int
 	}
 	if c.GetString("status") == "0"{
 		int,_:=strconv.Atoi(c.GetString("status"))
-		DiDatasourceGroup.Status = int
+		DiDatasourceType.Status = int
 	}
-	fmt.Println("---------------a-------------------",DiDatasourceGroup)
-	result := DiDatasourceGroup.Save()
+	fmt.Println("---------------a-------------------",DiDatasourceType)
+	result := DiDatasourceType.Save()
 	if !result {
 		c.EchoJsonErr("修改失败")
 	} else {
@@ -142,12 +144,12 @@ func (c *SourcetypeController) Update() {
 func (c *SourcetypeController) Remove() {
 	c.Require("id")
 	id := c.GetString("id")
-	DiDatasourceGroup := new(models.DiDatasourceGroup).Find(id)
-	if DiDatasourceGroup == nil {
+	DiDatasourceType := new(models.DiDatasourceType).Find(id)
+	if DiDatasourceType == nil {
 		c.EchoJsonErr("数据源组不存在")
 		c.StopRun()
 	}
-	result := DiDatasourceGroup.Delete(id)
+	result := DiDatasourceType.Delete(id)
 	if !result {
 		c.EchoJsonErr("删除失败")
 	} else {
@@ -157,20 +159,20 @@ func (c *SourcetypeController) Remove() {
 func (c *SourcetypeController) Edit() {
 	c.Require("id")
 	id := c.GetString("id")
-	DiDatasourceGroup := new(models.DiDatasourceGroup).Find(id)
-	if DiDatasourceGroup == nil {
+	DiDatasourceType := new(models.DiDatasourceType).Find(id)
+	if DiDatasourceType == nil {
 		c.EchoJsonErr("用户不存在")
 		c.StopRun()
 	}
 
-	c.Data["object"] = &DiDatasourceGroup
+	c.Data["object"] = &DiDatasourceType
 	c.TplName = "sourcetype/edit.html"
 }
 func (c *SourcetypeController) Add() {
-	DiDatasourceGroup := new(models.DiDatasourceGroup)
-	DiDatasourceGroup.Name = c.GetString("name")
-	DiDatasourceGroup.Status = 0
-	result :=DiDatasourceGroup.Save()
+	DiDatasourceType := new(models.DiDatasourceType)
+	DiDatasourceType.Name = c.GetString("name")
+	DiDatasourceType.Status = 0
+	result :=DiDatasourceType.Save()
 	if !result {
 		c.EchoJsonErr("创建失败")
 	} else {
@@ -183,11 +185,11 @@ func (c *SourcetypeController) Listremove() {
 	plist:=*utils.JsonDecodeArrays([]byte(datas))
 	argerr :=make([]string,1)
 	for _,v :=range plist{
-		DiDatasourceGroup := new(models.DiDatasourceGroup).Find(v["object_id"].(string))
-		if DiDatasourceGroup == nil {
+		DiDatasourceType := new(models.DiDatasourceType).Find(v["object_id"].(string))
+		if DiDatasourceType == nil {
 			argerr=append(argerr,v["object_id"].(string))
 		}else {
-			result := DiDatasourceGroup.Delete(v["object_id"].(string))
+			result := DiDatasourceType.Delete(v["object_id"].(string))
 			if !result {
 				argerr=append(argerr,v["object_id"].(string))
 			}

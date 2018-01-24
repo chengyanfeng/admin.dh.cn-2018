@@ -10,7 +10,7 @@
                 </div>
                 <div class="field-box">
                     <label>数据源分类：</label>
-                    <select  name="SourceType" id="SourceType" value={{.object.Type}} class="select2" style="width: 140px;height:30px">
+                    <select  name="SourceType" id="SourceType" value={{.object.TypeName}} class="select2" style="width: 140px;height:30px">
 
                         {{- range .sourceTypelist }}
                             {{ if  eq .sourceType .Type}}
@@ -21,12 +21,24 @@
                         {{- end}}
 
                     </select>
+
+
+
+
                 </div>
+                <div class="field-box">
+                    <label>log:</label>
+                    <input name="name" id="log" class="span6 inline-input" type="file" value="{{.object.Name}}" required />
+                </div>
+
+
 
                 <div class="field-box">
                     <label>&nbsp;</label>
                     <input  name="id" id="id" type="hidden" value="{{.object.ObjectId}}" />
                 </div>
+
+
 
                 <div class="field-box">
                     <input type="submit" class="btn-flat default" value="提 交" style="margin-left:66px">
