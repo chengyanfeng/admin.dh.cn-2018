@@ -43,7 +43,7 @@ func (c *SourceController) List() {
 	c.TplName = "source/index.html"
 	var total,total_page int64
 	typelist:=[]utils.P{}
-	var list []*models.DiDatasourceData
+	var list []*models.DiDatasourcePub
 	page,_ := c.GetInt64("page",1)
 	page_size,_ := c.GetInt64("page_size",10)
 	search := c.GetString("search")
@@ -79,8 +79,8 @@ func (c *SourceController) List() {
 
 
 
-			number,_:=new(models.DiDatasourceData).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
-			total,_=new(models.DiDatasourceData).Query().SetCond(condor).Count()
+			number,_:=new(models.DiDatasourcePub).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
+			total,_=new(models.DiDatasourcePub).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1
 			}else {
@@ -113,15 +113,21 @@ func (c *SourceController) List() {
 			c.Data["sourceType"] ="nil"
 		}
 
-		total,total_page,list = new(models.DiDatasourceData).OrderPager(page, page_size, filters,"-create_time")
+		total,total_page,list = new(models.DiDatasourcePub).OrderPager(page, page_size, filters,"-create_time")
 	}
 	data := []utils.P{}
 	if len(list) > 0 {
 		for _, info := range list {
+			DiDatasourceTypefilter:=map[string]interface{}{}
+			DiDatasourceTypefilter["object_id"]=info.DatasourceTypeId
+			DiDatasourceType:=new(models.DiDatasourceType).Find(DiDatasourceTypefilter["object_id"])
+			if DiDatasourceType ==nil{
+				c.EchoJsonErr("没有当前类型")
+			}
 			dhdatasource := utils.P{}
 			dhdatasource["ObjectId"] = info.ObjectId
 			dhdatasource["Name"] = info.Name
-			dhdatasource["TypeName"] = info.TypeName
+			dhdatasource["TypeName"] = DiDatasourceType.Name
 			dhdatasource["UpdateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
 			dhdatasource["Status"] = info.Status
 			data = append(data, dhdatasource)
@@ -147,7 +153,7 @@ func (c *SourceController) List() {
 func (c *SourceController) Update() {
 	c.Require("id")
 	id := c.GetString("id")
-	DiDatasourceData := new(models.DiDatasourceData).Find(id)
+	DiDatasourceData := new(models.DiDatasourcePub).Find(id)
 	if DiDatasourceData == nil {
 		c.EchoJsonErr("数据源不存在")
 		c.StopRun()
@@ -156,7 +162,13 @@ func (c *SourceController) Update() {
 		DiDatasourceData.Name = c.GetString("name")
 	}
 	if c.GetString("SourceType")!=""{
-		DiDatasourceData.TypeName = c.GetString("SourceType")
+		DiDatasourceTypefilter:=map[string]interface{}{}
+		DiDatasourceTypefilter["name"]=c.GetString("SourceType")
+		DiDatasourceType:=new(models.DiDatasourceType).Find(DiDatasourceTypefilter["object_id"])
+		if DiDatasourceType ==nil{
+			c.EchoJsonErr("没有当前类型")
+		}
+		DiDatasourceData.DatasourceTypeId = DiDatasourceType.ObjectId
 	}
 	if c.GetString("status")!=""{
 		int,err:=strconv.Atoi(c.GetString("status"))
@@ -180,7 +192,7 @@ func (c *SourceController) Listremove() {
 	plist:=*utils.JsonDecodeArrays([]byte(datas))
 	argerr :=make([]string,1)
 	for _,v :=range plist{
-		DiDatasourceData := new(models.DiDatasourceData).Find(v["object_id"].(string))
+		DiDatasourceData := new(models.DiDatasourcePub).Find(v["object_id"].(string))
 		if DiDatasourceData == nil {
 			argerr=append(argerr,v["object_id"].(string))
 		}else {
@@ -206,7 +218,7 @@ func (c *SourceController) ShowData() {
 func (c *SourceController) Remove() {
 	c.Require("id")
 	id := c.GetString("id")
-	DiDatasourceData := new(models.DiDatasourceData).Find(id)
+	DiDatasourceData := new(models.DiDatasourcePub).Find(id)
 	if DiDatasourceData == nil {
 		c.EchoJsonErr("大屏膜版不存在")
 		c.StopRun()
@@ -222,7 +234,7 @@ func (c *SourceController) Remove() {
 func (c *SourceController) Edit() {
 	c.Require("id")
 	id := c.GetString("id")
-	DiDatasourceData := new(models.DiDatasourceData).Find(id)
+	DiDatasourceData := new(models.DiDatasourcePub).Find(id)
 	if DiDatasourceData == nil {
 		c.EchoJsonErr("数据不存在")
 		c.StopRun()
@@ -234,11 +246,14 @@ func (c *SourceController) Edit() {
 		for _,v:=range DiDatasourceTypes{
 			ty:=utils.P{}
 			ty["sourceType"]=v.Name
-			ty["Type"]=DiDatasourceData.TypeName
+			if v.ObjectId==DiDatasourceData.DatasourceTypeId {
+			ty["Type"]=v.Name
+			}
 			typelist=append(typelist,ty)
 
 		}
 	}
+
 	c.Data["sourceTypelist"]=typelist
 	c.Data["object"] = &DiDatasourceData
 	fmt.Println(DiDatasourceData,"abc=------------------------afaf")

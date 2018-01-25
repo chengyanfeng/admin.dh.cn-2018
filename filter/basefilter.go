@@ -12,6 +12,7 @@ var BaseFilter = func(ctx *context.Context) {
 		 if ctx.Request.RequestURI  !="/login" {
 			 if ctx.Request.RequestURI !="/login/quit" {
 	gooid,bool:= ctx.GetSecureCookie("2rdsfada3@#$%^&*","gooid")
+
 	if bool == true {
 		cachgooid:=utils.S("gooid")
 		fmt.Println(gooid,"---------------gooid-----------------")

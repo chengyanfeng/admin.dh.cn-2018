@@ -96,9 +96,13 @@
             </table>
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
-        <div class="pull-left" style="padding-left: 20px;margin-top:23px">
-            <input type="button" id="listdelect" class="btn btn-lg" value="批量停用" style="margin-left:5px;margin-top:15px" disabled="disabled" >
 
+        <div class="pull-left" style="padding-left: 20px;margin-top:23px">
+            {{ if   eq  0 (.List|len)  }}
+            {{else}}
+
+            <input type="button" id="listdelect" class="btn btn-lg" value="批量停用" style="margin-left:5px;margin-top:15px" disabled="disabled" >
+{{ end }}
         </div>
     </div>
 </form>

@@ -8,11 +8,11 @@ import (
 )
 
 type LoginController struct {
+
 	controllers.BaseController
 }
 func (c *LoginController) init(i int) {
-
-	c.Layout = "common/layout.html"
+c.Layout = "common/layout.html"
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "common/header.html"
 	c.LayoutSections["HtmlFooter"] = "common/footer.html"
@@ -38,9 +38,7 @@ func (c *LoginController)Get(){
 	utils.SDel("gooid")
 	c.SetSecureCookie("","gooid","")
 	c.TplName="index/login.html"
-
 }
-
 
 func (c *LoginController)Login(){
 	c.init(0)
@@ -66,6 +64,7 @@ func (c *LoginController)Login(){
 	c.EchoJsonOk("main")
 
 }
+
 
 func (c *LoginController)Quit(){
 
