@@ -2,13 +2,14 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+	"fmt"
 )
 
-type MainController struct {
+type IndexController struct {
 	beego.Controller
 }
 
-func (c *MainController) init(i int) {
+func (c *IndexController) init(i int) {
 	c.Layout = "common/layout.html"
     c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "common/header.html"
@@ -21,11 +22,13 @@ func (c *MainController) init(i int) {
 		}
 	}
 	c.Data["Menu"]=Menu
-	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	Authname:=c.Ctx.GetCookie("Authname")
 	c.Data["Authname"]=Authname
 }
 
-func (c *MainController) Get() {
+func (c *IndexController) Get() {
+	fmt.Print("进去main了" +
+		"")
 	c.init(0)
     c.TplName = "index/index.html"
 }

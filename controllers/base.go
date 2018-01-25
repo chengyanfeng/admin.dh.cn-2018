@@ -13,9 +13,7 @@ var  accountSub=  []utils.P{
 		"On": 0,
 		"Path": "/user",
 		"Name": "用户管理",
-
-
-	},
+},
 	utils.P{
 		"On": 0,
 		"Path": "/corp/list",
@@ -63,10 +61,8 @@ var  screenSub=  []utils.P{
 var Menu = []utils.P{
 	utils.P{
 		"On": 0,
-		"Path": "/main",
+		"Path": "/index",
 		"Name": "首页",
-
-
 	},
 	utils.P{
 		"On": 0,

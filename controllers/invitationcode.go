@@ -37,6 +37,8 @@ func (c *InvitationCodeController) init(i int) {
 			}
 		}
 	}
+	Authname:=c.Ctx.GetCookie("Authname")
+	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
 func (c *InvitationCodeController) List() {

@@ -5,6 +5,8 @@ import (
 	"common.dh.cn/controllers"
 	"common.dh.cn/utils"
 	"fmt"
+
+
 )
 
 type LoginController struct {
@@ -30,7 +32,7 @@ c.Layout = "common/layout.html"
 			}
 		}
 	}
-	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	Authname:=c.Ctx.GetCookie("Authname")
 	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
@@ -41,6 +43,7 @@ func (c *LoginController)Get(){
 }
 
 func (c *LoginController)Login(){
+	fmt.Println("---------------------------dafdsffdsa---------")
 	c.init(0)
 	username:=c.GetString("name")
 	password:=c.GetString("password")
@@ -58,16 +61,19 @@ func (c *LoginController)Login(){
 		c.StopRun()
 	}
 	fmt.Println("111111111111111women1111111111111111")
-	c.Ctx.SetSecureCookie("2rdsfada3@#$%^&*","Authname",username)
-	c.SetSecureCookie("2rdsfada3@#$%^&*","gooid",username)
+
+
+	c.SetSession("gooid",username)
 	utils.S("gooid",username,"7200")
-	c.EchoJsonOk("main")
+	c.Ctx.SetCookie("Authname",username)
+	/*
 
+	c.Ctx.SetCookie("gooid",username+utils.ToString(time.Second))
+	*/
+	c.EchoJsonOk("index")
 }
-
-
 func (c *LoginController)Quit(){
-
+	c.DelSession("gooid")
 	c.Redirect("/",200)
 
 }

@@ -9,12 +9,11 @@ import (
 
 func init() {
 
-
+	beego.InsertFilter("/*", beego.BeforeRouter, BaseFilter)
 	beego.Router("/", &controllers.LoginController{},"get:Get")
 	beego.Router("/login", &controllers.LoginController{},"post:Login")
-	beego.Router("login/quit/",&controllers.LoginController{},"get:Quit")
-	beego.InsertFilter("/*", beego.BeforeRouter, BaseFilter)
-	beego.Router("/main", &controllers.MainController{},"get:Get")
+	beego.Router("/login/quit/",&controllers.LoginController{},"get:Quit")
+	beego.Router("/index", &controllers.IndexController{},"get:Get")
 	beego.Router("/user", &controllers.UserController{},"get:List")
 	beego.Router("/user/getuserdata", &controllers.UserController{},"get:GetUserData")
 	beego.Router("/user/create", &controllers.UserController{},"get:Create")

@@ -31,7 +31,7 @@ func (c *SourcetypeController) init(i int) {
 		}
 	}
 	c.Data["Menu"]=Menu
-	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	Authname:=c.Ctx.GetCookie("Authname")
 	c.Data["Authname"]=Authname
 }
 
@@ -101,7 +101,7 @@ func (c *SourcetypeController) List() {
 			dhdatasource := utils.P{}
 			dhdataType := utils.P{}
 			dhdatasource["datasource_type_id"]=info.ObjectId
-			dhdatasourceCount:=new(models.DiDatasourceData).Count(dhdatasource)
+			dhdatasourceCount:=new(models.DiDatasourcePub).Count(dhdatasource)
 			dhdataType["ObjectId"] = info.ObjectId
 			dhdataType["Name"] = info.Name
 			dhdataType["SourceCount"] = dhdatasourceCount

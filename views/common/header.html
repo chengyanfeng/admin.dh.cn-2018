@@ -35,6 +35,7 @@
             </ul>
         </div>
     </div>
+
     <div id="sidebar-nav">
         <ul id="dashboard-menu">
         {{- range .Menu}}
@@ -63,13 +64,12 @@
                         {{ end }}
                     {{- range .Sub}}
                      {{ if eq .On 1}}
-
-                        <li class="active">
+                        <li class="active" id="wokao">
                             <a href="{{.Path}}">{{.Name}}</a>
                         </li>
                     {{else}}
                     <li>
-                        <a href="{{.Path}}">{{.Name}}</a>
+                        <a href="{{.Path}}" id="wokaoni">{{.Name}}</a>
                     </li>
                     {{ end }}
                     {{- end}}

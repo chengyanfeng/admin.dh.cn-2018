@@ -178,7 +178,7 @@ function common_list_init(){
     form.delegate("a[action='view']",'click',function () {
         common_open_dialog($(this).attr('title'), $(this).attr('url'));
     });
-    <!--停用,启动，状态 的 操作 绑定-->
+    //停用,启动，状态 的 操作 绑定-->
     form.delegate("a[action='update']",'click',function () {
             var object_name = $(this).parents(".search").attr('object');
             if (object_name=="user"){
@@ -189,80 +189,80 @@ function common_list_init(){
                 common_update_status(object_name,$(this).attr('object-id'),$(this).attr('name'),$(this).attr('value'),$(this).attr('title'))
                     }
         });
-      <!--管理团队绑定-->
+      //管理团队绑定-->
       form.delegate("a[action='ManageCorp']",'click',function () {
                  var object_name = $(this).parents(".search").attr('object');
                  common_manage_corp($(this),object_name,$(this).attr('object-id'),"modalcorp");
          });
 
-      <!--管理用户团队---移除-->
+      //管理用户团队---移除-->
                $('body').on('click', '#userCorp tbody td a[action="ManageRemoveAdd"]',function(){
 
                     common_delect_add_user_corp($(this),$(this).attr('user-id'),$(this).attr('object-id'));
                })
 
-      <!-- 管理所有团队--添加用户-->
+      // 管理所有团队--添加用户-->
       $('body').on('click', '#AllCorp tbody td a[action="ManageRemoveAdd"]',function(){
 
                common_delect_add_user_corp($(this),$("#addUserCorp").attr('user-id'),$(this).attr('object-id'));
          })
-        <!-- 管理团队-搜索团队-->
+        //管理团队-搜索团队-->
       $('body').on('click', '#corpSearch',function(){
 
       common_manage_corp($(this),"user",$(this).attr('object-id'),"modalcorp",$("#selectCorp").val());
          })
-        <!--管理团队角色-->
+        //管理团队角色-->
                       $('body').on('change', '#userCorp tbody td select[id="userRole"]',function(){
 
                            common_delect_add_user_corp($(this),$(this).parent("td").next().children().attr("user-id"),$(this).parent("td").next().children().attr("object-id"));
                       })
- <!--管理用户屏-->
+ //管理用户屏-->
       form.delegate("a[action='userScreen']",'click',function () {
                  var object_name = $(this).parents(".search").attr('object');
                  common_manage_screen($(this),object_name,$(this).attr('object-id'),"modaluserscreen");
          });
-           <!--管理用户大屏---移除-->
+           //管理用户大屏---移除-->
                $('body').on('click', '#userScreen tbody td a[action="ManageScreenRemove"]',function(){
             common_delect_userscreen($(this),$("#addUserScreen").attr('user-id'),$(this).attr('object-id'));
                })
 
-            <!--管理团队成员绑定--通用-->
+            //管理团队成员绑定--通用-->
                 form.delegate("a[action='BangDing']",'click',function () {
                                 var object_name = $(this).parents(".search").attr('object');
                                 common_manage_bangding($(this),object_name,$(this).attr('object-id'),"modalcorp");
                         });
-              <!--管理团队成员绑定--通用-移除->
+              //管理团队成员绑定--通用-移除->
                             $('body').on('click', '#leftTable tbody td a[action="RemoveAdd"]',function(){
                                             var object_name = $("#pad-wrapper").attr('object');
                                             var object_id = $("#pad-wrapper").attr('object-id');
                              common_remove_add_user($(this),object_name,object_id,"modalcorp");
                                     });
-              <!--管理团队成员绑定--通用-添加->
+              //管理团队成员绑定--通用-添加->
                           $('body').on('click', '#rightTable tbody td a[action="RemoveAdd"]',function(){
                                                  var object_name = $("#pad-wrapper").attr('object');
                                                  var object_id = $("#pad-wrapper").attr('object-id');
                            common_remove_add_user($(this),object_name,object_id,"modalcorp");
                           });
-                   <!--管理团队角色-->
+                   //管理团队角色-->
                          $('body').on('change', '#leftTable tbody td select[id="role"]',function(){
                   var object_name = $("#pad-wrapper").attr('object');
                   var object_id = $(this).attr('object-id');
                   var corp_id = $("#pad-wrapper").attr('object-id');
                   common_change_role($(this),object_name,object_id,corp_id,"modalcorp")
                   });
-              <!-- 管理团队-搜索团队-->
+              // 管理团队-搜索团队-->
                $('body').on('click', '#userSearch',function(){
                   var object_name = $("#pad-wrapper").attr('object');
                   var object_id = $("#pad-wrapper").attr('object-id');
                  common_manage_bangding($(this),object_name,object_id,"modalcorp",$("#selectCorp").val());
                })
-               <!-- 管理大屏-主页删除通用->
+               // 管理大屏-主页删除通用->
                               $('body').on('click', '#remove',function(){
                                  var object_name = $("#pad-wrapper").attr('object');
                                  var object_id = $("#pad-wrapper").attr('object-id');
                                 common_manage_bangding($(this),object_name,object_id,"modalcorp",$("#selectCorp").val());
                               });
-            <!--邀请码--添加->
+            //邀请码--添加->
                               form.delegate("a[action='addcode']",'click',function () {
                              var object_name = $(this).parents(".search").attr('object');
                              var  amount=  $("#codeamont").attr("value")
@@ -270,18 +270,18 @@ function common_list_init(){
                                  common_object_add(object_name,amount,$(this));
              });
 
-              <!-- 获取表格焦点-->
+              // 获取表格焦点-->
                          $('body').on('mouseover',".showlastone", function(){
                               $(this).children("td:last ").css("display","")
                             console.log($(this).children("td:last").attr("test"))
                            });
-                             <!-- 失去表格焦点-->
+                             // 失去表格焦点-->
                            $('body').on('mouseout',".showlastone", function(){
                            $(this).children("td:last ").css("display","none")
                            });
 
 }
-<!--数据显示--详情显示-->
+//数据显示--详情显示-->
                   $('body').on('click',"a[action='BangDingData']",function () {
                                 var object_name = $(this).parents(".search").attr('object');
                                 common_manage_bangding($(this),object_name,$(this).attr('object-id'),"modalcorp");
@@ -1295,7 +1295,7 @@ $(document).ready(function(){
         common_list_init();
     }
 });
-<!-- 全部选中-->
+//全部选中
 
 $("#child_delect").change(function() {
 
@@ -1311,7 +1311,7 @@ $("#child_delect").change(function() {
 
 }
 });
-<!-- 部分选中-->
+// 部分选中
 $(".list_delect").each(function(){
  var i=0
 
@@ -1337,7 +1337,7 @@ $(".list_delect").each(function(){
 
                    });
 
- <!-- 批量删除-->
+//批量删除
       $('#listdelect').on('click',function(){
       var object_name = $(this).parents(".search").attr('object');
      var title= $(this).parents(".search").attr('name');
@@ -1364,7 +1364,7 @@ $(".list_delect").each(function(){
 
 
   })
- <!--批量修改绑定-->
+//批量修改绑定
 
       $('#listchangetype').on('click',function() {
                  var object_name = $(this).parents(".search").attr('object');
@@ -1617,6 +1617,13 @@ function getColumns() {
 
     });
 }
+
+
+  $('body').on('mouseover',"#wokao", function(){
+
+                          console.log($(this).children("a").attr("href"))
+                           });
+
 
 
 

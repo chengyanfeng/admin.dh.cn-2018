@@ -34,9 +34,11 @@
 <script type="text/javascript" src="/static/js/jquery.form.js"></script>
 <script type="text/javascript" src="/static/js/jquery.validate.min.js"></script>
 <script type="text/javascript" src="/static/js/messages_zh.js"></script>
+<script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function() {
-        var v = jQuery('#login_f').validate({submitHandler: function(form) {action_submit();}});
+		var v = jQuery('#login_f').validate({submitHandler: function(form) {action_submit();}});
     });
     function action_submit() {
         $('#login_f').ajaxSubmit({
@@ -47,9 +49,10 @@
                 if (data.code == 200) {
                var url= window.location.href
                let new_url = url + data.msg;
-               debugger
                console.log(new_url, 'new_url')
-                window.location.href = new_url;
+               alert(new_url)
+				window.location.href = new_url;
+
                 } else {
                     alert(data.msg);
                 }

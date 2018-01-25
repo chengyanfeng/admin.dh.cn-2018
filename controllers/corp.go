@@ -36,7 +36,7 @@ func (c *CorpController) init(i int) {
 			}
 		}
 	}
-	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	Authname:=c.Ctx.GetCookie("Authname")
 	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
