@@ -36,6 +36,7 @@ c.Layout = "common/layout.html"
 	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
+
 func (c *LoginController)Get(){
 	utils.SDel("gooid")
 	c.SetSecureCookie("","gooid","")
