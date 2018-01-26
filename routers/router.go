@@ -13,6 +13,7 @@ func init() {
 	beego.Router("/login", &controllers.LoginController{}, "post:Login")
 	beego.Router("/login/quit/", &controllers.LoginController{}, "get:Quit")
 
+	beego.InsertFilter("/", beego.BeforeRouter, BaseFilter)
 	beego.InsertFilter("/index", beego.BeforeRouter, BaseFilter)
 	beego.InsertFilter("/user/*", beego.BeforeRouter, BaseFilter)
 	beego.InsertFilter("/corp/*", beego.BeforeRouter, BaseFilter)
@@ -23,6 +24,7 @@ func init() {
 	beego.InsertFilter("/invitationcode/*", beego.BeforeRouter, BaseFilter)
 
 	//首页
+	beego.Router("/", &controllers.IndexController{}, "get:Get")
 	beego.Router("/index", &controllers.IndexController{}, "get:Get")
 
 	//用户
