@@ -8,11 +8,12 @@ import (
 
 func init() {
 
+	//登录
 	beego.Router("/login", &controllers.LoginController{}, "get:Get")
 	beego.Router("/login", &controllers.LoginController{}, "post:Login")
 	beego.Router("/login/quit/", &controllers.LoginController{}, "get:Quit")
-	beego.Router("/", &controllers.IndexController{}, "get:Get")
 
+	beego.InsertFilter("/index", beego.BeforeRouter, BaseFilter)
 	beego.InsertFilter("/user/*", beego.BeforeRouter, BaseFilter)
 	beego.InsertFilter("/corp/*", beego.BeforeRouter, BaseFilter)
 	beego.InsertFilter("/sourcetype/*", beego.BeforeRouter, BaseFilter)
@@ -21,6 +22,10 @@ func init() {
 	beego.InsertFilter("/userscreen/*", beego.BeforeRouter, BaseFilter)
 	beego.InsertFilter("/invitationcode/*", beego.BeforeRouter, BaseFilter)
 
+	//首页
+	beego.Router("/index", &controllers.IndexController{}, "get:Get")
+
+	//用户
 	beego.Router("/user", &controllers.UserController{}, "get:List")
 	beego.Router("/user/getuserdata", &controllers.UserController{}, "get:GetUserData")
 	beego.Router("/user/create", &controllers.UserController{}, "get:Create")
