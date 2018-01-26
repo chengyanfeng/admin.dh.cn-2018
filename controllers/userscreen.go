@@ -41,13 +41,12 @@ func (c *UserscreenController) init(i int) {
 
 
 func (c *UserscreenController) List() {
-	defer func(){
+	/*defer func(){
 		if err:=recover();err!=nil{
 			c.EchoJsonErr("出现异常")
 		}
 
-	}()
-
+	}()*/
 	var mpurl ="/userscreen/list?"
 	c.init(3)
 	var total,total_page int64
@@ -59,7 +58,6 @@ func (c *UserscreenController) List() {
 	filters["status__gte"]=0
 	search := c.GetString("search")
 	status:= c.GetString("status")
-
 	if len(search)>0{
 		cond := orm.NewCondition()
 		if len(search)>0{
@@ -75,8 +73,7 @@ func (c *UserscreenController) List() {
 			}else{
 				c.Data["status"] = "nil"
 			}
-
-			number,_:=new(models.DxScreen).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
+		number,_:=new(models.DxScreen).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total,_=new(models.DxScreen).Query().SetCond(condor).Count()
 			if total%page_size!=0{
 				total_page=total/page_size+1
