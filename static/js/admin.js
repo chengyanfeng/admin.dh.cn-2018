@@ -1599,7 +1599,7 @@ function getColumns() {
 
 
                 });
-                <!-- 初始化tables-->
+               //初始化tables
              tableItem();
 
              $table.bootstrapTable(
