@@ -10,7 +10,7 @@
                 </div>
                 <div class="field-box">
                     <label>数据源分类：</label>
-                    <select  name="SourceType" id="SourceType" value={{.object.TypeName}} class="select2" style="width: 140px;height:30px">
+                    <select  name="SourceType" id="SourceType" value={{.object.DatasourceTypeId}} class="select2" style="width: 140px;height:30px">
 
                         {{- range .sourceTypelist }}
                             {{ if  eq .sourceType .Type}}
@@ -28,7 +28,7 @@
                 </div>
                 <div class="field-box">
                     <label>log:</label>
-                    <input name="name" id="log" class="span6 inline-input" type="file" value="{{.object.Name}}" required />
+                    <input name="name" id="uplog" class="span6 inline-input" type="file" value="{{.object.Name}}" required />
                 </div>
 
 

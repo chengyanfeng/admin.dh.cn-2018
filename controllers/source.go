@@ -120,14 +120,19 @@ func (c *SourceController) List() {
 		for _, info := range list {
 			DiDatasourceTypefilter:=map[string]interface{}{}
 			DiDatasourceTypefilter["object_id"]=info.DatasourceTypeId
-			DiDatasourceType:=new(models.DiDatasourceType).Find(DiDatasourceTypefilter["object_id"])
-			if DiDatasourceType ==nil{
-				c.EchoJsonErr("没有当前类型")
-			}
+			DiDatasourceType:=new(models.DiDatasourceType).Find(DiDatasourceTypefilter)
 			dhdatasource := utils.P{}
 			dhdatasource["ObjectId"] = info.ObjectId
+			if DiDatasourceType ==nil{
+				dhdatasource["TypeName"] = ""
+			}else {
+
+				dhdatasource["TypeName"] = DiDatasourceType.Name
+			}
+			fmt.Println(DiDatasourceType,"--------------------afdsfddsaf----------")
 			dhdatasource["Name"] = info.Name
-			dhdatasource["TypeName"] = DiDatasourceType.Name
+
+
 			dhdatasource["UpdateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
 			dhdatasource["Status"] = info.Status
 			data = append(data, dhdatasource)
@@ -164,7 +169,7 @@ func (c *SourceController) Update() {
 	if c.GetString("SourceType")!=""{
 		DiDatasourceTypefilter:=map[string]interface{}{}
 		DiDatasourceTypefilter["name"]=c.GetString("SourceType")
-		DiDatasourceType:=new(models.DiDatasourceType).Find(DiDatasourceTypefilter["object_id"])
+		DiDatasourceType:=new(models.DiDatasourceType).Find(DiDatasourceTypefilter)
 		if DiDatasourceType ==nil{
 			c.EchoJsonErr("没有当前类型")
 		}
@@ -248,6 +253,8 @@ func (c *SourceController) Edit() {
 			ty["sourceType"]=v.Name
 			if v.ObjectId==DiDatasourceData.DatasourceTypeId {
 			ty["Type"]=v.Name
+			}else {
+				ty["Type"]=""
 			}
 			typelist=append(typelist,ty)
 
