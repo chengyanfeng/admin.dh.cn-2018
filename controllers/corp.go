@@ -41,6 +41,7 @@ func (c *CorpController) init(i int) {
 	c.Data["Menu"]=Menu
 }
 
+
 func (c *CorpController) List() {
 	utils.S("name","chenyanfeng")
 	var mpurl ="/corp/list?"
