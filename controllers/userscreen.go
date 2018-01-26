@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"strconv"
 
+
 )
 
 type UserscreenController struct {
@@ -41,12 +42,7 @@ func (c *UserscreenController) init(i int) {
 
 
 func (c *UserscreenController) List() {
-	/*defer func(){
-		if err:=recover();err!=nil{
-			c.EchoJsonErr("出现异常")
-		}
 
-	}()*/
 	var mpurl ="/userscreen/list?"
 	c.init(3)
 	var total,total_page int64
@@ -102,15 +98,24 @@ func (c *UserscreenController) List() {
 			filtersdxScreen["relate_id"]=info.ObjectId
 			filtersdxScreen["relate_type"]="dx_screen"
 			dxScreen:= new(models.DhRelation).Find(filtersdxScreen)
-			user:=new(models.DhUser).Find(dxScreen.UserId)
-			if user==nil{
-				c.EchoJsonErr("用户查询失败")
-			}
 			Screen := utils.P{}
+
+			if dxScreen !=nil{
+				user:=new(models.DhUser).Find(dxScreen.UserId)
+				if user==nil{
+					c.EchoJsonErr("用户查询失败")
+				}
+				Screen["CreateUserId"] = user.ObjectId
+				Screen["CreateUser"] = user.Name
+			}else {
+				Screen["CreateUserId"] = ""
+				Screen["CreateUser"] = ""
+			}
+
+
+
 			Screen["ObjectId"] = info.ObjectId
 			Screen["Name"] = info.Name
-			Screen["CreateUserId"] = user.ObjectId
-			Screen["CreateUser"] = user.Name
 			Screen["Status"] = info.Status
 			 p:=*utils.JsonDecode([]byte(info.Config))
 			Screen["Config"] =utils.ToString(p["width"])+utils.ToString("*")+utils.ToString(p["height"])
