@@ -4,7 +4,9 @@
             <div class="form-group" style="position:absolute;height:30px;width:100%">
                 <a style="margin-left:10px;margin-top:-3px" user-id="{{.userid}}" id="addUserScreen" width="200px">{{.name}}所有大屏</a>
             </div>
-            <table operation="update" object="user" id="userScreen"  class="table table-bordered table-hover" style="position:absolute;margin-top:4%;border-left: 1px solid #dddddd !important;">
+            <div style="height:300px;position:absolute;width:446px;height:340px;top:33px;overflow:auto;border:1px solid">
+
+                <table operation="update" object="user" id="userScreen"  class="table table-bordered table-hover" style="position:absolute;border-left: 0px solid #dddddd !important;">
                     <thead>
 
                     </thead>
@@ -12,14 +14,14 @@
                     {{- range .userScreenData}}
                     <tr >
                         <td style="display:none">{{.ObjectId}}</td>
-                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Name}}</td>
-                <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;"><a action='ManageScreenRemove' object-id="{{.ObjectId}}" corpid = "{{.CorpId}}"style="cursor:pointer" title="移除用户">移除</a>
+                        <td style="border-style:none;width:376px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Name}}</td>
+                        <td style="border-style:none;width: 50px;overflow: hidden;text-overflow: ellipsis;"><a action='ManageScreenRemove' object-id="{{.ObjectId}}" corpid = "{{.CorpId}}"style="cursor:pointer" title="移除用户">移除</a>
                         </td>
                     </tr>
                     {{- end}}
-               </tbody>
+                    </tbody>
                 </table>
-
+            </div>
 
 
         </div>
