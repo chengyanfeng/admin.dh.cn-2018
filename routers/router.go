@@ -11,7 +11,7 @@ func init() {
 	//登录
 	beego.Router("/login", &controllers.LoginController{}, "get:Get")
 	beego.Router("/login", &controllers.LoginController{}, "post:Login")
-	beego.Router("/login/quit/", &controllers.LoginController{}, "get:Quit")
+	beego.Router("/logout", &controllers.LoginController{}, "get:Quit")
 
 	beego.InsertFilter("/", beego.BeforeRouter, BaseFilter)
 	beego.InsertFilter("/index", beego.BeforeRouter, BaseFilter)

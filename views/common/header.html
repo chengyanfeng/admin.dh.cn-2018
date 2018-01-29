@@ -27,10 +27,10 @@
             </a>
             <ul class="nav pull-right">
                 <li class="settings hidden-phone">
-        <a class="dropdown-toggle hidden-phone">欢迎{{ .Authname}}&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        <a class="dropdown-toggle hidden-phone">欢迎,{{ .Authname}}&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 </li>
                 <li class="settings hidden-phone">
-                    <a href="/" class="dropdown-toggle hidden-phone">退出登录</a>
+                    <a href="/logout" class="dropdown-toggle hidden-phone">退出登录</a>
                 </li>
             </ul>
         </div>
@@ -69,7 +69,7 @@
                         </li>
                     {{else}}
                     <li>
-                        <a href="{{.Path}}" id="wokaoni">{{.Name}}</a>
+                        <a href="{{.Path}}" id="wokaoni">—{{.Name}}</a>
                     </li>
                     {{ end }}
                     {{- end}}

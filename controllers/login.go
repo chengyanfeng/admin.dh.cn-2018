@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"common.dh.cn/controllers"
+	"common.dh.cn/def"
 	"common.dh.cn/models"
 	"common.dh.cn/utils"
 )
@@ -37,8 +38,6 @@ func (c *LoginController) init(i int) {
 }
 
 func (c *LoginController) Get() {
-	utils.SDel("gooid")
-	c.SetSecureCookie("", "gooid", "")
 	c.TplName = "index/login.html"
 }
 
@@ -48,28 +47,23 @@ func (c *LoginController) Login() {
 	password := c.GetString("password")
 	userfilter := map[string]interface{}{}
 	userfilter["name"] = username
+	userfilter["password"] = utils.Md5(password, def.Md5Salt)
 	user := new(models.DhUser).Find(userfilter)
 	fmt.Print(user)
 	if user == nil {
-		c.EchoJsonErr("用户不存在")
+		c.EchoJsonErr("账号或密码错误")
+		c.StopRun()
+	} else if user.IsAdmin != 1 {
+		c.EchoJsonErr("您不是管理员")
 		c.StopRun()
 	}
-	if password != user.Password {
-
-		c.EchoJsonErr("密码不正确")
-		c.StopRun()
-	}
-	c.SetSession("gooid", username)
-	utils.S("gooid", username, "7200")
-	c.Ctx.SetCookie("Authname", username)
-	/*
-
-		c.Ctx.SetCookie("gooid",username+utils.ToString(time.Second))
-	*/
-	c.EchoJsonOk("index")
+	c.SetSession("auth", user.Auth)
+	c.SetSession("Authname", user.Name)
+	c.EchoJsonOk()
 }
-func (c *LoginController) Quit() {
-	c.DelSession("gooid")
-	c.Redirect("/login", 200)
 
+func (c *LoginController) Quit() {
+	c.DelSession("auth")
+	c.DelSession("Authname")
+	c.Ctx.Redirect(302, "/login")
 }
