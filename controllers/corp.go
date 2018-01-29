@@ -254,7 +254,7 @@ func (c *CorpController) GetUserCorp() {
 	}
 
 	c.Data["CorpId"]=id
-	c.Data["CorpName"]=dhcorp.Name
+	c.Data["corpName"]=dhcorp.Name
 	c.Data["CorpUserData"]=CropUserData
 	c.Data["AllUserData"]=AllUserData
 	c.TplName = "corp/manageUser.html"

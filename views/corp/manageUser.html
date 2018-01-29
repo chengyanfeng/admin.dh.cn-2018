@@ -8,9 +8,9 @@
                 <input type="account" class="form-control"   id="selectCorp"     placeholder="搜索" name="auth" style="position:absolute;margin:0;left:754px;width:128px;top:7px">
 
             </div>
-            <div style="height:300px;position:absolute;width:446px;height:350px;top:33px;overflow:auto;border:1px solid">
+            <div style="height:300px;position:absolute;width:446px;height:350px;top:33px;overflow:auto;border:1px solid;-webkit-scrollbar{width:14px;}">
 
-                <table operation="update" object="user" id="leftTable"  class="table table-bordered table-hover" style="border:0px solid #dddddd !important;">
+                <table operation="update" object="user" id="leftTable"  class="table table-bordered table-hover" style="border:0px solid #dddddd !important; ">
                     <thead>
 
                     </thead>
@@ -21,7 +21,7 @@
                         <td style="border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.email}}</td>
                         <td style="border-style:none;width: 120px;overflow: hidden;text-overflow: ellipsis;float:left;">
 
-                            <select  name="role" id="role" title="改变用户角色" parametername='role'  redirectMethod='getusercorp' method='changeuserrole'  object-id="{{.objectId}}" headtitle="管理成员"  class="role" style="height:30px;width:90px">
+                            <select  name="role" id="role" title="改变用户角色" parametername='role'  redirectMethod='getusercorp' method='changeuserrole'  object-id="{{.objectId}}" headtitle="管理成员"  class="role" style="height:27px;width:90px">
                                 {{ if eq  .role "0"}}
                                 <option value="1" >管理员</option>
                                 <option value="0" selected>普通成员</option>
@@ -31,7 +31,7 @@
                                 {{ end }}
                             </select>
                         </td>
-                        <td style="border-style:none;float:left;display :none"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='0' style="cursor:pointer" title="移除用户" headtitle="管理成员" >移除</a>
+                        <td style="border-style:none;float:left;display :none;height:43px;"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='0' style="cursor:pointer" title="移除用户" headtitle="管理成员" >移除</a>
                         </td>
                     </tr>
                     {{- end}}

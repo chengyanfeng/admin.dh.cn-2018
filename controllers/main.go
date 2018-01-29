@@ -26,7 +26,6 @@ func (c *IndexController) init(i int) {
 	c.Data["Authname"] = Authname
 	c.Data["Menu"] = Menu
 }
-
 func (c *IndexController) Get() {
 	fmt.Print("进去main了" +
 		"")

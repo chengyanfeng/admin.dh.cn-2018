@@ -14,8 +14,6 @@ type ScreenController struct{
 	controllers.BaseController
 
 }
-
-
 func (c *ScreenController) init(i int) {
 	c.Layout = "common/layout.html"
 	c.LayoutSections = make(map[string]string)
@@ -39,8 +37,6 @@ func (c *ScreenController) init(i int) {
 	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
-
-
 func (c *ScreenController) List() {
 	var mpurl ="/screen?"
 	c.init(3)
