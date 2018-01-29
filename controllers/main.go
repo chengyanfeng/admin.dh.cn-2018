@@ -5,11 +5,9 @@ import (
 
 	"github.com/astaxie/beego"
 )
-
 type IndexController struct {
 	beego.Controller
 }
-
 func (c *IndexController) init(i int) {
 	c.Layout = "common/layout.html"
 	c.LayoutSections = make(map[string]string)

@@ -27,8 +27,8 @@
 
                 </div>
                 <div class="field-box">
-                    <label>log:</label>
-                    <input name="name" id="uplog" class="span6 inline-input" type="file" value="{{.object.Name}}" required />
+              <input     id="img" type="button"  class="image-uplaod" />
+                    <input     id="imghidden" type="button"  class="image-uplaod" s/>
                 </div>
 
 
@@ -48,3 +48,28 @@
         </div>
     </div>
 </div>
+
+<script src="/static/js/ajaxfileupload.js" type="text/javascript" ></script>
+
+<script style="text/javascript">
+function ajaxFileUploads(myBlogImage,imgId,img){
+                   $.ajaxFileUpload({
+                       url: '/source/uploadfile',
+                      secureuri:false,                      //是否启用安全提交,默认为false
+                      fileElementId:myBlogImage,           //文件选择框的id属性
+                       dataType:'json',                       //服务器返回的格式,可以是json或xml等
+                       fileSize:5120000,
+                        allowType:'jpg,jpeg,png,JPG,JPEG,PNG',
+                        success:function(data, status){        //服务器响应成功时的处理函数
+                           if( true == data.success){     //0表示上传成功(后跟上传后的文件路径),1表示失败(后跟失败描述)
+                               $("img[id='"+imgId+"']").attr("src", "${imgServer}"+data.result);
+                                $("#"+img).val(data.result);
+                               alert('图片上传成功');
+                          }
+                        },
+                        error:function(data, status, e){ //服务器响应失败时的处理函数
+    　　　　　　　　　　　　　　　　alert(e);
+                       }
+                    });
+                }
+</script>

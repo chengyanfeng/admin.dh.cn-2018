@@ -48,10 +48,8 @@ func (c *LoginController) Login() {
 	userfilter := map[string]interface{}{}
 	userfilter["name"] = username
 	userfilter["password"] = utils.Md5(password, def.Md5Salt)
-	fmt.Println(userfilter["password"],"---------------------password----------")
+	fmt.Println(userfilter["password"], "---------------------password----------")
 	user := new(models.DhUser).Find(userfilter)
-	fmt.Print(user)
-	fmt.Print(user,"---------------------------user--------------------")
 	if user == nil {
 		c.EchoJsonErr("账号或密码错误")
 		c.StopRun()
@@ -63,7 +61,6 @@ func (c *LoginController) Login() {
 	c.SetSession("Authname", user.Name)
 	c.EchoJsonOk()
 }
-
 func (c *LoginController) Quit() {
 	c.DelSession("auth")
 	c.DelSession("Authname")

@@ -79,8 +79,8 @@ func (c *UserController) List() {
 			}
 			number, _ := new(models.DhUser).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total, _ = new(models.DhUser).Query().SetCond(condor).Count()
-			if total%page_size != 0 {
-				total_page = total/page_size + 1
+			if total % page_size != 0 {
+				total_page = total / page_size + 1
 			} else {
 				total_page = total / page_size
 			}
@@ -155,7 +155,7 @@ func (c *UserController) Add() {
 	user.Email = c.GetString("email")
 	user.Mobile = c.GetString("mobile")
 	user.Password = utils.Md5(c.GetString("password"), def.Md5Salt)
-	user.Auth = utils.Md5(c.GetString("email"), c.GetString("password"), rand.Intn(1000)*rand.Intn(1000))
+	user.Auth = utils.Md5(c.GetString("email"), c.GetString("password"), rand.Intn(1000) * rand.Intn(1000))
 	if c.GetString("status") == "1" {
 		user.Status = 1
 	} else {
