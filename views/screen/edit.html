@@ -1,26 +1,22 @@
 <div id="pad-wrapper" class="form-page">
-
     <div class="row-fluid form-wrapper">
         <div class="span12 column">
-
             <form operation="update" object="corp">
                 <div class="field-box">
-                    <label>团队名称：</label>
+                    <label>模版名称：</label>
                     <input name="name" id="name" class="span6 inline-input" type="text" value="{{.object.Name}}" required />
                 </div>
-
                 <div class="field-box">
-                    <label>上传模版：</label>
-                    <input name="uplaod" type="file"  id="uplaod"  class="span6 inline-input" type="text" value="{{.object.Mobile}}" required />
+                    <label>模版文件：</label>
+                    <input name="uplaod" type="text" id="uplaod" class="span9 inline-input file-uploader" type="text" required/>
                 </div>
                 <div class="field-box">
                     <label>&nbsp;</label>
-                    <input  name="id" id="id" type="hidden" value="{{.object.ObjectId}}" />
+                    <input name="id" id="id" type="hidden" value="{{.object.ObjectId}}" />
                 </div>
-
                 <div class="field-box">
                     <input type="submit" class="btn-flat default" value="提 交" style="margin-left:66px">
-                    <input type="button" class="btn-flat gray" action="cancel" value="取 消"  style="margin-left:25px" >
+                    <input type="button" class="btn-flat gray" action="cancel" value="取 消" style="margin-left:25px">
                 </div>
             </form>
         </div>

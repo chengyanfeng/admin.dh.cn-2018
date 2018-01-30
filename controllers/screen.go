@@ -172,6 +172,11 @@ func (c *ScreenController) Remove() {
 	}
 }
 
+func (c *ScreenController) Create() {
+
+	c.TplName = "screen/create.html"
+}
+
 func (c *ScreenController) Edit() {
 
 	c.TplName = "screen/edit.html"
