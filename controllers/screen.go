@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"common.dh.cn/utils"
-	"common.dh.cn/models"
-	"common.dh.cn/controllers"
-	"github.com/astaxie/beego/orm"
 	"fmt"
 	"strconv"
+
+	"common.dh.cn/controllers"
+	"common.dh.cn/models"
+	"common.dh.cn/utils"
+	"github.com/astaxie/beego/orm"
 )
 
 type ScreenController struct {
@@ -64,8 +65,8 @@ func (c *ScreenController) List() {
 
 			number, _ := new(models.DxScreenTemplate).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total, _ = new(models.DxScreenTemplate).Query().SetCond(condor).Count()
-			if total % page_size != 0 {
-				total_page = total / page_size + 1
+			if total%page_size != 0 {
+				total_page = total/page_size + 1
 			} else {
 				total_page = total / page_size
 			}
@@ -112,6 +113,9 @@ func (c *ScreenController) Update() {
 	if c.GetString("name") != "" {
 		dxScreenTemplate.Name = c.GetString("name")
 	}
+	if c.GetString("logos") != "" {
+		dxScreenTemplate.Name = c.GetString("name")
+	}
 	if c.GetString("status") != "" {
 		int, err := strconv.Atoi(c.GetString("status"))
 		if err == nil {
@@ -137,8 +141,10 @@ func (c *ScreenController) Listremove() {
 			argerr = append(argerr, v["object_id"].(string))
 		} else {
 			switch DXScreenTemplate.Status {
-			case -1, 0: DXScreenTemplate.Status = 1;
-			case 1:DXScreenTemplate.Status = -1;
+			case -1, 0:
+				DXScreenTemplate.Status = 1
+			case 1:
+				DXScreenTemplate.Status = -1
 			}
 			DXScreenTemplate.Save()
 		}

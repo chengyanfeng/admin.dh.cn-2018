@@ -8,6 +8,9 @@ import (
 
 func init() {
 
+	//上传文件
+	beego.Router("/file_upload", &controllers.IndexController{}, "post:FileUploader")
+
 	//登录
 	beego.Router("/login", &controllers.LoginController{}, "get:Get")
 	beego.Router("/login", &controllers.LoginController{}, "post:Login")

@@ -1,14 +1,13 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego/orm"
-	"common.dh.cn/utils"
-	"common.dh.cn/models"
-	"common.dh.cn/controllers"
 	"fmt"
 	"strconv"
-	"strings"
-	"github.com/astaxie/beego"
+
+	"common.dh.cn/controllers"
+	"common.dh.cn/models"
+	"common.dh.cn/utils"
+	"github.com/astaxie/beego/orm"
 )
 
 type SourceController struct {
@@ -80,8 +79,8 @@ func (c *SourceController) List() {
 
 			number, _ := new(models.DiDatasourcePub).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total, _ = new(models.DiDatasourcePub).Query().SetCond(condor).Count()
-			if total % page_size != 0 {
-				total_page = total / page_size + 1
+			if total%page_size != 0 {
+				total_page = total/page_size + 1
 			} else {
 				total_page = total / page_size
 			}
@@ -134,7 +133,7 @@ func (c *SourceController) List() {
 		}
 	}
 
-	DiDatasourceTypes := [] models.DiDatasourceType{}
+	DiDatasourceTypes := []models.DiDatasourceType{}
 	new(models.DiDatasourceType).Query().GroupBy("object_id").All(&DiDatasourceTypes, "name")
 	if len(DiDatasourceTypes) > 0 {
 		for _, v := range DiDatasourceTypes {
@@ -160,6 +159,9 @@ func (c *SourceController) Update() {
 	}
 	if c.GetString("name") != "" {
 		DiDatasourceData.Name = c.GetString("name")
+	}
+	if c.GetString("logo") != "" {
+		DiDatasourceData.Logo = c.GetString("logo")
 	}
 	if c.GetString("SourceType") != "" {
 		DiDatasourceTypefilter := map[string]interface{}{}
@@ -238,7 +240,7 @@ func (c *SourceController) Edit() {
 		c.StopRun()
 	}
 	typelist := []utils.P{}
-	DiDatasourceTypes := [] models.DiDatasourceType{}
+	DiDatasourceTypes := []models.DiDatasourceType{}
 	new(models.DiDatasourceType).Query().GroupBy("object_id").All(&DiDatasourceTypes, "name")
 	if len(DiDatasourceTypes) > 0 {
 		for _, v := range DiDatasourceTypes {
@@ -257,18 +259,4 @@ func (c *SourceController) Edit() {
 	c.Data["sourceTypelist"] = typelist
 	c.Data["object"] = &DiDatasourceData
 	c.TplName = "source/edit.html"
-}
-
-func (c *SourceController) UploadFile() {
-	bin := c.GetString("fileElementId")
-	bin = strings.Replace(bin, "data:image/png;base64,", "", -1)
-	filename := utils.JoinStr(bin, ".png")
-	b := utils.Base64Decode(bin)
-	utils.WriteFile("upload/" + filename, b)
-	result := utils.P{}
-	host := beego.AppConfig.DefaultString("dh_host", "https://www.datahunter.cn")
-	result["url"] = host + "upload/" + filename
-	result["ext"] = "png"
-	result["size"] = len(b)
-	c.EchoJsonMsg(result)
 }
