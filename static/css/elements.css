@@ -316,7 +316,7 @@ i.table-delete{
 .modal {
 	display: none;
 	top: 10%;
-	width: 1000px;
+	width: auto;
 	margin: 0 0 0 -500px;
 }
 

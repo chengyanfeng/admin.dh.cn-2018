@@ -53,6 +53,13 @@ var invicodeSub = []utils.P{
 		"Name": "邀请码管理",
 	},
 }
+var sourceshare = []utils.P{
+	utils.P{
+		"On": 0,
+		"Path": "/sourceshare/list",
+		"Name": "工作表共享管理",
+	},
+}
 var Menu = []utils.P{
 	utils.P{
 		"On":   0,
@@ -82,6 +89,12 @@ var Menu = []utils.P{
 		"Path": "/",
 		"Name": "邀请码管理",
 		"Sub":  invicodeSub,
+	},
+	utils.P{
+		"On": 0,
+		"Path": "/",
+		"Name": "数据权限管理",
+		"Sub": sourceshare,
 	},
 }
 

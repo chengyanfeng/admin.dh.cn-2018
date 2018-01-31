@@ -1,13 +1,12 @@
 package controllers
 
 import (
+	"common.dh.cn/utils"
+	"common.dh.cn/models"
+	"common.dh.cn/controllers"
+	"github.com/astaxie/beego/orm"
 	"fmt"
 	"strconv"
-
-	"common.dh.cn/controllers"
-	"common.dh.cn/models"
-	"common.dh.cn/utils"
-	"github.com/astaxie/beego/orm"
 )
 
 type ScreenController struct {
@@ -65,8 +64,8 @@ func (c *ScreenController) List() {
 
 			number, _ := new(models.DxScreenTemplate).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total, _ = new(models.DxScreenTemplate).Query().SetCond(condor).Count()
-			if total%page_size != 0 {
-				total_page = total/page_size + 1
+			if total % page_size != 0 {
+				total_page = total / page_size + 1
 			} else {
 				total_page = total / page_size
 			}
@@ -98,7 +97,6 @@ func (c *ScreenController) List() {
 			data = append(data, Screen)
 		}
 	}
-	fmt.Println(data, "------------------------data-------------")
 	c.Data["List"] = data
 	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page), mpurl)
 }
@@ -172,12 +170,22 @@ func (c *ScreenController) Remove() {
 	}
 }
 
-func (c *ScreenController) Create() {
-
-	c.TplName = "screen/create.html"
-}
-
 func (c *ScreenController) Edit() {
 
 	c.TplName = "screen/edit.html"
+}
+func (c *ScreenController) Create() {
+	c.TplName = "screen/create.html"
+}
+
+func (c *ScreenController) Add() {
+	DxScreenTemplate := new(models.DxScreenTemplate)
+	DxScreenTemplate.Name = c.GetString("name")
+	DxScreenTemplate.Status = 0
+	result := DxScreenTemplate.Save()
+	if !result {
+		c.EchoJsonErr("创建失败")
+	} else {
+		c.EchoJsonOk()
+	}
 }

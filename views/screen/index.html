@@ -13,32 +13,32 @@
 
             <div class="filter-field">
                 <span>状态:</span>
-                <select name="status" id="status" class="select2" style="width: 140px;height:30px">
+                <select  name="status" id="status" class="select2" style="width: 140px;height:30px">
                     {{if eq .status "nil"}}
-                    <option value="" selected="selected">全部</option>
-                    <option value="0">未审核</option>
-                    <option value="1">审核通过</option>
-                    <option value="-1">已停用</option>
+                    <option value="" selected="selected" >全部</option>
+                    <option value="0" >未审核</option>
+                    <option value="1" >审核通过</option>
+                    <option value="-1" >已停用</option>
                     {{else if eq .status "0"}}
-                    <option value="">全部</option>
+                    <option value=""  >全部</option>
                     <option value="0" selected="selected">未审核</option>
-                    <option value="1">审核通过</option>
+                    <option value="1" >审核通过</option>
                     <option value="-1">已停用</option>
                     {{else if eq .status "1"}}
-                    <option value="">全部</option>
-                    <option value="0">未审核</option>
+                    <option value=""  >全部</option>
+                    <option value="0" >未审核</option>
                     <option value="1" selected="selected">审核通过</option>
-                    <option value="-1">已停用</option>
+                    <option value="-1" >已停用</option>
                     {{else if eq .status "-1"}}
-                    <option value="">全部</option>
-                    <option value="0">未审核</option>
-                    <option value="1">审核通过</option>
+                    <option value=""  >全部</option>
+                    <option value="0" >未审核</option>
+                    <option value="1" >审核通过</option>
                     <option value="-1" selected="selected">已停用</option>
                     {{end }}
                 </select>
             </div>
             <div class="filter-field">
-                <input type="submit" class="btn-flat primary" value="搜索">
+                <input type="submit" class="btn-flat default" value="搜索" >
             </div>
             <div class="filter-field" style="float:right;text-align:right">
                 <a class="btn-flat default" action='new' title="上传模版" style="margin-right:30px">上传模版</a>

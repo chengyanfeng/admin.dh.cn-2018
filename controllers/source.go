@@ -13,7 +13,6 @@ import (
 type SourceController struct {
 	controllers.BaseController
 }
-
 func (c *SourceController) init(i int) {
 	c.Layout = "common/layout.html"
 	c.LayoutSections = make(map[string]string)
@@ -38,7 +37,6 @@ func (c *SourceController) init(i int) {
 	Authname := c.Ctx.GetCookie("Authname")
 	c.Data["Authname"] = Authname
 }
-
 func (c *SourceController) List() {
 	c.init(2)
 	var mpurl = "/source/list?"
