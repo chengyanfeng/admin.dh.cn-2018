@@ -201,4 +201,5 @@ func (c *SourcetypeController) Listremove() {
 
 func (c *SourcetypeController) Create() {
 	c.TplName = "sourcetype/create.html"
+
 }

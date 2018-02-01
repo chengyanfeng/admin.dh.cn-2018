@@ -1,18 +1,18 @@
 package controllers
 
 import (
-	"common.dh.cn/utils"
-	"common.dh.cn/models"
+	/*"common.dh.cn/utils"
+	"common.dh.cn/models"*/
 	"common.dh.cn/controllers"
-	"github.com/astaxie/beego/orm"
+	/*"github.com/astaxie/beego/orm"
 	"fmt"
-	"strconv"
+	"strconv"*/
 )
 type SourceShareController struct {
 	controllers.BaseController
 }
 
-func (c *SourceShareController) init(i int) {
+/*func (c *SourceShareController) init(i int) {
 	c.Layout = "common/layout.html"
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "common/header.html"
@@ -34,9 +34,9 @@ func (c *SourceShareController) init(i int) {
 	Authname := c.Ctx.GetCookie("Authname")
 	c.Data["Authname"] = Authname
 	c.Data["Menu"] = Menu
-}
+}*/
 
-func (c *SourceShareController) List() {
+/*func (c *SourceShareController) List() {
 	var mpurl = "/sourceshare/list?"
 	c.init(5)
 	var total, total_page int64
@@ -117,4 +117,16 @@ func (c *SourceShareController) List() {
 	c.Data["List"] = data
 	fmt.Println(data,"---------------------data--------------------")
 	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page), mpurl)
+}*/
+
+
+
+/*
+func (c *SourceShareController) Create() {
+	c.TplName = "sourceshare/create.html"
+}*/
+
+
+func (c *SourceShareController) Test() {
+	c.TplName = "sourceshare/create.html"
 }
