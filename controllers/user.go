@@ -82,7 +82,6 @@ func (c *UserController) List() {
 		}
 
 		total, total_page, list = new(models.DhUser).OrderPager(page, page_size, filters, "-create_time")
-		fmt.Println("list", list)
 	}
 	data := []utils.P{}
 	if len(list) > 0 {
@@ -294,8 +293,6 @@ func (c *UserController) GetCorp() {
 	c.Data["allCorpData"] = allCorpData
 	c.Data["name"] = user.Name
 	c.Data["userid"] = user.ObjectId
-	fmt.Println(user.Name)
-	fmt.Println(id)
 	c.TplName = "user/manageCorp.html"
 
 }
@@ -376,7 +373,6 @@ func (c *UserController) DelectAndAddCorp() {
 		userCorpfilterrole["role"] = "1"
 		userCorpfilterrole["object_id"] = object_id
 		if role == "0" {
-			fmt.Println(role, "---------------------------------进去---------------------------------")
 
 			number := new(models.DhUserCorp).Count(userCorpfilterrole)
 			if number < 2 {
@@ -458,8 +454,6 @@ func (c *UserController) DelectUserScreen() {
 	c.Require("id", "user_id")
 	id := c.GetString("id")
 	user_id := c.GetString("user_id")
-	fmt.Println(user_id, "--------------------user_id-------------")
-	fmt.Println(id, "--------------------id-------------")
 
 	dhrelation := map[string]interface{}{}
 	dhrelation["user_id"] = user_id

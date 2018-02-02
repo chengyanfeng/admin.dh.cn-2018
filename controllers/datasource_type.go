@@ -105,7 +105,6 @@ func (c *DatasourceTypeController) Update() {
 		int, _ := strconv.Atoi(c.GetString("status"))
 		DiDatasourceType.Status = int
 	}
-	fmt.Println("---------------a-------------------", DiDatasourceType)
 	result := DiDatasourceType.Save()
 	if !result {
 		c.EchoJsonErr("修改失败")

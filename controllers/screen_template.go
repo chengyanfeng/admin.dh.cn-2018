@@ -74,7 +74,6 @@ func (c *ScreenTemplateController) List() {
 			data = append(data, Screen)
 		}
 	}
-	fmt.Println(data, "------------------------data-------------")
 	c.Data["List"] = data
 	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page), mpurl)
 }

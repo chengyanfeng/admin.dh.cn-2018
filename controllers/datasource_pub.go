@@ -43,25 +43,25 @@ func (c *DatasourcePubController) List() {
 				c.Data["status"] = "nil"
 			}
 			if len(sourceType) > 0 {
-				pubfilter:=utils.P{}
+				pubfilter := utils.P{}
 				c.Data["sourceType"] = sourceType
 				mpurl = mpurl + "&sourceType=" + sourceType
-				pubfilter["name"]=sourceType;
-				pub:=new(models.DiDatasourcePub).Find(pubfilter)
-				if pub==nil{
+				pubfilter["name"] = sourceType;
+				pub := new(models.DiDatasourcePub).Find(pubfilter)
+				if pub == nil {
 					condor = cond.AndCond(condor).And("datasource_type_id", "")
-					}else {
-				condor = cond.AndCond(condor).And("datasource_type_id", pub.ObjectId)
-				}
 				} else {
+					condor = cond.AndCond(condor).And("datasource_type_id", pub.ObjectId)
+				}
+			} else {
 
 				c.Data["sourceType"] = "nil"
 			}
 
 			number, _ := new(models.DiDatasourcePub).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total, _ = new(models.DiDatasourcePub).Query().SetCond(condor).Count()
-			if total%page_size != 0 {
-				total_page = total/page_size + 1
+			if total % page_size != 0 {
+				total_page = total / page_size + 1
 			} else {
 				total_page = total / page_size
 			}

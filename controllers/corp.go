@@ -128,7 +128,7 @@ func (c *CorpController) Edit() {
 		c.EchoJsonErr("用户不存在")
 		c.StopRun()
 	}
-	fmt.Println(corp)
+
 	c.Data["object"] = &corp
 	c.TplName = "corp/edit.html"
 }
@@ -247,7 +247,6 @@ func (c *CorpController) RemoveAndUser() {
 			DhUserCorpCount["corp_id"] = id
 			DhUserCorpCount["role"] = 3
 			adminCount := new(models.DhUserCorp).Count(DhUserCorpCount)
-			fmt.Println(adminCount, "---------------admin--------------")
 			if adminCount < 2 {
 				c.EchoJsonErr("管理员唯一不可删除")
 				c.StopRun()
@@ -291,7 +290,6 @@ func (c *CorpController) ChangeUserRole() {
 	userCorpfilterrole["role"] = "3"
 	userCorpfilterrole["object_id"] = id
 	if role == "0" {
-		fmt.Println(role, "---------------------------------进去---------------------------------")
 
 		number := new(models.DhUserCorp).Count(userCorpfilterrole)
 		if number < 2 {

@@ -74,11 +74,9 @@ func (c *InvitationCodeController) List() {
 	data := []utils.P{}
 	if len(list) > 0 {
 		for _, info := range list {
-			fmt.Println(info, "-------------------a-----------")
 			filters := utils.P{}
 			filters["icode"] = info.Code
 			users := new(models.DhUser).List(filters)
-			fmt.Println(users, "------------user-------------")
 			if len(users) == 0 {
 				CodeList := utils.P{}
 				CodeList["ObjectId"] = info.ObjectId
@@ -137,11 +135,9 @@ func (c *InvitationCodeController) Add() {
 	if len(amont) > 0 && amont != "0" {
 
 		j, _ := strconv.Atoi(amont)
-		fmt.Println(j, "-----------------j--------------")
 		for i := 0; i < j; i++ {
 			dhicode := models.DhIcode{}
 			code := utils.GetRandomString(5)
-			fmt.Println(code, "----------------------code---------")
 			dhicode.Code = code
 			result := dhicode.Save()
 			if !result {
