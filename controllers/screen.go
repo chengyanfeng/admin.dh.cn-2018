@@ -15,7 +15,7 @@ type ScreenController struct {
 
 func (c *ScreenController) List() {
 
-	var mpurl = "/screen/list?"
+	var mpurl = "/admin/screen/list?"
 	c.init(3)
 	var total, total_page int64
 	var list []*models.DxScreen

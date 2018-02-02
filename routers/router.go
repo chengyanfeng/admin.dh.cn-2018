@@ -84,11 +84,10 @@ func init() {
 	beego.Router("admin/screen/remove", &controllers.ScreenController{}, "get:Remove")
 	beego.Router("admin/screen/listremove", &controllers.ScreenController{}, "get:ListRemove")
 	//邀请码管理
-	beego.Router("admin/invitationcode/list", &controllers.InvitationCodeController{}, "get:List")
-	beego.Router("admin/invitationcode/add", &controllers.InvitationCodeController{}, "post:Add")
-	beego.Router("admin/invitationcode/update", &controllers.InvitationCodeController{}, "post:Update")
-	beego.Router("admin/invitationcode/remove", &controllers.InvitationCodeController{}, "get:Remove")
-	beego.Router("admin/invitationcode/listremove", &controllers.InvitationCodeController{}, "get:ListRemove")
+	beego.Router("admin/invitation_code/list", &controllers.InvitationCodeController{}, "get:List")
+	beego.Router("admin/invitation_code/add", &controllers.InvitationCodeController{}, "post:Add")
+	beego.Router("admin/invitation_code/remove", &controllers.InvitationCodeController{}, "get:Remove")
+	beego.Router("admin/invitation_code/listremove", &controllers.InvitationCodeController{}, "get:ListRemove")
 	//自动注入路由
 	//beego.AutoRouter(&controllers.CorpController{})
 	//beego.AutoRouter(&controllers.SourcetypeController{})

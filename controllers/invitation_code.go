@@ -21,7 +21,7 @@ func (c *InvitationCodeController) List() {
 
 	}()
 
-	var mpurl = "/invitationcode/list?"
+	var mpurl = "/admin/invitation_code/list?"
 	c.init(4)
 	var total, total_page int64
 	var list []*models.DhIcode
@@ -108,31 +108,7 @@ func (c *InvitationCodeController) List() {
 	c.Data["List"] = data
 	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page), mpurl)
 }
-func (c *InvitationCodeController) Update() {
-	c.Require("id")
-	id := c.GetString("id")
-	dxScreenTemplate := new(models.DxScreenTemplate).Find(id)
-	if dxScreenTemplate == nil {
-		c.EchoJsonErr("用户不存在")
-		c.StopRun()
-	}
-	if c.GetString("name") != "" {
-		dxScreenTemplate.Name = c.GetString("name")
-	}
-	if c.GetString("status") != "" {
-		int, err := strconv.Atoi(c.GetString("status"))
-		if err == nil {
-			dxScreenTemplate.Status = int
-		}
 
-	}
-	result := dxScreenTemplate.Save()
-	if !result {
-		c.EchoJsonErr("更新失败")
-	} else {
-		c.EchoJsonOk()
-	}
-}
 func (c *InvitationCodeController) ListRemove() {
 	c.Require("datas")
 	datas := c.GetString("datas")
