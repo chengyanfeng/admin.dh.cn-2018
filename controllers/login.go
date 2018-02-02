@@ -13,36 +13,11 @@ type LoginController struct {
 	controllers.BaseController
 }
 
-func (c *LoginController) init(i int) {
-	c.Layout = "common/layout.html"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "common/header.html"
-	c.LayoutSections["HtmlFooter"] = "common/footer.html"
-	for k, v := range Menu {
-		if k != i {
-			v["On"] = 0
-		} else {
-			Menu[i]["On"] = 1
-			if Menu[i]["Sub"] != nil {
-				a := Menu[i]["Sub"].(interface{})
-				b := a.([]utils.P)
-				for _, v := range b {
-					v["On"] = 1
-				}
-			}
-		}
-	}
-	Authname := c.Ctx.GetCookie("Authname")
-	c.Data["Authname"] = Authname
-	c.Data["Menu"] = Menu
-}
-
 func (c *LoginController) Get() {
 	c.TplName = "index/login.html"
 }
 
 func (c *LoginController) Login() {
-	c.init(0)
 	username := c.GetString("name")
 	password := c.GetString("password")
 	userfilter := map[string]interface{}{}

@@ -4,39 +4,13 @@ import (
 	"fmt"
 	"strconv"
 
-	"common.dh.cn/controllers"
 	"common.dh.cn/models"
 	"common.dh.cn/utils"
 	"github.com/astaxie/beego/orm"
 )
 
 type CorpController struct {
-	controllers.BaseController
-}
-
-func (c *CorpController) init(i int) {
-	c.Layout = "common/layout.html"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "common/header.html"
-	c.LayoutSections["HtmlFooter"] = "common/footer.html"
-	for k, v := range Menu {
-		if k != i {
-			v["On"] = 0
-		} else {
-
-			Menu[i]["On"] = 1
-			if Menu[i]["Sub"] != nil {
-				a := Menu[i]["Sub"].(interface{})
-				b := a.([]utils.P)
-				for _, v := range b {
-					v["On"] = 1
-				}
-			}
-		}
-	}
-	Authname := c.Ctx.GetCookie("Authname")
-	c.Data["Authname"] = Authname
-	c.Data["Menu"] = Menu
+	AdminController
 }
 
 func (c *CorpController) List() {

@@ -4,43 +4,18 @@ import (
 	"fmt"
 	"strconv"
 
-	"common.dh.cn/controllers"
 	"common.dh.cn/models"
 	"common.dh.cn/utils"
 	"github.com/astaxie/beego/orm"
 )
 
 type DatasourceTypeController struct {
-	controllers.BaseController
+	AdminController
 }
 
-func (c *DatasourceTypeController) init(i int) {
-	c.Layout = "common/layout.html"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "common/header.html"
-	c.LayoutSections["HtmlFooter"] = "common/footer.html"
-	for k, v := range Menu {
-		if k != i {
-			v["On"] = 0
-		} else {
-
-			Menu[i]["On"] = 1
-			if Menu[i]["Sub"] != nil {
-				a := Menu[i]["Sub"].(interface{})
-				b := a.([]utils.P)
-				for _, v := range b {
-					v["On"] = 1
-				}
-			}
-		}
-	}
-	c.Data["Menu"] = Menu
-	Authname := c.Ctx.GetCookie("Authname")
-	c.Data["Authname"] = Authname
-}
 func (c *DatasourceTypeController) List() {
 	c.init(2)
-	var mpurl = "/datasource_type/list?"
+	var mpurl = "/admin/datasource_type/list?"
 	c.TplName = "datasource_type/index.html"
 	var total, total_page int64
 	var list []*models.DiDatasourceType

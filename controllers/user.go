@@ -5,7 +5,6 @@ import (
 	"math/rand"
 	"strconv"
 
-	"common.dh.cn/controllers"
 	"common.dh.cn/def"
 	"common.dh.cn/models"
 	"common.dh.cn/utils"
@@ -13,32 +12,7 @@ import (
 )
 
 type UserController struct {
-	controllers.BaseController
-}
-
-func (c *UserController) init(i int) {
-	c.Layout = "common/layout.html"
-	c.LayoutSections = make(map[string]string)
-	c.LayoutSections["HtmlHead"] = "common/header.html"
-	c.LayoutSections["HtmlFooter"] = "common/footer.html"
-	for k, v := range Menu {
-		if k != i {
-			v["On"] = 0
-		} else {
-			Menu[i]["On"] = 1
-			if Menu[i]["Sub"] != nil {
-				a := Menu[i]["Sub"].(interface{})
-				b := a.([]utils.P)
-				for _, v := range b {
-					v["On"] = 1
-				}
-			}
-		}
-	}
-	Authname := c.GetSession("Authname")
-	c.Data["Authname"] = Authname
-	c.Data["Menu"] = Menu
-
+	AdminController
 }
 
 func (c *UserController) List() {
@@ -130,11 +104,9 @@ func (c *UserController) List() {
 	c.Data["List"] = data
 	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page), mpurl)
 }
-
 func (c *UserController) Create() {
 	c.TplName = "user/create.html"
 }
-
 func (c *UserController) Edit() {
 	c.Require("id")
 	id := c.GetString("id")
@@ -146,7 +118,6 @@ func (c *UserController) Edit() {
 	c.Data["object"] = &user
 	c.TplName = "user/edit.html"
 }
-
 func (c *UserController) Add() {
 	user := new(models.DhUser)
 	user.Name = c.GetString("name")
@@ -177,7 +148,6 @@ func (c *UserController) Add() {
 		c.EchoJsonOk()
 	}
 }
-
 func (c *UserController) Update() {
 	c.Require("id")
 	id := c.GetString("id")
@@ -212,7 +182,6 @@ func (c *UserController) Update() {
 		c.EchoJsonOk()
 	}
 }
-
 func (c *UserController) Remove() {
 	c.Require("id")
 	id := c.GetString("id")
@@ -253,7 +222,6 @@ func (c *UserController) Listremove() {
 	c.EchoJsonOk()
 
 }
-
 func (c *UserController) ChangeType() {
 	c.TplName = "user/changeType.html"
 }
@@ -277,7 +245,6 @@ func (c *UserController) UpdateStatusAva() {
 		c.EchoJsonOk()
 	}
 }
-
 func (c *UserController) GetCorp() {
 	c.Require("id")
 	id := c.GetString("id")
@@ -332,7 +299,6 @@ func (c *UserController) GetCorp() {
 	c.TplName = "user/manageCorp.html"
 
 }
-
 func (c *UserController) DelectAndAddCorp() {
 	//title  1    为 删除用户
 	//title  2    为添加用户
@@ -431,7 +397,6 @@ func (c *UserController) DelectAndAddCorp() {
 	}
 
 }
-
 func (c *UserController) ListChangeType() {
 	c.Require("datas", "changType-X", "changType-I")
 	datas := c.GetString("datas")
@@ -455,7 +420,6 @@ func (c *UserController) ListChangeType() {
 	}
 	c.EchoJsonOk()
 }
-
 func (c *UserController) GetUserScreen() {
 	c.Require("id")
 	id := c.GetString("id")
@@ -490,7 +454,6 @@ func (c *UserController) GetUserScreen() {
 	c.TplName = "user/manageScreen.html"
 
 }
-
 func (c *UserController) DelectUserScreen() {
 	c.Require("id", "user_id")
 	id := c.GetString("id")
@@ -515,7 +478,6 @@ func (c *UserController) DelectUserScreen() {
 
 	c.EchoJsonOk()
 }
-
 func (c *UserController) GetUserData() {
 	c.EchoJsonOk("测试")
 }
