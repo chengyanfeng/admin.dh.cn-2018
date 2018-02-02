@@ -1,19 +1,20 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego/orm"
-	"common.dh.cn/utils"
-	"common.dh.cn/models"
-	"common.dh.cn/controllers"
 	"fmt"
 	"strconv"
+
+	"common.dh.cn/controllers"
+	"common.dh.cn/models"
+	"common.dh.cn/utils"
+	"github.com/astaxie/beego/orm"
 )
 
-type SourcetypeController struct {
+type DatasourceTypeController struct {
 	controllers.BaseController
 }
 
-func (c *SourcetypeController) init(i int) {
+func (c *DatasourceTypeController) init(i int) {
 	c.Layout = "common/layout.html"
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "common/header.html"
@@ -37,8 +38,7 @@ func (c *SourcetypeController) init(i int) {
 	Authname := c.Ctx.GetCookie("Authname")
 	c.Data["Authname"] = Authname
 }
-
-func (c *SourcetypeController) List() {
+func (c *DatasourceTypeController) List() {
 	c.init(2)
 	var mpurl = "/sourcetype/list?"
 	c.TplName = "sourcetype/index.html"
@@ -69,8 +69,8 @@ func (c *SourcetypeController) List() {
 
 			number, _ := new(models.DiDatasourceType).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total, _ = new(models.DiDatasourceType).Query().SetCond(condor).Count()
-			if total % page_size != 0 {
-				total_page = total / page_size + 1
+			if total%page_size != 0 {
+				total_page = total/page_size + 1
 			} else {
 				total_page = total / page_size
 			}
@@ -110,7 +110,7 @@ func (c *SourcetypeController) List() {
 	c.Data["List"] = data
 	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page), mpurl)
 }
-func (c *SourcetypeController) Update() {
+func (c *DatasourceTypeController) Update() {
 	c.Require("id")
 	id := c.GetString("id")
 	name := c.GetString("name")
@@ -138,7 +138,7 @@ func (c *SourcetypeController) Update() {
 		c.EchoJsonOk()
 	}
 }
-func (c *SourcetypeController) Remove() {
+func (c *DatasourceTypeController) Remove() {
 	c.Require("id")
 	id := c.GetString("id")
 	DiDatasourceType := new(models.DiDatasourceType).Find(id)
@@ -153,7 +153,10 @@ func (c *SourcetypeController) Remove() {
 		c.EchoJsonOk()
 	}
 }
-func (c *SourcetypeController) Edit() {
+func (c *DatasourceTypeController) Create() {
+	c.TplName = "sourcetype/create.html"
+}
+func (c *DatasourceTypeController) Edit() {
 	c.Require("id")
 	id := c.GetString("id")
 	DiDatasourceType := new(models.DiDatasourceType).Find(id)
@@ -165,7 +168,7 @@ func (c *SourcetypeController) Edit() {
 	c.Data["object"] = &DiDatasourceType
 	c.TplName = "sourcetype/edit.html"
 }
-func (c *SourcetypeController) Add() {
+func (c *DatasourceTypeController) Add() {
 	DiDatasourceType := new(models.DiDatasourceType)
 	DiDatasourceType.Name = c.GetString("name")
 	DiDatasourceType.Status = 0
@@ -176,7 +179,7 @@ func (c *SourcetypeController) Add() {
 		c.EchoJsonOk()
 	}
 }
-func (c *SourcetypeController) Listremove() {
+func (c *DatasourceTypeController) ListRemove() {
 	c.Require("datas")
 	datas := c.GetString("datas")
 	plist := *utils.JsonDecodeArrays([]byte(datas))
@@ -197,8 +200,4 @@ func (c *SourcetypeController) Listremove() {
 	}
 	c.EchoJsonOk()
 
-}
-
-func (c *SourcetypeController) Create() {
-	c.TplName = "sourcetype/create.html"
 }

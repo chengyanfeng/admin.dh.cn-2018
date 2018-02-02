@@ -42,12 +42,12 @@
     });
     function action_submit() {
         $('#login_f').ajaxSubmit({
-            url: "/login",
+            url: "/admin/login",
             dataType: "json",
             timeout: 60000,
             success: function (data) {
                 if (data.code == 200) {
-				    window.location.href = "/";
+				    window.location.href = "/admin/";
                 } else {
                     alert(data.msg);
                 }

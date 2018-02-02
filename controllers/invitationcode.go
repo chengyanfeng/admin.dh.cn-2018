@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"common.dh.cn/utils"
-	"common.dh.cn/models"
-	"common.dh.cn/controllers"
-	"github.com/astaxie/beego/orm"
 	"fmt"
 	"strconv"
+
+	"common.dh.cn/controllers"
+	"common.dh.cn/models"
+	"common.dh.cn/utils"
+	"github.com/astaxie/beego/orm"
 )
 
 type InvitationCodeController struct {
@@ -75,8 +76,8 @@ func (c *InvitationCodeController) List() {
 
 			number, _ := new(models.DhIcode).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total, _ = new(models.DhIcode).Query().SetCond(condor).Count()
-			if total % page_size != 0 {
-				total_page = total / page_size + 1
+			if total%page_size != 0 {
+				total_page = total/page_size + 1
 			} else {
 				total_page = total / page_size
 			}
@@ -157,7 +158,7 @@ func (c *InvitationCodeController) Update() {
 		c.EchoJsonOk()
 	}
 }
-func (c *InvitationCodeController) Listremove() {
+func (c *InvitationCodeController) ListRemove() {
 	c.Require("datas")
 	datas := c.GetString("datas")
 	plist := *utils.JsonDecodeArrays([]byte(datas))
@@ -182,7 +183,7 @@ func (c *InvitationCodeController) Add() {
 
 	amont := c.GetString("id")
 	argerr := make([]string, 1)
-	if len(amont) > 0&&amont != "0" {
+	if len(amont) > 0 && amont != "0" {
 
 		j, _ := strconv.Atoi(amont)
 		fmt.Println(j, "-----------------j--------------")
@@ -209,7 +210,7 @@ func (c *InvitationCodeController) Remove() {
 	id := c.GetString("id")
 	DhIcode := new(models.DhIcode).Find(id)
 	if DhIcode == nil {
-		c.EchoJsonErr("大屏膜版不存在")
+		c.EchoJsonErr("大屏模版不存在")
 		c.StopRun()
 	}
 	result := DhIcode.SoftDelete(id)

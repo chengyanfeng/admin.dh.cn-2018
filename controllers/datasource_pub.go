@@ -10,11 +10,11 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type SourceController struct {
+type DatasourcePubController struct {
 	controllers.BaseController
 }
 
-func (c *SourceController) init(i int) {
+func (c *DatasourcePubController) init(i int) {
 	c.Layout = "common/layout.html"
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "common/header.html"
@@ -38,11 +38,10 @@ func (c *SourceController) init(i int) {
 	Authname := c.Ctx.GetCookie("Authname")
 	c.Data["Authname"] = Authname
 }
-
-func (c *SourceController) List() {
+func (c *DatasourcePubController) List() {
 	c.init(2)
-	var mpurl = "/source/list?"
-	c.TplName = "source/index.html"
+	var mpurl = "/datasource_pub/list?"
+	c.TplName = "datasource_pub/index.html"
 	var total, total_page int64
 	typelist := []utils.P{}
 	var list []*models.DiDatasourcePub
@@ -149,7 +148,7 @@ func (c *SourceController) List() {
 	c.Data["List"] = data
 	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page), mpurl)
 }
-func (c *SourceController) Update() {
+func (c *DatasourcePubController) Update() {
 	c.Require("id")
 	id := c.GetString("id")
 	DiDatasourceData := new(models.DiDatasourcePub).Find(id)
@@ -186,8 +185,7 @@ func (c *SourceController) Update() {
 		c.EchoJsonOk()
 	}
 }
-
-func (c *SourceController) Listremove() {
+func (c *DatasourcePubController) ListRemove() {
 	c.Require("datas")
 	datas := c.GetString("datas")
 	plist := *utils.JsonDecodeArrays([]byte(datas))
@@ -211,16 +209,16 @@ func (c *SourceController) Listremove() {
 	c.EchoJsonOk()
 
 }
-func (c *SourceController) ShowData() {
+func (c *DatasourcePubController) ShowData() {
 
-	c.TplName = "source/showData.html"
+	c.TplName = "datasource_pub/showData.html"
 }
-func (c *SourceController) Remove() {
+func (c *DatasourcePubController) Remove() {
 	c.Require("id")
 	id := c.GetString("id")
 	DiDatasourceData := new(models.DiDatasourcePub).Find(id)
 	if DiDatasourceData == nil {
-		c.EchoJsonErr("大屏膜版不存在")
+		c.EchoJsonErr("大屏模版不存在")
 		c.StopRun()
 	}
 	result := DiDatasourceData.Delete(id)
@@ -230,8 +228,22 @@ func (c *SourceController) Remove() {
 		c.EchoJsonOk()
 	}
 }
+func (c *DatasourcePubController) Create() {
+	typelist := []utils.P{}
+	DiDatasourceTypes := []models.DiDatasourceType{}
+	new(models.DiDatasourceType).Query().GroupBy("object_id").All(&DiDatasourceTypes, "name")
+	if len(DiDatasourceTypes) > 0 {
+		for _, v := range DiDatasourceTypes {
+			ty := utils.P{}
+			ty["sourceType"] = v.Name
+			typelist = append(typelist, ty)
 
-func (c *SourceController) Edit() {
+		}
+	}
+	c.Data["sourceTypelist"] = typelist
+	c.TplName = "datasource_pub/create.html"
+}
+func (c *DatasourcePubController) Edit() {
 	c.Require("id")
 	id := c.GetString("id")
 	DiDatasourceData := new(models.DiDatasourcePub).Find(id)
@@ -255,8 +267,7 @@ func (c *SourceController) Edit() {
 
 		}
 	}
-
 	c.Data["sourceTypelist"] = typelist
 	c.Data["object"] = &DiDatasourceData
-	c.TplName = "source/edit.html"
+	c.TplName = "datasource_pub/edit.html"
 }

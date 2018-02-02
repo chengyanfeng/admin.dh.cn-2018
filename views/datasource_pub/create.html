@@ -1,0 +1,37 @@
+<div id="pad-wrapper" class="form-page">
+        <div class="row-fluid form-wrapper">
+            <div class="span12 column">
+                <form operation="add" object="admin/datasource_pub">
+                    <div class="field-box">
+                        <label>数据源名称：</label>
+                        <input name="name" id="name" class="span6 inline-input" type="text" value="" required />
+                    </div>
+                    <div class="field-box">
+                        <label>数据源ID：</label>
+                        <input name="di_datasource_id" id="di_datasource_id" class="span6 inline-input" type="text" value="" required />
+                    </div>
+                    <div class="field-box">
+                        <label>数据源分类：</label>
+                        <select name="SourceType" id="SourceType" value={{.object.DatasourceTypeId}} class="select2" style="width: 140px;height:30px">
+                            {{- range .sourceTypelist }} {{ if eq .sourceType .Type}}
+                            <option value="{{.sourceType}}" selected="selected">{{.sourceType}}</option>
+                            {{ else }}
+                            <option value="{{.sourceType}}">{{.sourceType}}</option>
+                            {{ end }} {{- end}}
+                        </select>
+                    </div>
+                    <div class="field-box">
+                        <label>Logo：</label>
+                        <input name="logo" id="logo" class="span9 inline-input img-uploader" type="text" value="{{.object.Logo}}" readonly required/>
+                        <br>
+                        <br>
+                        <img id='logo_view' class="thrumb_preview" src="{{.object.Logo}}">
+                    </div>
+                    <div class="field-box">
+                        <input type="submit" class="btn-flat default" value="提 交" style="margin-left:66px">
+                        <input type="button" class="btn-flat gray" action="cancel" style="margin-left:25px" value="取 消">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

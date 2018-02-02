@@ -1,4 +1,4 @@
-<form object='corp' class="search" name="团队">
+<form object='admin/corp' class="search" name="团队">
     <div class="table-products section">
         <div class="row-fluid head">
             <div class="span12">
@@ -9,7 +9,6 @@
             <div class="filter-field">
         <input name="search" type="text" value="{{.search}}" placeholder="名称，手机号，邮箱">
             </div>
-
             <div class="filter-field">
                 <span>状态:</span>
                 <select  name="status" id="status" class="select2" style="width: 140px;height:30px">
@@ -94,13 +93,11 @@
             </table>
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
-
         <div class="pull-left" style="padding-left: 20px;margin-top:23px">
             {{ if   eq  0 (.List|len)  }}
             {{else}}
-
             <input type="button" id="listdelect" class="btn btn-lg" value="批量停用" style="margin-left:5px;margin-top:15px" disabled="disabled" >
-{{ end }}
+            {{ end }}
         </div>
     </div>
 </form>
