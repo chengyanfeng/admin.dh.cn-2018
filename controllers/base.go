@@ -34,19 +34,19 @@ var datasourceSub = []utils.P{
 var screenSub = []utils.P{
 	utils.P{
 		"On":   0,
-		"Path": "/screen_template/list",
+		"Path": "/admin/screen_template/list",
 		"Name": "大屏模版管理",
 	},
 	utils.P{
 		"On":   0,
-		"Path": "/screen/list",
+		"Path": "/admin/screen/list",
 		"Name": "用户大屏管理",
 	},
 }
 var invicodeSub = []utils.P{
 	utils.P{
 		"On":   0,
-		"Path": "/invitationcode/list",
+		"Path": "/admin/invitationcode/list",
 		"Name": "邀请码管理",
 	},
 }
