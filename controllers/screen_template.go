@@ -38,7 +38,7 @@ func (c *ScreenTemplateController) init(i int) {
 	c.Data["Menu"] = Menu
 }
 func (c *ScreenTemplateController) List() {
-	var mpurl = "/screen_template?"
+	var mpurl = "/screen_template/list?"
 	c.init(3)
 	var total, total_page int64
 	var list []*models.DxScreenTemplate

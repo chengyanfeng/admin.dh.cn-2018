@@ -64,5 +64,5 @@ func (c *LoginController) Login() {
 func (c *LoginController) Quit() {
 	c.DelSession("auth")
 	c.DelSession("Authname")
-	c.Ctx.Redirect(302, "/login")
+	c.Ctx.Redirect(302, "/admin/login")
 }
