@@ -7,6 +7,7 @@ import (
 
 func main() {
 	beego.SetStaticPath("/upload", "upload")
+	beego.SetStaticPath("/admin/static", "static")
 	beego.BConfig.WebConfig.Session.SessionOn = true
 	beego.Run()
 }
