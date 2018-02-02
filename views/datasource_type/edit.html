@@ -1,17 +1,17 @@
 <div id="pad-wrapper" class="form-page">
     <div class="row-fluid form-wrapper">
         <div class="span12 column">
-            <form operation="add" object="corp">
-                <div class="field-box">
-                    <label>模版名称：</label>
+            <form operation="update" object="admin/datasource_type">
+                <div class="field-box" style="margin-top:16px;margin-bottom:-25px">
+                    <label>分类名称：</label>
                     <input name="name" id="name" class="span6 inline-input" type="text" value="{{.object.Name}}" required />
                 </div>
                 <div class="field-box">
-                    <label>上传模版：</label>
-                    <input name="file" id="file" class="span6 inline-input" type="file" value="" required />
+                    <label>&nbsp;</label>
+                    <input  name="id" id="id" type="hidden" value="{{.object.ObjectId}}" />
                 </div>
-                <div class="field-box">
-                    <input type="submit" class="btn-flat default" value="提 交">
+                <div class="field-box" >
+                    <input type="submit" class="btn-flat default" value="提 交" style="margin-left: 230px;">
                     <input type="button" class="btn-flat gray" action="cancel" value="取 消">
                 </div>
             </form>

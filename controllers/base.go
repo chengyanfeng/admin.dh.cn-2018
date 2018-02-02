@@ -8,62 +8,52 @@ import (
 )
 
 var accountSub = []utils.P{
-
 	utils.P{
 		"On":   0,
-		"Path": "/user",
+		"Path": "/admin/user/list",
 		"Name": "用户管理",
 	},
 	utils.P{
 		"On":   0,
-		"Path": "/corp/list",
+		"Path": "/admin/corp/list",
 		"Name": "团队管理",
 	},
 }
 var datasourceSub = []utils.P{
-
 	utils.P{
 		"On":   0,
-		"Path": "/sourcetype/list",
-		"Name": "数据源分类管理",
+		"Path": "/admin/datasource_type/list",
+		"Name": "分类管理",
 	},
 	utils.P{
 		"On":   0,
-		"Path": "/source/list",
+		"Path": "/admin/datasource_pub/list",
 		"Name": "数据源管理",
 	},
 }
 var screenSub = []utils.P{
-
 	utils.P{
 		"On":   0,
-		"Path": "/screen/list",
-		"Name": "模版管理",
+		"Path": "/admin/screen_template/list",
+		"Name": "大屏模版管理",
 	},
 	utils.P{
 		"On":   0,
-		"Path": "/userscreen/list",
+		"Path": "/admin/screen/list",
 		"Name": "用户大屏管理",
 	},
 }
 var invicodeSub = []utils.P{
 	utils.P{
 		"On":   0,
-		"Path": "/invitationcode/list",
+		"Path": "/admin/invitationcode/list",
 		"Name": "邀请码管理",
-	},
-}
-var sourceshare = []utils.P{
-	utils.P{
-		"On": 0,
-		"Path": "/sourceshare/list",
-		"Name": "工作表共享管理",
 	},
 }
 var Menu = []utils.P{
 	utils.P{
 		"On":   0,
-		"Path": "/index",
+		"Path": "/admin/",
 		"Name": "首页",
 	},
 	utils.P{
@@ -89,12 +79,6 @@ var Menu = []utils.P{
 		"Path": "/",
 		"Name": "邀请码管理",
 		"Sub":  invicodeSub,
-	},
-	utils.P{
-		"On": 0,
-		"Path": "/",
-		"Name": "数据权限管理",
-		"Sub": sourceshare,
 	},
 }
 

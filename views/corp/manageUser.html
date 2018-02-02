@@ -2,17 +2,14 @@
     <div class="row-fluid form-wrapper">
         <div class="span12 column" style="position:relative;height:355px">
             <div class="form-group" style="position:absolute;height:30px;width:100%">
-                <a style="color:#000000;text-decoration:none;margin-top:12px" object-id="{{.CorpId}}" id="addCorpUser" width="200px">{{.corpName}}所有的成员</a>
-                <input type="button" title="管理团队"  object-id="{{.CorpId}}" id="userSearch" Rmethod="getusercorp" value="搜索" style="position:absolute;left:701px;
-                margin:0;top:-3px" class="btn-flat default">
-                <input type="account" class="form-control"   id="selectCorp"     placeholder="搜索" name="auth" style="position:absolute;margin:0;left:754px;width:128px;height:25px;top:-3px">
-
+                <a style="margin-left:60px;margin-top:12px" object-id="{{.CorpId}}" id="addCorpUser" width="200px">{{.corpName}}所有的成员</a>
+                <input type="button" title="管理团队"  object-id="{{.CorpId}}" id="userSearch" Rmethod="getusercorp" value="搜索" style="position:absolute;margin-left:696px;left:710px;
+                margin:0;top:7px">
+                <input type="account" class="form-control"   id="selectCorp"     placeholder="搜索" name="auth" style="position:absolute;margin:0;left:754px;width:128px;top:7px">
             </div>
-            <div style="height:300px;position:absolute;width:446px;height:350px;top:33px;overflow:auto;border:1px solid;border-color:#D3D3D3 ;">
-
+            <div style="height:300px;position:absolute;width:446px;height:350px;top:33px;overflow:auto;border:1px solid;-webkit-scrollbar{width:14px;}">
                 <table operation="update" object="user" id="leftTable"  class="table table-bordered table-hover" style="border:0px solid #dddddd !important; ">
                     <thead>
-
                     </thead>
                     <tbody>
                     {{- range .CorpUserData}}
@@ -20,7 +17,6 @@
                         <td style="border-style:none;width:100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.name}}</td>
                         <td style="border-style:none;width:130px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.email}}</td>
                         <td style="border-style:none;width: 120px;overflow: hidden;text-overflow: ellipsis;float:left;">
-
                             <select  name="role" id="role" title="改变用户角色" parametername='role'  redirectMethod='getusercorp' method='changeuserrole'  object-id="{{.objectId}}" headtitle="管理成员"  class="role" style="height:27px;width:90px">
                                 {{ if eq  .role "0"}}
                                 <option value="1" >管理员</option>
@@ -38,8 +34,7 @@
                     </tbody>
                 </table>
             </div>
-            <div style="height:300px;position:absolute;left:50%;width:426px;height:350px;top:33px;overflow:auto;border:1px solid;border-color:#D3D3D3;">
-
+            <div style="height:300px;position:absolute;left:50%;width:426px;height:350px;top:33px;overflow:auto;border:1px solid">
                 <table operation="update" object="corp" id="rightTable"  class="table table-bordered table-hover" style="border:0px solid #dddddd !important;" >
                     <thead>
                     </thead>
@@ -47,8 +42,10 @@
                     {{- range .AllUserData}}
                     <tr class="showlastone">
                         <td style="display:none" >{{.userid}}</td>
-                        <td style="border-style:none;width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;;height:36px">{{.name}}</td>
-                        <td style="border-style:none;width: 229px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;;height:36px">{{.email}}</td>
+                        <td style="border-style:none;width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;">{{.name}}</td>
+                        <td style="border-style:none;width: 235px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;">{{.email}}</td>
+                        </td>
+                        <td style="border-style:none;float:left;display :none"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='1' style="cursor:pointer" style="cursor:pointer" title="添加用户"  headtitle="管理成员">添加用户</a>
                         </td>
                         <td style="border-style:none;float:left;width:80px;"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='1' style="cursor:pointer;display :none ;"  title="添加用户"  headtitle="管理成员">添加用户</a>
                              </td>
@@ -57,7 +54,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
 </div>

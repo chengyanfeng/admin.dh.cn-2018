@@ -8,18 +8,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="/img/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <title>后台管理</title>
-    <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/bootstrap-overrides.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/select2.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/layout.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/elements.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/jquery.ui.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/bootstrap-table.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/sweetalert.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/uploader.css" rel="stylesheet" type="text/css" />
-    <link href="/static/css/chengyanfeng.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/bootstrap-overrides.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/select2.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/layout.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/elements.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/jquery.ui.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/sweetalert.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/uploader.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/chengyanfeng.css" rel="stylesheet" type="text/css" />
 
 </head>
 <body style="position:relative">
@@ -55,11 +55,8 @@
                 <a href="{{.Path}}"><span>{{.Name}}</span></a>
             {{else}}
                 <a href="#" class="dropdown-toggle" >
-
                     <span>{{.Name}}</span>
-
                 </a>
-
             {{ if eq .On 0}}
                 <ul class="submenu" >
                     {{ else }}
@@ -68,7 +65,7 @@
                     {{- range .Sub}}
                      {{ if eq .On 1}}
                         <li class="active" id="wokao">
-                            <a href="{{.Path}}">{{.Name}}</a>
+                            <a href="{{.Path}}">—{{.Name}}</a>
                         </li>
                     {{else}}
                     <li>

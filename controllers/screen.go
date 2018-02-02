@@ -1,12 +1,13 @@
 package controllers
 
 import (
-	"common.dh.cn/utils"
-	"common.dh.cn/models"
-	"common.dh.cn/controllers"
-	"github.com/astaxie/beego/orm"
 	"fmt"
 	"strconv"
+
+	"common.dh.cn/controllers"
+	"common.dh.cn/models"
+	"common.dh.cn/utils"
+	"github.com/astaxie/beego/orm"
 )
 
 type ScreenController struct {
@@ -37,14 +38,16 @@ func (c *ScreenController) init(i int) {
 	c.Data["Menu"] = Menu
 }
 func (c *ScreenController) List() {
-	var mpurl = "/screen?"
+
+	var mpurl = "/screen/list?"
 	c.init(3)
 	var total, total_page int64
-	var list []*models.DxScreenTemplate
+	var list []*models.DxScreen
 	c.TplName = "screen/index.html"
 	page, _ := c.GetInt64("page", 1)
 	page_size, _ := c.GetInt64("page_size", 10)
 	filters := map[string]interface{}{}
+	filters["status__gte"] = 0
 	search := c.GetString("search")
 	status := c.GetString("status")
 	if len(search) > 0 {
@@ -53,6 +56,7 @@ func (c *ScreenController) List() {
 			c.Data["search"] = search
 			mpurl = mpurl + "&search=" + search
 			condor := cond.Or("name__icontains", search)
+
 			if len(status) > 0 {
 				c.Data["status"] = status
 				int, _ := strconv.Atoi(status)
@@ -61,11 +65,10 @@ func (c *ScreenController) List() {
 			} else {
 				c.Data["status"] = "nil"
 			}
-
-			number, _ := new(models.DxScreenTemplate).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
-			total, _ = new(models.DxScreenTemplate).Query().SetCond(condor).Count()
-			if total % page_size != 0 {
-				total_page = total / page_size + 1
+			number, _ := new(models.DxScreen).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
+			total, _ = new(models.DxScreen).Query().SetCond(condor).Count()
+			if total%page_size != 0 {
+				total_page = total/page_size + 1
 			} else {
 				total_page = total / page_size
 			}
@@ -82,16 +85,34 @@ func (c *ScreenController) List() {
 			c.Data["status"] = "nil"
 		}
 
-		total, total_page, list = new(models.DxScreenTemplate).OrderPager(page, page_size, filters, "-create_time")
+		total, total_page, list = new(models.DxScreen).OrderPager(page, page_size, filters, "-create_time")
 	}
 	data := []utils.P{}
 	if len(list) > 0 {
 		for _, info := range list {
+			filtersdxScreen := map[string]interface{}{}
+			filtersdxScreen["relate_id"] = info.ObjectId
+			filtersdxScreen["relate_type"] = "dx_screen"
+			dxScreen := new(models.DhRelation).Find(filtersdxScreen)
 			Screen := utils.P{}
+
+			if dxScreen != nil {
+				user := new(models.DhUser).Find(dxScreen.UserId)
+				if user == nil {
+					c.EchoJsonErr("用户查询失败")
+				}
+				Screen["CreateUserId"] = user.ObjectId
+				Screen["CreateUser"] = user.Name
+			} else {
+				Screen["CreateUserId"] = ""
+				Screen["CreateUser"] = ""
+			}
+
 			Screen["ObjectId"] = info.ObjectId
-			Screen["Screenid"] = info.ScreenId
 			Screen["Name"] = info.Name
 			Screen["Status"] = info.Status
+			p := *utils.JsonDecode([]byte(info.Config))
+			Screen["Config"] = utils.ToString(p["width"]) + utils.ToString("*") + utils.ToString(p["height"])
 			Screen["CreateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
 			Screen["UpdateTime"] = info.UpdateTime.Format("2006-01-02 15:04:05")
 			data = append(data, Screen)
@@ -111,9 +132,6 @@ func (c *ScreenController) Update() {
 	if c.GetString("name") != "" {
 		dxScreenTemplate.Name = c.GetString("name")
 	}
-	if c.GetString("logos") != "" {
-		dxScreenTemplate.Name = c.GetString("name")
-	}
 	if c.GetString("status") != "" {
 		int, err := strconv.Atoi(c.GetString("status"))
 		if err == nil {
@@ -128,25 +146,20 @@ func (c *ScreenController) Update() {
 		c.EchoJsonOk()
 	}
 }
-func (c *ScreenController) Listremove() {
+func (c *ScreenController) ListRemove() {
 	c.Require("datas")
 	datas := c.GetString("datas")
 	plist := *utils.JsonDecodeArrays([]byte(datas))
 	argerr := make([]string, 1)
 	for _, v := range plist {
-		DXScreenTemplate := new(models.DxScreenTemplate).Find(v["object_id"].(string))
-		if DXScreenTemplate == nil {
+		DxScreen := new(models.DxScreen).Find(v["object_id"].(string))
+		if DxScreen == nil {
 			argerr = append(argerr, v["object_id"].(string))
 		} else {
-			switch DXScreenTemplate.Status {
-			case -1, 0:
-				DXScreenTemplate.Status = 1
-			case 1:
-				DXScreenTemplate.Status = -1
-			}
-			DXScreenTemplate.Save()
-		}
+			DxScreen.Status = -1
 
+			DxScreen.Save()
+		}
 	}
 	if len(argerr[0]) > 0 {
 		c.EchoJsonErr("部分更新失败")
@@ -157,27 +170,18 @@ func (c *ScreenController) Listremove() {
 func (c *ScreenController) Remove() {
 	c.Require("id")
 	id := c.GetString("id")
-	dxScreenTemplate := new(models.DxScreenTemplate).Find(id)
-	if dxScreenTemplate == nil {
-		c.EchoJsonErr("大屏膜版不存在")
+	DxScreen := new(models.DxScreen).Find(id)
+	if DxScreen == nil {
+		c.EchoJsonErr("大屏模版不存在")
 		c.StopRun()
 	}
-	result := dxScreenTemplate.Delete(id)
+	result := DxScreen.SoftDelete(id)
 	if !result {
 		c.EchoJsonErr("删除失败")
 	} else {
 		c.EchoJsonOk()
 	}
 }
-
-func (c *ScreenController) Edit() {
-
-	c.TplName = "screen/edit.html"
-}
-func (c *ScreenController) Create() {
-	c.TplName = "screen/create.html"
-}
-
 func (c *ScreenController) Add() {
 	DxScreenTemplate := new(models.DxScreenTemplate)
 	DxScreenTemplate.Name = c.GetString("name")
@@ -188,4 +192,7 @@ func (c *ScreenController) Add() {
 	} else {
 		c.EchoJsonOk()
 	}
+}
+func (c *ScreenController) Create() {
+	c.TplName = "screen/create.html"
 }

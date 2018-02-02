@@ -179,12 +179,15 @@ function common_update_status_avatar(object_name, object_id, name, username) {
  * @param object_id
  */
 function common_update_status(object_name, object_id, name, value, title) {
-    common_ajax_get('/' + object_name + '/update?id=' + object_id + '&status=' + value,
+    common_ajax_post('/' + object_name + '/update',
+    {
+        "id":object_id,
+        "status":value
+    },
     function() {
         window.location.reload(true);
     },
     true, "确定" + title + name + "?");
-
 }
 
 /**
@@ -559,7 +562,7 @@ function createListItems() {
     var mydocument = document;
     var mylist = mydocument.getElementById("AllCorp");
     var docFragments = mydocument.createDocumentFragment();
-    common_ajax_get_data("/" + "user" + "/getuserdata",
+    common_ajax_get_data("/admin/user/getuserdata",
     function() {
 
         for (var i = pos; i < pos + LIST_ITEM_SIZE; ++i) {
