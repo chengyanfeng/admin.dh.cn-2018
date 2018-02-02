@@ -40,8 +40,8 @@ func (c *DatasourceTypeController) init(i int) {
 }
 func (c *DatasourceTypeController) List() {
 	c.init(2)
-	var mpurl = "/sourcetype/list?"
-	c.TplName = "sourcetype/index.html"
+	var mpurl = "/datasource_type/list?"
+	c.TplName = "datasource_type/index.html"
 	var total, total_page int64
 	var list []*models.DiDatasourceType
 	page, _ := c.GetInt64("page", 1)
@@ -154,7 +154,7 @@ func (c *DatasourceTypeController) Remove() {
 	}
 }
 func (c *DatasourceTypeController) Create() {
-	c.TplName = "sourcetype/create.html"
+	c.TplName = "datasource_type/create.html"
 }
 func (c *DatasourceTypeController) Edit() {
 	c.Require("id")
@@ -166,7 +166,7 @@ func (c *DatasourceTypeController) Edit() {
 	}
 
 	c.Data["object"] = &DiDatasourceType
-	c.TplName = "sourcetype/edit.html"
+	c.TplName = "datasource_type/edit.html"
 }
 func (c *DatasourceTypeController) Add() {
 	DiDatasourceType := new(models.DiDatasourceType)

@@ -15,7 +15,7 @@
                     {{- range .CorpUserData}}
                     <tr  class="showlastone">
                         <td style="border-style:none;width:100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.name}}</td>
-                        <td style="border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.email}}</td>
+                        <td style="border-style:none;width:130px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.email}}</td>
                         <td style="border-style:none;width: 120px;overflow: hidden;text-overflow: ellipsis;float:left;">
                             <select  name="role" id="role" title="改变用户角色" parametername='role'  redirectMethod='getusercorp' method='changeuserrole'  object-id="{{.objectId}}" headtitle="管理成员"  class="role" style="height:27px;width:90px">
                                 {{ if eq  .role "0"}}
@@ -27,7 +27,7 @@
                                 {{ end }}
                             </select>
                         </td>
-                        <td style="border-style:none;float:left;display :none;height:43px;"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='0' style="cursor:pointer" title="移除用户" headtitle="管理成员" >移除</a>
+                        <td style="border-style:none;float:left;height:43px;width:76px"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='0' style="cursor:pointer;display :none" title="移除用户" headtitle="管理成员" >移除</a>
                         </td>
                     </tr>
                     {{- end}}
@@ -47,6 +47,8 @@
                         </td>
                         <td style="border-style:none;float:left;display :none"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='1' style="cursor:pointer" style="cursor:pointer" title="添加用户"  headtitle="管理成员">添加用户</a>
                         </td>
+                        <td style="border-style:none;float:left;width:80px;"><a action='RemoveAdd' parametername='user_id' parametervalue="{{.userid}}" redirectMethod='getusercorp' method='removeanduser' removed='1' style="cursor:pointer;display :none ;"  title="添加用户"  headtitle="管理成员">添加用户</a>
+                             </td>
                     </tr>
                     {{- end}}
                     </tbody>

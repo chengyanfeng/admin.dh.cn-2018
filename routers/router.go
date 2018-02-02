@@ -26,7 +26,7 @@ func init() {
 	beego.Router("admin/", &controllers.IndexController{}, "get:Get")
 	beego.Router("admin/index", &controllers.IndexController{}, "get:Get")
 	//用户
-	beego.Router("admin/user", &controllers.UserController{}, "get:List")
+	beego.Router("admin/user/list", &controllers.UserController{}, "get:List")
 	beego.Router("admin/user/getuserdata", &controllers.UserController{}, "get:GetUserData")
 	beego.Router("admin/user/create", &controllers.UserController{}, "get:Create")
 	beego.Router("admin/user/edit", &controllers.UserController{}, "get:Edit")

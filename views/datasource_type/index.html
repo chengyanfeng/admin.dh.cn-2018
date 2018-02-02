@@ -75,7 +75,7 @@
             </table>
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
-        <div class="pull-left" style="padding-left: 20px;margin-top:23px">
+        <div class="pull-left" style="padding-left: 20px;margin-top:0px">
             {{ if   eq  0 (.List|len)  }}
             {{else}}
             <input type="button" id="listdelect" class="btn btn-lg" value="批量删除" style="margin-left:5px;margin-top:35px" disabled="disabled" >

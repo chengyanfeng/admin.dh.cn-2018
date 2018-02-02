@@ -42,7 +42,7 @@ func (c *UserController) init(i int) {
 }
 
 func (c *UserController) List() {
-	var mpurl = "/user?"
+	var mpurl = "admin/user/list?"
 	c.init(1)
 	var total, total_page int64
 	var list []*models.DhUser
@@ -79,8 +79,8 @@ func (c *UserController) List() {
 			}
 			number, _ := new(models.DhUser).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total, _ = new(models.DhUser).Query().SetCond(condor).Count()
-			if total % page_size != 0 {
-				total_page = total / page_size + 1
+			if total%page_size != 0 {
+				total_page = total/page_size + 1
 			} else {
 				total_page = total / page_size
 			}
@@ -132,7 +132,6 @@ func (c *UserController) List() {
 }
 
 func (c *UserController) Create() {
-
 	c.TplName = "user/create.html"
 }
 
@@ -155,7 +154,7 @@ func (c *UserController) Add() {
 	user.Email = c.GetString("email")
 	user.Mobile = c.GetString("mobile")
 	user.Password = utils.Md5(c.GetString("password"), def.Md5Salt)
-	user.Auth = utils.Md5(c.GetString("email"), c.GetString("password"), rand.Intn(1000) * rand.Intn(1000))
+	user.Auth = utils.Md5(c.GetString("email"), c.GetString("password"), rand.Intn(1000)*rand.Intn(1000))
 	if c.GetString("status") == "1" {
 		user.Status = 1
 	} else {
@@ -230,14 +229,11 @@ func (c *UserController) Remove() {
 	}
 }
 func (c *UserController) Listremove() {
-
 	c.Require("datas")
 	datas := c.GetString("datas")
-
 	plist := *utils.JsonDecodeArrays([]byte(datas))
 	argerr := make([]string, 1)
 	for _, v := range plist {
-
 		dhUser := new(models.DhUser).Find(v["object_id"].(string))
 		if dhUser == nil {
 			argerr = append(argerr, v["object_id"].(string))
@@ -250,7 +246,6 @@ func (c *UserController) Listremove() {
 			}
 			dhUser.Save()
 		}
-
 	}
 	if len(argerr[0]) > 0 {
 		c.EchoJsonErr("删除失败")
@@ -264,7 +259,6 @@ func (c *UserController) ChangeType() {
 }
 func (c *UserController) UpdateStatusAva() {
 	c.Require("id")
-
 	id := c.GetString("id")
 	status := c.GetString("status")
 	user := new(models.DhUser).Find(id)
@@ -299,7 +293,6 @@ func (c *UserController) GetCorp() {
 		c.EchoJsonErr("用户不存在")
 		c.StopRun()
 	}
-
 	filtersUserCorp["user_id"] = id
 	userCorp := new(models.DhUserCorp).OrderList(filtersUserCorp, "-create_time")
 	UserCorpData := []utils.P{}
@@ -320,9 +313,7 @@ func (c *UserController) GetCorp() {
 		}
 	}
 	c.Data["userCorpData"] = UserCorpData
-
 	allCorp := new(models.DhCorp).OrderList(filtersAllCorp, "-create_time")
-
 	allCorpData := []utils.P{}
 	if len(allCorp) > 0 {
 		for _, info := range allCorp {
