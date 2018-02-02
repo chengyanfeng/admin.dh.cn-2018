@@ -559,7 +559,7 @@ function createListItems() {
     var mydocument = document;
     var mylist = mydocument.getElementById("AllCorp");
     var docFragments = mydocument.createDocumentFragment();
-    common_ajax_get_data("admin/user/getuserdata",
+    common_ajax_get_data("/admin/user/getuserdata",
     function() {
 
         for (var i = pos; i < pos + LIST_ITEM_SIZE; ++i) {
