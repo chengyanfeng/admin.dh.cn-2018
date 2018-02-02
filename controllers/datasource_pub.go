@@ -271,3 +271,17 @@ func (c *DatasourcePubController) Edit() {
 	c.Data["object"] = &DiDatasourceData
 	c.TplName = "datasource_pub/edit.html"
 }
+func (c *DatasourcePubController) Add() {
+	DiDatasourcePub := new(models.DiDatasourcePub)
+	DiDatasourcePub.Name = c.GetString("name")
+	DiDatasourcePub.DiDatasourceId = c.GetString("di_datasource_id")
+	DiDatasourcePub.DatasourceTypeId = c.GetString("SourceType")
+	DiDatasourcePub.Logo = c.GetString("logo")
+	DiDatasourcePub.Status = 0
+	result := DiDatasourcePub.Save()
+	if !result {
+		c.EchoJsonErr("创建失败")
+	} else {
+		c.EchoJsonOk()
+	}
+}
