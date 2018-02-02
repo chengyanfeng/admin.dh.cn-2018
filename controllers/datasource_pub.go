@@ -43,10 +43,17 @@ func (c *DatasourcePubController) List() {
 				c.Data["status"] = "nil"
 			}
 			if len(sourceType) > 0 {
+				pubfilter:=utils.P{}
 				c.Data["sourceType"] = sourceType
 				mpurl = mpurl + "&sourceType=" + sourceType
-				condor = cond.AndCond(condor).And("type", sourceType)
-			} else {
+				pubfilter["name"]=sourceType;
+				pub:=new(models.DiDatasourcePub).Find(pubfilter)
+				if pub==nil{
+					condor = cond.AndCond(condor).And("datasource_type_id", "")
+					}else {
+				condor = cond.AndCond(condor).And("datasource_type_id", pub.ObjectId)
+				}
+				} else {
 
 				c.Data["sourceType"] = "nil"
 			}
