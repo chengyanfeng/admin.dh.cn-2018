@@ -1,41 +1,47 @@
-<form object='sourcetype' class="search" name="数据源类别">
+<form object='sourceshare' class="search" name="数据源共享">
     <div class="table-products section">
         <div class="row-fluid head">
             <div class="span12">
-                <h4>数据源分类列表</h4>
+                <h4>数据源共享管理</h4>
             </div>
         </div>
         <div class="row-fluid filter-block" style="margin-left: 13px;">
             <div class="filter-field">
 
-                <input name="search" type="text" value="{{.search}}" placeholder="数据源分类名称">
+
+                <input name="search" type="text" value="{{.search}}" placeholder="数据源名称">
+            </div>
+            <div  class="filter-field" >
+                <span>分类:</span>
+
             </div>
             <div class="filter-field">
                 <span>状态:</span>
                 <select  name="status" id="status" class="select2" style="width: 140px;height:30px">
-
                     {{if eq .status "nil"}}
                     <option value="" selected="selected" >全部</option>
-                    <option value="1" >显示</option>
-                    <option value="0" >未显示</option>
-                    {{else if eq .status "1"}}
-                    <option value=""  >全部</option>
-                    <option value="1" selected="selected">显示</option>
-                    <option value="0">未显示</option>
+                    <option value="0" >停用</option>
+                    <option value="1" >启用</option>
+
                     {{else if eq .status "0"}}
                     <option value=""  >全部</option>
-                    <option value="1" >显示</option>
-                    <option value="0" selected="selected">未显示</option>
+                    <option value="0" selected="selected">停用</option>
+                    <option value="1" >启用</option>
+
+                    {{else if eq .status "1"}}
+                    <option value=""  >全部</option>
+                    <option value="0" >停用</option>
+                    <option value="1" selected="selected">启用</option>
+
 
                     {{end }}
-
-
                 </select>
             </div>
             <div class="filter-field">
-                <input type="submit" class="btn-flat default" value="搜索" >
-        </div>
-            <a class="btn-flat default" action='new' title="分类信息" style="float:right;margin-right:40px">新建分类</a>
+                <input type="submit" class="btn-flat default" value="搜索"  >
+
+            </div>
+            <a class="btn-flat default" action='new' title="分类信息" style="float:right;margin-right:40px">新建工作表</a>
 
         </div>
         <div class="row-fluid">
@@ -44,10 +50,11 @@
                 <tr>
                     <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
                     <th style="display:none;"><span class="line"></span>ID</th>
-                    <th style="width: 20%"><span class="line" title="分类信息"></span>数据源分类名称</th>
-                    <th style="width: 20%"><span class="line"></span>数据源数量</th>
-                    <th style="width: 20%"><span class="line"></span>添加时间</th>
+                    <th style="width: 10%"><span class="line" title="数据源名称"></span>数据源名称</th>
+                    <th style="width: 10%"><span class="line"></span>分类</th>
+                    <th style="width: 10%"><span class="line"></span>更新时间</th>
                     <th style="width: 20%"><span class="line"></span>状态</th>
+                    <th style="width: 20%"><span class="line"></span>共享团队</th>
                     <th style="width: 20%"><span class="line"></span>操作</th>
                 </tr>
                 </thead>
@@ -55,23 +62,25 @@
                 {{- range .List}}
                     <tr>
                         <td><input type="checkbox" id="child" class="list_delect"></td>
-                        <td  style="display:none;" >{{.ObjectId}}</td>
+                        <td style="display:none;">{{.ObjectId}}</td>
                         <td>{{.Name}}</td>
-                        <td>{{.SourceCount}}</td>
-                        <td>{{.CreateTime}}</td>
+                        <td>{{.Format}}</td>
+                        <td>{{.UpdateTime}}</td>
                         {{if  eq .Status 1}}
-                        <td>显示</td>
-                        {{  else if  eq .Status 0 }}
-                        <td>未显示</td>
+                        <td>已启用</td>
+                        {{  else if  eq .Status 0}}
+                        <td>未启用</td>
+
                         {{ end }}
+                        <td>{{.CorpName}}</td>
                         <td>
                             <ul class="actions" style="float: left;">
                                 {{ if eq .Status 1 }}
-                                <li><a action='update' object-id="{{.ObjectId}}" value="0" title="不显示" name="{{.Name}}"> 不显示</a></li>|
+                                <li><a action='update' object-id="{{.ObjectId}}" value="0" title="停用" name="{{.Name}}"> 停用</a></li>|
                                 {{else if  eq .Status 0 }}
-                                <li><a action='update' object-id="{{.ObjectId}}" value="1" title="显示" name="{{.Name}}">显示</a></li>|
-
+                                <li><a action='update' object-id="{{.ObjectId}}" value="1" title="待审核" name="{{.Name}}">启用</a></li>|
                                 {{ end }}
+                                <li><a action='BangDingData'  Rmethod="showdata" object-id="{{.ObjectId}}" title="数据详情" >数据详情</a></li>|
                                 <li><a action='edit' object-id="{{.ObjectId}}"  title="编辑数据源">编辑</a></li>|
                                 <li><a action='delete'  object-id="{{.ObjectId}}" title="删除" name="{{.Name}}">删除</a></li>
 
@@ -81,13 +90,14 @@
                 {{- end}}
                 </tbody>
             </table>
+
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
-        <div class="pull-left" style="padding-left: 20px;margin-top:0px">
+        <div class="pull-left" style="padding-left: 20px;margin-top:23px">
             {{ if   eq  0 (.List|len)  }}
             {{else}}
             <input type="button" id="listdelect" class="btn btn-lg" value="批量删除" style="margin-left:5px;margin-top:35px" disabled="disabled" >
-                {{end}}
+        {{ end }}
         </div>
     </div>
 </form>

@@ -55,7 +55,7 @@
                 </select>
             </div>
             <div class="filter-field">
-                <input type="submit" class="btn-flat primary" value="搜索"  >
+                <input type="submit" class="btn-flat default" value="搜索"  >
 
             </div>
         </div>
@@ -66,7 +66,7 @@
                     <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
                     <th style="display:none;"><span class="line"></span>ID</th>
                     <th style="width: 20%"><span class="line" title="数据源名称"></span>数据源名称</th>
-                    <th style="width: 20%"><span class="line"></span>分类</th>
+                    <th style="width: 10%"><span class="line"></span>分类</th>
                     <th style="width: 20%"><span class="line"></span>更新时间</th>
                     <th style="width: 20%"><span class="line"></span>状态</th>
                     <th style="width: 20%"><span class="line"></span>操作</th>
@@ -78,7 +78,7 @@
                         <td><input type="checkbox" id="child" class="list_delect"></td>
                         <td style="display:none;">{{.ObjectId}}</td>
                         <td>{{.Name}}</td>
-                        <td>{{.SourceType}}</td>
+                        <td>{{.TypeName}}</td>
                         <td>{{.UpdateTime}}</td>
                         {{if  eq .Status 1}}
                         <td>已启用</td>
@@ -91,9 +91,9 @@
                                 {{ if eq .Status 1 }}
                                 <li><a action='update' object-id="{{.ObjectId}}" value="0" title="停用" name="{{.Name}}"> 停用</a></li>|
                                 {{else if  eq .Status 0 }}
-                                <li><a action='update' object-id="{{.ObjectId}}" value="1" title="待审核" name="{{.Name}}">启用</a></li>|
+                                <li><a action='update' object-id="{{.ObjectId}}" value="1" title="启用" name="{{.Name}}">启用</a></li>|
                                 {{ end }}
-                                <li><a action='BangDing'  Rmethod="getusercorp" object-id="{{.ObjectId}}" title="数据详情" >数据详情</a></li>|
+                                <li><a action='BangDingData'  Rmethod="showdata" object-id="{{.ObjectId}}" title="数据详情" >数据详情</a></li>|
                                 <li><a action='edit' object-id="{{.ObjectId}}"  title="编辑数据源">编辑</a></li>|
                                 <li><a action='delete'  object-id="{{.ObjectId}}" title="删除" name="{{.Name}}">删除</a></li>
 
@@ -103,9 +103,10 @@
                 {{- end}}
                 </tbody>
             </table>
+
         </div>
         <div class="pagination">{{.Pagination | str2html}}</div>
-        <div class="pull-left" style="padding-left: 20px;margin-top:23px">
+        <div class="pull-left" style="padding-left: 20px;margin-top:0px">
             {{ if   eq  0 (.List|len)  }}
             {{else}}
             <input type="button" id="listdelect" class="btn btn-lg" value="批量删除" style="margin-left:5px;margin-top:35px" disabled="disabled" >

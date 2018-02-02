@@ -15,7 +15,12 @@
     <link href="/static/css/layout.css" rel="stylesheet" type="text/css" />
     <link href="/static/css/elements.css" rel="stylesheet" type="text/css" />
     <link href="/static/css/jquery.ui.css" rel="stylesheet" type="text/css" />
+    <link href="/static/css/bootstrap-table.css" rel="stylesheet" type="text/css" />
+    <link href="/static/css/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
     <link href="/static/css/sweetalert.css" rel="stylesheet" type="text/css" />
+    <link href="/static/css/uploader.css" rel="stylesheet" type="text/css" />
+    <link href="/static/css/chengyanfeng.css" rel="stylesheet" type="text/css" />
+
 </head>
 <body style="position:relative">
     <div class="navbar navbar-inverse">
@@ -25,14 +30,15 @@
             </a>
             <ul class="nav pull-right">
                 <li class="settings hidden-phone">
-        <a class="dropdown-toggle hidden-phone">欢迎{{ .Authname}}&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        <a class="dropdown-toggle hidden-phone">欢迎,{{ .Authname}}&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 </li>
                 <li class="settings hidden-phone">
-                    <a href="/" class="dropdown-toggle hidden-phone">退出登录</a>
+                    <a href="/logout" class="dropdown-toggle hidden-phone">退出登录</a>
                 </li>
             </ul>
         </div>
     </div>
+
     <div id="sidebar-nav">
         <ul id="dashboard-menu">
         {{- range .Menu}}
@@ -61,13 +67,12 @@
                         {{ end }}
                     {{- range .Sub}}
                      {{ if eq .On 1}}
-
-                        <li class="active">
+                        <li class="active" id="wokao">
                             <a href="{{.Path}}">{{.Name}}</a>
                         </li>
                     {{else}}
                     <li>
-                        <a href="{{.Path}}">{{.Name}}</a>
+                        <a href="{{.Path}}" id="wokaoni">—{{.Name}}</a>
                     </li>
                     {{ end }}
                     {{- end}}

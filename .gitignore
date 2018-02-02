@@ -3,3 +3,4 @@ conf/*
 .idea/
 admin.dh.cn*
 logs/*
+upload/*

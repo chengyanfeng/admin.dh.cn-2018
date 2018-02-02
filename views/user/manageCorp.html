@@ -3,26 +3,26 @@
     <div class="row-fluid form-wrapper">
         <div class="span12 column" style="position:relative;height:355px">
             <div class="form-group" style="position:absolute;height:30px;width:100%">
-                <a style="margin-left:60px;margin-top:12px" user-id="{{.userid}}" id="addUserCorp" width="200px">{{.name}}所属团队</a>
-                <input type="button" title="管理团队"  object-id="{{.userid}}" id="corpSearch"  value="搜索" style="position:absolute;margin-left:696px;left:710px;
-                margin:0;top:7px">
-                <input type="account" class="form-control"   id="selectCorp"     placeholder="搜索用户名称" name="auth" style="position:absolute;margin:0;left:754px;width:128px;top:7px">
+                <a style="color:#000000;text-decoration:none;margin-top:8px" user-id="{{.userid}}" id="addUserCorp" width="200px">{{.name}}所属团队</a>
+                <input type="button" title="管理团队"  object-id="{{.userid}}" id="corpSearch"  value="搜索" style="position:absolute;left:701px;
+                margin:0;top:-3px" class="btn-flat default">
+                <input type="account" class="form-control"   id="selectCorp"     placeholder="搜索用户名称" name="auth" style="position:absolute;margin:0;left:754px;width:128px;height:25px;top:-3px;">
 
             </div>
-            <div style="height:300px;position:absolute;width:446px;height:350px;top:33px;overflow:auto">
-            <table operation="update" object="user" id="userCorp"  class="table table-bordered table-hover" style="border-left: 1px solid #dddddd !important;">
+            <div style="height:300px;position:absolute;width:446px;height:350px;top:33px;overflow:auto;border:1px solid;border-color:#D3D3D3 ">
+                <table operation="update" object="user" id="userCorp"  class="table table-bordered table-hover" style="border: 0px solid #dddddd !important;">
                     <thead>
 
                     </thead>
                     <tbody>
                     {{- range .userCorpData}}
                     <tr class="showlastone">
-                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Name}}</td>
-                        <td style="border-style:none;max-width: 100px;overflow: hidden;text-overflow: ellipsis;">{{.Email}}</td>
+                        <td style="border-style:none;width:100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Name}}</td>
+                        <td style="border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Email}}</td>
 
-                        <td style="border-style:none;max-width: 100px;overflow: hidden;text-overflow: ellipsis;">
-                            <select  name="userRole" id="userRole" title="改变用户角色" class="userRole" style="height:30px;width:90px">
-                              {{ if eq  .Role "0"}}
+                        <td style="border-style:none;width: 116px;overflow: hidden;text-overflow: ellipsis;float:left;height:43px;">
+                            <select  name="userRole" id="userRole" title="改变用户角色" class="userRole" style="height:28px;width:90px;">
+                                {{ if eq  .Role "0"}}
                                 <option value="1" >管理员</option>
                                 <option value="0" selected>普通成员</option>
                                 {{ else }}
@@ -31,29 +31,28 @@
                                 {{ end }}
                             </select>
                         </td>
-                        <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;display:none;"><a action='ManageRemoveAdd' object-id="{{.ObjectId}}" user-id="{{.Userid}}" corpid = "{{.CorpId}}"style="cursor:pointer" title="移除用户">移除</a>
+                        <td style="border-style:none;width: 50px;overflow: hidden;text-overflow: ellipsis;height:43px;float:left;"><a action='ManageRemoveAdd' object-id="{{.ObjectId}}" user-id="{{.Userid}}" corpid = "{{.CorpId}}" style="cursor:pointer;display:none" title="移除用户" >移除</a>
                         </td>
                     </tr>
                     {{- end}}
-               </tbody>
+                    </tbody>
                 </table>
             </div>
-                <div style="height:300px;position:absolute;left:50%;width:446px;height:350px;top:33px;overflow:auto">
-            <table operation="update" object="user" id="AllCorp"  class="table table-bordered table-hover" style="border-left: 1px solid #dddddd !important;" >
-                <thead>
-                </thead>
-                <tbody>
-                {{- range .allCorpData}}
-                <tr class="showlastone">
+            <div style="height:300px;position:absolute;left:50%;width:426px;height:350px;top:33px;overflow:auto;border:1px solid;border-color:#D3D3D3;">
+                <table operation="update" object="user" id="AllCorp"  class="table table-bordered table-hover" style="border: 0px solid #dddddd !important;" >
+                    <thead>
+                    </thead>
+                    <tbody>
+                    {{- range .allCorpData}}
+                    <tr class="showlastone">
 
-                    <td style="border-style:none;max-width: 50px;overflow: hidden;text-overflow: ellipsis;">{{.Name}}</td>
-                    <td style="border-style:none;max-width: 150px;overflow: hidden;text-overflow: ellipsis;">{{.Email}}</td>
-
-                    <td style="border-style:none;display :none"><a  action='ManageRemoveAdd' object-id="{{.ObjectId}}" style="cursor:pointer" title="添加用户">添加用户</a>
-                    </td>
-                </tr>
-                {{- end}}
-                </tbody>
+                        <td style="border-style:none;width: 100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:35px">{{.Name}}</td>
+                        <td style="border-style:none;width: 225px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:35px">{{.Email}}</td>
+                        <td style="border-style:none;float:left;height:35px;width: 83px"><a  action='ManageRemoveAdd' object-id="{{.ObjectId}}" style="cursor:pointer;display :none" title="添加用户">添加用户</a>
+                        </td>
+                    </tr>
+                    {{- end}}
+                    </tbody>
                 </table>
             </div>
 

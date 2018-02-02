@@ -58,10 +58,9 @@
                 </select>
             </div>
             <div class="filter-field">
-                <input type="submit" class="btn-flat primary" value="搜索" >
-                <a class="btn-flat default" action='new' title="新增用户" style="margin-left:230px">新增用户</a>
-
-            </div>
+                <input type="submit" class="btn-flat default" value="搜索" >
+             </div>
+            <a class="btn-flat default" action='new' title="新增用户" style="float:right;margin-right:40px">新增用户</a>
         </div>
         <div class="row-fluid">
             <table class="table table-hover">
@@ -113,36 +112,19 @@
                         <ul class="actions" style="float: left;">
                             <a action='edit' object-id="{{.ObjectId}}"  title="编辑用户">编辑</a>
                             {{if  eq .Status 1}}
-
-                            |
-                            <a action='update' object-id="{{.ObjectId}}" name="Down" username="{{.Name}}">停用</a>
-                            {{else if  eq .Status 0 }}
-                            |
-                            <a action='update' object-id="{{.ObjectId}}"  username="{{.Name}}">审核</a>
-
-                            {{ else if  eq .Status -1 }}
-                            |
-                            <a action='update' object-id="{{.ObjectId}}" name ="Up"  username="{{.Name}}" >启用</a>
-                            {{ end }}
+                            |<a action='update' object-id="{{.ObjectId}}" name="Down" username="{{.Name}}">停用</a>
                             {{if  eq  .IsDataIUser 1 }}
-                            {{ if eq  .IsDataXUser 1}}
-                            |
-                            <a action='ManageCorp' object-id="{{.ObjectId}}" title="管理团队">管理团队</a>
-                            |
-                            <a action='userScreen' object-id="{{.ObjectId}}" title="管理大屏">管理大屏</a>
-                            {{ else }}
-                            |
-                            <a action='userScreen' object-id="{{.ObjectId}}" title="管理大屏" >管理大屏</a>
+                            |<a action='ManageCorp' object-id="{{.ObjectId}}" title="管理团队" >管理团队</a>
                             {{end}}
-                            {{ else  }}
                             {{ if eq  .IsDataXUser 1}}
-                            |
-                            <a action='ManageCorp' object-id="{{.ObjectId}}" >管理团队</a>
+                            |<a action='userScreen' object-id="{{.ObjectId}}" title="管理大屏">管理大屏</a>
                             {{ else }}
-
                             {{end}}
+                            {{else if  eq .Status 0 }}
+                            |<a action='update' object-id="{{.ObjectId}}"  username="{{.Name}}">审核</a>
+                            {{ else if  eq .Status -1 }}
+                            |<a action='update' object-id="{{.ObjectId}}" name ="Up"  username="{{.Name}}" >启用</a>
                             {{ end }}
-
                         </ul>
                     </td>
                 </tr>

@@ -36,10 +36,11 @@ func (c *CorpController) init(i int) {
 			}
 		}
 	}
-	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
+	Authname:=c.Ctx.GetCookie("Authname")
 	c.Data["Authname"]=Authname
 	c.Data["Menu"]=Menu
 }
+
 
 func (c *CorpController) List() {
 	utils.S("name","chenyanfeng")
@@ -253,7 +254,7 @@ func (c *CorpController) GetUserCorp() {
 	}
 
 	c.Data["CorpId"]=id
-	c.Data["CorpName"]=dhcorp.Name
+	c.Data["corpName"]=dhcorp.Name
 	c.Data["CorpUserData"]=CropUserData
 	c.Data["AllUserData"]=AllUserData
 	c.TplName = "corp/manageUser.html"
@@ -277,7 +278,15 @@ func (c *CorpController) RemoveAndUser() {
 		if dhusercorp==nil{
 
 	} else {
-
+			DhUserCorpCount := map[string]interface{}{}
+			DhUserCorpCount["corp_id"]=id
+			DhUserCorpCount["role"]=3
+			adminCount:=new(models.DhUserCorp).Count(DhUserCorpCount)
+			fmt.Println(adminCount,"---------------admin--------------")
+			if adminCount<2{
+				c.EchoJsonErr("管理员唯一不可删除")
+				c.StopRun()
+			}
 		result:= dhusercorp.Delete(userCorp)
 		if result!=true{
 			c.EchoJsonErr("删除失败")
@@ -289,7 +298,7 @@ func (c *CorpController) RemoveAndUser() {
 		usercorp:=new(models.DhUserCorp)
 		usercorp.UserId=user_id
 		usercorp.CorpId=id
-		usercorp.Role="3"
+		usercorp.Role="1"
 		usercorpfilter["userid"]=user_id
 		usercorpfilter["corpid"]=id
 		usercorpflag:=new(models.DhUserCorp).Find(usercorpfilter)
@@ -314,7 +323,7 @@ func (c *CorpController)  ChangeUserRole() {
 		c.StopRun()
 	}
 	userCorpfilterrole:=map[string]interface{}{}
-	userCorpfilterrole["role"]="1"
+	userCorpfilterrole["role"]="3"
 	userCorpfilterrole["object_id"]=id
 	if role =="0"{
 		fmt.Println(role,"---------------------------------进去---------------------------------")

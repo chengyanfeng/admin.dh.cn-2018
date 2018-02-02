@@ -1,15 +1,15 @@
 package controllers
 
 import (
-	"math/rand"
-	"common.dh.cn/def"
-	"common.dh.cn/utils"
-	"common.dh.cn/models"
-	"common.dh.cn/controllers"
-	"github.com/astaxie/beego/orm"
 	"fmt"
+	"math/rand"
 	"strconv"
 
+	"common.dh.cn/controllers"
+	"common.dh.cn/def"
+	"common.dh.cn/models"
+	"common.dh.cn/utils"
+	"github.com/astaxie/beego/orm"
 )
 
 type UserController struct {
@@ -21,97 +21,94 @@ func (c *UserController) init(i int) {
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "common/header.html"
 	c.LayoutSections["HtmlFooter"] = "common/footer.html"
-	for   k,v :=range Menu{
-		if k!=i{
-			v["On"]=0
-		}else {
-			Menu[i]["On"]=1
-			if Menu[i]["Sub"]!=nil{
-				a:= Menu[i]["Sub"].(interface{})
-				b:= a.([]utils.P)
-				for _,v:=range b {
-					v["On"]=1
+	for k, v := range Menu {
+		if k != i {
+			v["On"] = 0
+		} else {
+			Menu[i]["On"] = 1
+			if Menu[i]["Sub"] != nil {
+				a := Menu[i]["Sub"].(interface{})
+				b := a.([]utils.P)
+				for _, v := range b {
+					v["On"] = 1
 				}
 			}
 		}
 	}
-	Authname,_:=c.GetSecureCookie("2rdsfada3@#$%^&*","Authname")
-	c.Data["Authname"]=Authname
-	c.Data["Menu"]=Menu
+	Authname := c.GetSession("Authname")
+	c.Data["Authname"] = Authname
+	c.Data["Menu"] = Menu
 
 }
 
 func (c *UserController) List() {
-	var mpurl ="/user?"
+	var mpurl = "/user?"
 	c.init(1)
-	var total,total_page int64
+	var total, total_page int64
 	var list []*models.DhUser
 	c.TplName = "user/index.html"
-	page,_ := c.GetInt64("page",1)
-	page_size,_ := c.GetInt64("page_size",10)
+	page, _ := c.GetInt64("page", 1)
+	page_size, _ := c.GetInt64("page_size", 10)
 	filters := map[string]interface{}{}
 	search := c.GetString("search")
-	status:= c.GetString("status")
+	status := c.GetString("status")
 	businesstype := c.GetString("businesstype")
 
-	if len(search)>0{
+	if len(search) > 0 {
 		cond := orm.NewCondition()
-		if len(search)>0{
+		if len(search) > 0 {
 			c.Data["search"] = search
-			mpurl=mpurl+"&search="+search
+			mpurl = mpurl + "&search=" + search
 			condor := cond.Or("name__icontains", search).Or("corp__icontains", search).
 				Or("email__icontains", search).Or("mobile__icontains", search)
-			if len(status)>0{
+			if len(status) > 0 {
 				c.Data["status"] = status
-				int,_:=strconv.Atoi(status)
-				mpurl=mpurl+"&status="+status
-				condor=cond.AndCond(condor).And("status",int)
-			}else{
+				int, _ := strconv.Atoi(status)
+				mpurl = mpurl + "&status=" + status
+				condor = cond.AndCond(condor).And("status", int)
+			} else {
 				c.Data["status"] = "nil"
 			}
-			if len(businesstype)>0{
+			if len(businesstype) > 0 {
 				c.Data["businesstype"] = businesstype
-				mpurl=mpurl+"&businesstype="+businesstype
-				condor=cond.AndCond(condor).And(businesstype,1)
-			}else {
+				mpurl = mpurl + "&businesstype=" + businesstype
+				condor = cond.AndCond(condor).And(businesstype, 1)
+			} else {
 
-				c.Data["businesstype"] ="nil"
+				c.Data["businesstype"] = "nil"
 			}
-			number,_:=new(models.DhUser).Query().Offset((page-1)*page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
-			total,_=new(models.DhUser).Query().SetCond(condor).Count()
-			if total%page_size!=0{
-				total_page=total/page_size+1
-			}else {
-				total_page=total/page_size
+			number, _ := new(models.DhUser).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
+			total, _ = new(models.DhUser).Query().SetCond(condor).Count()
+			if total % page_size != 0 {
+				total_page = total / page_size + 1
+			} else {
+				total_page = total / page_size
 			}
-
 
 			fmt.Println(number)
 
-
-
 		}
 
-	}else {
-		if len(status)>0{
+	} else {
+		if len(status) > 0 {
 
 			c.Data["status"] = status
-			int,_:=strconv.Atoi(status)
-			filters["status"]=int
-			mpurl=mpurl+"&status="+status
-		}else{
+			int, _ := strconv.Atoi(status)
+			filters["status"] = int
+			mpurl = mpurl + "&status=" + status
+		} else {
 			c.Data["status"] = "nil"
 		}
-		if len(businesstype)>0{
+		if len(businesstype) > 0 {
 			c.Data["businesstype"] = businesstype
-			filters[businesstype]=1
-			mpurl=mpurl+"&businesstype="+businesstype
-		}else {
-			c.Data["businesstype"] ="nil"
+			filters[businesstype] = 1
+			mpurl = mpurl + "&businesstype=" + businesstype
+		} else {
+			c.Data["businesstype"] = "nil"
 		}
 
-		total,total_page,list = new(models.DhUser).OrderPager(page, page_size, filters,"-create_time")
-	fmt.Println("list",list)
+		total, total_page, list = new(models.DhUser).OrderPager(page, page_size, filters, "-create_time")
+		fmt.Println("list", list)
 	}
 	data := []utils.P{}
 	if len(list) > 0 {
@@ -131,7 +128,7 @@ func (c *UserController) List() {
 		}
 	}
 	c.Data["List"] = data
-	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page),mpurl)
+	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page), mpurl)
 }
 
 func (c *UserController) Create() {
@@ -158,7 +155,7 @@ func (c *UserController) Add() {
 	user.Email = c.GetString("email")
 	user.Mobile = c.GetString("mobile")
 	user.Password = utils.Md5(c.GetString("password"), def.Md5Salt)
-	user.Auth = utils.Md5(c.GetString("email"), c.GetString("password"), rand.Intn(1000)*rand.Intn(1000))
+	user.Auth = utils.Md5(c.GetString("email"), c.GetString("password"), rand.Intn(1000) * rand.Intn(1000))
 	if c.GetString("status") == "1" {
 		user.Status = 1
 	} else {
@@ -237,27 +234,28 @@ func (c *UserController) Listremove() {
 	c.Require("datas")
 	datas := c.GetString("datas")
 
-	plist:=*utils.JsonDecodeArrays([]byte(datas))
-	argerr :=make([]string,1)
-	for _,v :=range plist{
+	plist := *utils.JsonDecodeArrays([]byte(datas))
+	argerr := make([]string, 1)
+	for _, v := range plist {
 
 		dhUser := new(models.DhUser).Find(v["object_id"].(string))
 		if dhUser == nil {
-			argerr=append(argerr,v["object_id"].(string))
-		}else {
+			argerr = append(argerr, v["object_id"].(string))
+		} else {
 			switch dhUser.Status {
-			case -1,0: dhUser.Status=1;
-			case 1:dhUser.Status=-1;
+			case -1, 0:
+				dhUser.Status = 1
+			case 1:
+				dhUser.Status = -1
 			}
 			dhUser.Save()
 		}
 
 	}
-	if  len(argerr[0]) > 0 {
+	if len(argerr[0]) > 0 {
 		c.EchoJsonErr("删除失败")
 	}
 	c.EchoJsonOk()
-
 
 }
 
@@ -268,15 +266,15 @@ func (c *UserController) UpdateStatusAva() {
 	c.Require("id")
 
 	id := c.GetString("id")
-	status:= c.GetString("status")
+	status := c.GetString("status")
 	user := new(models.DhUser).Find(id)
 	if user == nil {
 		c.EchoJsonErr("用户不存在")
 		c.StopRun()
 	}
-	int,err:=strconv.Atoi(status)
-	if err ==nil {
-		user.Status=int
+	int, err := strconv.Atoi(status)
+	if err == nil {
+		user.Status = int
 	}
 	result := user.Save()
 	if !result {
@@ -293,8 +291,8 @@ func (c *UserController) GetCorp() {
 	filtersAllCorp := map[string]interface{}{}
 	filtersAllCorp["status__gte"] = 0
 	corpName := c.GetString("corpName")
-	if corpName!=""&&corpName!="undefined"{
-		filtersAllCorp["name__contains"]=corpName
+	if corpName != "" && corpName != "undefined" {
+		filtersAllCorp["name__contains"] = corpName
 	}
 	user := new(models.DhUser).Find(id)
 	if user == nil {
@@ -302,28 +300,28 @@ func (c *UserController) GetCorp() {
 		c.StopRun()
 	}
 
-	filtersUserCorp["user_id"] =id
-	userCorp  :=new(models.DhUserCorp).OrderList(filtersUserCorp,"-create_time")
+	filtersUserCorp["user_id"] = id
+	userCorp := new(models.DhUserCorp).OrderList(filtersUserCorp, "-create_time")
 	UserCorpData := []utils.P{}
 	if len(userCorp) > 0 {
 		for _, info := range userCorp {
-			corp:=new(models.DhCorp).Find(info.CorpId)
-			if corp != nil{
+			corp := new(models.DhCorp).Find(info.CorpId)
+			if corp != nil {
 				userCorp := utils.P{}
-			userCorp["ObjectId"] = info.ObjectId
-			userCorp["CorpId"] = info.CorpId
-			userCorp["Role"] = info.Role
-			userCorp["Userid"] = info.UserId
-			userCorp["Name"]=corp.Name
-			userCorp["Email"]=corp.Email
+				userCorp["ObjectId"] = info.ObjectId
+				userCorp["CorpId"] = info.CorpId
+				userCorp["Role"] = info.Role
+				userCorp["Userid"] = info.UserId
+				userCorp["Name"] = corp.Name
+				userCorp["Email"] = corp.Email
 
-			UserCorpData = append(UserCorpData, userCorp)
+				UserCorpData = append(UserCorpData, userCorp)
 			}
 		}
 	}
 	c.Data["userCorpData"] = UserCorpData
 
-	allCorp := new(models.DhCorp).OrderList(filtersAllCorp,"-create_time")
+	allCorp := new(models.DhCorp).OrderList(filtersAllCorp, "-create_time")
 
 	allCorpData := []utils.P{}
 	if len(allCorp) > 0 {
@@ -336,42 +334,41 @@ func (c *UserController) GetCorp() {
 		}
 	}
 	c.Data["allCorpData"] = allCorpData
-	c.Data["name"]=user.Name
-	c.Data["userid"]=user.ObjectId
+	c.Data["name"] = user.Name
+	c.Data["userid"] = user.ObjectId
 	fmt.Println(user.Name)
 	fmt.Println(id)
 	c.TplName = "user/manageCorp.html"
 
 }
 
-
 func (c *UserController) DelectAndAddCorp() {
 	//title  1    为 删除用户
 	//title  2    为添加用户
 	//role   1,0    改变用户角色
-	c.Require("id","user_id")
+	c.Require("id", "user_id")
 
 	object_id := c.GetString("id")
-	role:= c.GetString("role")
+	role := c.GetString("role")
 	user_id := c.GetString("user_id")
 	corp_id := c.GetString("corp_id")
 	title := c.GetString("title")
 	filtersUserCorp := map[string]interface{}{}
-	filtersUserCorp["object_id"]=object_id
-	filtersUserCorp["user_id"]=user_id
-	if title == "1"{
+	filtersUserCorp["object_id"] = object_id
+	filtersUserCorp["user_id"] = user_id
+	if title == "1" {
 		UserCorp := new(models.DhUserCorp).Find(filtersUserCorp)
-		if UserCorp == nil{
+		if UserCorp == nil {
 			c.EchoJsonErr("团队不存在")
 			c.StopRun()
 		}
 
-		if UserCorp.Role =="1"{
+		if UserCorp.Role == "1" {
 			UserCorpadminCount := map[string]interface{}{}
-			UserCorpadminCount["corp_id"]=corp_id
-			UserCorpadminCount["role"]=1
-			adminCount:=new(models.DhUserCorp).Count(UserCorpadminCount)
-			if adminCount<2{
+			UserCorpadminCount["corp_id"] = corp_id
+			UserCorpadminCount["role"] = 1
+			adminCount := new(models.DhUserCorp).Count(UserCorpadminCount)
+			if adminCount < 2 {
 				c.EchoJsonErr("管理员唯一不可删除")
 				c.StopRun()
 			}
@@ -383,55 +380,55 @@ func (c *UserController) DelectAndAddCorp() {
 		} else {
 			c.EchoJsonOk()
 
-		}}
+		}
+	}
 	if title == "2" {
-		DhUserCorpfilter:=map[string]interface{}{}
+		DhUserCorpfilter := map[string]interface{}{}
 		Corp := new(models.DhCorp).Find(object_id)
-		if Corp == nil{
+		if Corp == nil {
 			c.EchoJsonErr("团队不存在")
 			c.StopRun()
 		}
 
-		DhUserCorp:=new(models.DhUserCorp)
-		DhUserCorp.Role="0"
-		DhUserCorp.CorpId=Corp.ObjectId
-		DhUserCorp.UserId=user_id
-		DhUserCorpfilter["corpid"]=Corp.ObjectId
-		DhUserCorpfilter["userid"]=user_id
-		DhUserCorpflag:=new(models.DhUserCorp).Find(DhUserCorpfilter)
-		if DhUserCorpflag !=nil {
+		DhUserCorp := new(models.DhUserCorp)
+		DhUserCorp.Role = "0"
+		DhUserCorp.CorpId = Corp.ObjectId
+		DhUserCorp.UserId = user_id
+		DhUserCorpfilter["corpid"] = Corp.ObjectId
+		DhUserCorpfilter["userid"] = user_id
+		DhUserCorpflag := new(models.DhUserCorp).Find(DhUserCorpfilter)
+		if DhUserCorpflag != nil {
 			c.EchoJsonErr("用户已经添加到团队中")
 			c.StopRun()
 		}
-		result :=DhUserCorp.Save()
+		result := DhUserCorp.Save()
 		if !result {
 			c.EchoJsonErr("添加用户失败")
 		} else {
 			c.EchoJsonOk()
 		}
 
-
 	}
-	if role !=""{
+	if role != "" {
 		UserCorp := new(models.DhUserCorp).Find(filtersUserCorp)
-		if UserCorp == nil{
+		if UserCorp == nil {
 			c.EchoJsonErr("团队不存在")
 			c.StopRun()
 		}
-		userCorpfilterrole:=map[string]interface{}{}
-		userCorpfilterrole["role"]="1"
-		userCorpfilterrole["object_id"]=object_id
-		if role =="0"{
-			fmt.Println(role,"---------------------------------进去---------------------------------")
+		userCorpfilterrole := map[string]interface{}{}
+		userCorpfilterrole["role"] = "1"
+		userCorpfilterrole["object_id"] = object_id
+		if role == "0" {
+			fmt.Println(role, "---------------------------------进去---------------------------------")
 
-			number:=new(models.DhUserCorp).Count(userCorpfilterrole)
-		if number<2 {
-			c.EchoJsonOk("管理员唯一不可改变")
-			c.StopRun()
+			number := new(models.DhUserCorp).Count(userCorpfilterrole)
+			if number < 2 {
+				c.EchoJsonOk("管理员唯一不可改变")
+				c.StopRun()
 
+			}
 		}
-		}
-		UserCorp.Role=role
+		UserCorp.Role = role
 		result := UserCorp.Save()
 
 		if !result {
@@ -442,32 +439,27 @@ func (c *UserController) DelectAndAddCorp() {
 
 	}
 
-
-
-
-
-
 }
 
 func (c *UserController) ListChangeType() {
-	c.Require("datas","changType-X","changType-I")
+	c.Require("datas", "changType-X", "changType-I")
 	datas := c.GetString("datas")
-	changTypex,_ :=c.GetInt("changType-X")
-	changTypei,_ :=c.GetInt("changType-I")
-	plist:=*utils.JsonDecodeArrays([]byte(datas))
-	errmasage :=make([]string,1)
-	for _,v :=range plist{
+	changTypex, _ := c.GetInt("changType-X")
+	changTypei, _ := c.GetInt("changType-I")
+	plist := *utils.JsonDecodeArrays([]byte(datas))
+	errmasage := make([]string, 1)
+	for _, v := range plist {
 		user := new(models.DhUser).Find(v["object_id"].(string))
 		if user == nil {
-			errmasage=append(errmasage,v["object_id"].(string))
-		}else {
-			user.IsDataIUser=changTypei
-			user.IsDataXUser=changTypex
-			reult:=user.Save()
+			errmasage = append(errmasage, v["object_id"].(string))
+		} else {
+			user.IsDataIUser = changTypei
+			user.IsDataXUser = changTypex
+			reult := user.Save()
 			fmt.Println(reult)
 		}
 	}
-	if errmasage[0]!="" {
+	if errmasage[0] != "" {
 		c.EchoJsonErr("部分更新失败")
 	}
 	c.EchoJsonOk()
@@ -477,15 +469,15 @@ func (c *UserController) GetUserScreen() {
 	c.Require("id")
 	id := c.GetString("id")
 	dhrelation := map[string]interface{}{}
-	dhrelation["user_id"]=id
-	dhrelation["relate_type"]="dx_screen"
+	dhrelation["user_id"] = id
+	dhrelation["relate_type"] = "dx_screen"
 
 	user := new(models.DhUser).Find(id)
 	if user == nil {
 		c.EchoJsonErr("用户不存在")
 		c.StopRun()
 	}
-	userScreen := new(models.DhRelation).OrderList(dhrelation,"-create_time")
+	userScreen := new(models.DhRelation).OrderList(dhrelation, "-create_time")
 
 	if userScreen == nil {
 		c.EchoJsonErr("用户无大屏数据")
@@ -501,32 +493,31 @@ func (c *UserController) GetUserScreen() {
 			userScreenData = append(userScreenData, alluserscreen)
 		}
 	}
-	c.Data["userScreenData"]=userScreenData
-	c.Data["name"]=user.Name
-	c.Data["userid"]=user.ObjectId
+	c.Data["userScreenData"] = userScreenData
+	c.Data["name"] = user.Name
+	c.Data["userid"] = user.ObjectId
 	c.TplName = "user/manageScreen.html"
 
 }
 
-
 func (c *UserController) DelectUserScreen() {
-	c.Require("id","user_id")
+	c.Require("id", "user_id")
 	id := c.GetString("id")
 	user_id := c.GetString("user_id")
-	fmt.Println(user_id,"--------------------user_id-------------")
-	fmt.Println(id,"--------------------id-------------")
+	fmt.Println(user_id, "--------------------user_id-------------")
+	fmt.Println(id, "--------------------id-------------")
 
 	dhrelation := map[string]interface{}{}
-	dhrelation["user_id"]=user_id
-	dhrelation["relate_type"]="dx_screen"
-	dhrelation["object_id"]=id
+	dhrelation["user_id"] = user_id
+	dhrelation["relate_type"] = "dx_screen"
+	dhrelation["object_id"] = id
 	user := new(models.DhUser).Find(user_id)
 	if user == nil {
 		c.EchoJsonErr("用户不存在")
 		c.StopRun()
 	}
 	userScreen := new(models.DhRelation).Delete(dhrelation)
-	if userScreen !=true {
+	if userScreen != true {
 		c.EchoJsonErr("大屏移除失败")
 		c.StopRun()
 	}
