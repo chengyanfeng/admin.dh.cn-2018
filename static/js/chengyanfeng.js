@@ -24,7 +24,7 @@ var formmysf = $('form.search');
 //停用,启动，状态 的 操作 绑定-->
 formmysf.delegate("a[action='update']", 'click',function() {
     var object_name = $(this).parents(".search").attr('object');
-    if (object_name == "user") {
+    if (object_name == "admin/user") {
 
         common_update_status_avatar(object_name, $(this).attr('object-id'), $(this).attr('name'), $(this).attr('username'));
     } else {
@@ -64,7 +64,7 @@ $('body').on('click', '#AllCorp tbody td a[action="ManageRemoveAdd"]',function()
 //管理团队-搜索团队-->
 $('body').on('click', '#corpSearch',function() {
 
-    common_manage_corp($(this), "user", $(this).attr('object-id'), "modalcorp", $("#selectCorp").val());
+    common_manage_corp($(this), "admin/user", $(this).attr('object-id'), "modalcorp", $("#selectCorp").val());
 })
 //管理团队角色-->
 $('body').on('change', '#userCorp tbody td select[id="userRole"]',function() {
@@ -201,6 +201,7 @@ function common_manage_corp(button, object_name, object_id, modal, corpname) {
     var title = button.attr('title');
     var query = button.attr('query');
     var methods = button.attr('methods');
+    alert(object_name)
     var url = '/' + object_name + '/getCorp?id=' + object_id;
     if (corpname != "undefined") {
         url = url + "&corpName=" + corpname
@@ -231,15 +232,15 @@ function common_delect_add_user_corp(button, user_id, object_id) {
     var value = button.attr("value");
      var url = ""
     if (title == '移除用户') {
-        url = '/user/delectAndAddCorp?id=' + object_id + "&user_id=" + user_id + "&title=" + 1 + "&corp_id=" + corpid;
+        url = '/admin/user/delectAndAddCorp?id=' + object_id + "&user_id=" + user_id + "&title=" + 1 + "&corp_id=" + corpid;
     }
     if (title == "添加用户") {
-        url = '/user/delectAndAddCorp?id=' + object_id + "&user_id=" + user_id + "&title=" + 2;
+        url = '/admin/user/delectAndAddCorp?id=' + object_id + "&user_id=" + user_id + "&title=" + 2;
     }
     if (title == "改变用户角色") {
-        url = '/user/delectAndAddCorp?id=' + object_id + "&user_id=" + user_id + "&role=" + value;
+        url = '/admin/user/delectAndAddCorp?id=' + object_id + "&user_id=" + user_id + "&role=" + value;
     }
-    var redirecturl = '/user/getCorp?id=' + user_id;
+    var redirecturl = '/admin/user/getCorp?id=' + user_id;
     common_ajax_get_corp_screen(url,
     function() {
         common_open_dialog(title, redirecturl)
