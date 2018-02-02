@@ -98,7 +98,6 @@ func (c *DatasourcePubController) List() {
 
 				dhdatasource["TypeName"] = DiDatasourceType.Name
 			}
-			fmt.Println(DiDatasourceType, "--------------------afdsfddsaf----------")
 			dhdatasource["Name"] = info.Name
 
 			dhdatasource["UpdateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")

@@ -63,12 +63,6 @@ function common_open_dialog(title, url, modal) {
         content: url,
         loaded: function () {
             common_dialog_init();
-            if (title == "数据详情") {
-                // 数据表格初始化
-                getColumns()
-
-
-            }
         }
     });
 }
@@ -379,6 +373,7 @@ function common_ajax_get(url, success_callback, confirm, confirm_info) {
  * @param confirm_info
  */
 function common_ajax_post(url, data, success_callback, confirm, confirm_info) {
+
     if (confirm && confirm_info) {
         common_confirm(confirm_info, function (is_confirm) {
             if (!is_confirm) {
