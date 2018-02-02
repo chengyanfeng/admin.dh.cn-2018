@@ -1,0 +1,99 @@
+<form object='invitationcode' class="search" name="邀请码">
+    <div class="table-products section">
+        <div class="row-fluid head">
+            <div class="span12">
+                <h4>邀请码列表</h4>
+            </div>
+        </div>
+        <div class="row-fluid filter-block" style="margin-left: 12px;">
+            <div class="filter-field">
+                <span>状态:</span>
+                <select  name="status" id="status" class="select2" style="width: 140px;height:30px">
+                    {{if eq .status "nil"}}
+                    <option value="" selected="selected" >全部</option>
+                    <option value="0" >未使用</option>
+                    <option value="1" >已使用</option>
+                    {{else if eq .status "0"}}
+                    <option value=""  >全部</option>
+                    <option value="0" selected="selected">未使用</option>
+                    <option value="1" >已使用</option>
+                    {{else if eq .status "1"}}
+                    <option value=""  >全部</option>
+                    <option value="0" >未使用</option>
+                    <option value="1" selected="selected">已使用</option>
+                    {{end }}
+                </select>
+                <input type="submit" class="btn-flat default" value="搜索" >
+            </div>
+            <div class="filter-field">
+                <input type="submit" class="btn-flat primary" value="搜索" >
+                <div style="margin: 0px;margin-top: -4%;margin-left: 665px;">
+               <form>
+                <span> 生成邀请码 :</span>
+                <input name="add" type="text" value="1"  id="codeamont" style="width: 24px;margin: 0px;" maxlength="3">
+                <span> 个</span>
+                <a class="btn-flat default" action='addcode' title="新增加邀请码" parametername='codeamont' parametervalue="1" redirectMethod='list' method='addcode' removed='1'>新增邀请码</a>
+               </form>
+                </div>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th style="width: 5%"><span class="line"></span><input type="checkbox" class="child_delect" id="child_delect" ></th>
+                    <th style="display:none;"><span class="line"></span>ID</th>
+                    <th style="width: 15%"><span class="line" title="邀请码"></span>邀请码</th>
+                    <th style="width: 15%"><span class="line"></span>使用者姓名</th>
+                    <th style="width: 15%"><span class="line"></span>使用邮箱</th>
+                    <th style="width: 15%"><span class="line"></span>创建时间</th>
+                    <th style="width: 10%"><span class="line"></span>使用时间</th>
+                    <th style="width: 10%"><span class="line"></span>状态</th>
+                    <th style="width: 10%"><span class="line"></span>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{- range .List}}
+                    <tr>
+                        <td><input type="checkbox" id="child" class="list_delect"></td>
+                        <td  style="display:none;">{{.ObjectId}}</td>
+                        <td>{{.Code}}</td>
+                        <td>{{.Name}}</td>
+                        <td>{{.Email}}</td>
+                        <td>{{.CreateTime}}</td>
+                        {{if  eq .Status 1}}
+
+                        <td>{{.UseTime}}</td>
+                        {{  else if  eq .Status 0}}
+
+                        <td>暂无</td>
+                        {{ end }}
+
+                        {{if  eq .Status 1}}
+                        <td>已经使用</td>
+                        {{  else if  eq .Status 0}}
+                        <td>未使用</td>
+                        {{  else if  eq .Status -1}}
+                        <td>已经删除</td>
+                        {{ end }}
+                        <td>
+                            <ul class="actions" style="float: left;">
+
+                                <li><a action='delete'  object-id="{{.ObjectId}}" title="删除" name="{{.Code}}">删除</a></li>
+
+                            </ul>
+                        </td>
+                    </tr>
+                {{- end}}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">{{.Pagination | str2html}}</div>
+        <div class="pull-left" style="padding-left: 20px">
+            {{ if   eq  0 (.List|len)  }}
+            {{else}}
+            <input type="button" id="listdelect" class="btn btn-lg" value="批量删除" style="margin-top:35px;" disabled="disabled" >
+            {{end }}
+        </div>
+    </div>
+</form>
