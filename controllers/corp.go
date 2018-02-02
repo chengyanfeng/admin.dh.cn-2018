@@ -41,7 +41,7 @@ func (c *CorpController) init(i int) {
 
 func (c *CorpController) List() {
 	utils.S("name", "chenyanfeng")
-	var mpurl = "admin/corp/list?"
+	var mpurl = "/admin/corp/list?"
 	c.init(1)
 	c.TplName = "corp/index.html"
 	var total, total_page int64

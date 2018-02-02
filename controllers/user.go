@@ -42,7 +42,7 @@ func (c *UserController) init(i int) {
 }
 
 func (c *UserController) List() {
-	var mpurl = "admin/user/list?"
+	var mpurl = "/admin/user/list?"
 	c.init(1)
 	var total, total_page int64
 	var list []*models.DhUser
