@@ -47,7 +47,7 @@ var screenSub = []utils.P{
 var invicodeSub = []utils.P{
 	utils.P{
 		"On":   0,
-		"Path": "/admin/invitationcode/list",
+		"Path": "/admin/invitation_code/list",
 		"Name": "邀请码管理",
 	},
 }
