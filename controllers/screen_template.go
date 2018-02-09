@@ -70,7 +70,7 @@ func (c *ScreenTemplateController) List() {
 			Screen["Name"] = info.Name
 			Screen["Status"] = info.Status
 			Screen["CreateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
-			Screen["UpdateTime"] = info.UpdateTime.Format("2006-01-02 15:04:05")
+			Screen["Description"] = info.Description
 			data = append(data, Screen)
 		}
 	}
@@ -82,21 +82,20 @@ func (c *ScreenTemplateController) Update() {
 	id := c.GetString("id")
 	dxScreenTemplate := new(models.DxScreenTemplate).Find(id)
 	if dxScreenTemplate == nil {
-		c.EchoJsonErr("用户不存在")
+		c.EchoJsonErr("模版不存在")
 		c.StopRun()
 	}
 	if c.GetString("name") != "" {
 		dxScreenTemplate.Name = c.GetString("name")
 	}
-	if c.GetString("logos") != "" {
-		dxScreenTemplate.Name = c.GetString("name")
+	if c.GetString("description") != "" {
+		dxScreenTemplate.Description = c.GetString("description")
 	}
 	if c.GetString("status") != "" {
 		int, err := strconv.Atoi(c.GetString("status"))
 		if err == nil {
 			dxScreenTemplate.Status = int
 		}
-
 	}
 	result := dxScreenTemplate.Save()
 	if !result {
@@ -150,5 +149,13 @@ func (c *ScreenTemplateController) Create() {
 	c.TplName = "screen_template/create.html"
 }
 func (c *ScreenTemplateController) Edit() {
+	c.Require("id")
+	id := c.GetString("id")
+	template := new(models.DxScreenTemplate).Find(id)
+	if template == nil {
+		c.EchoJsonErr("模版不存在")
+		c.StopRun()
+	}
+	c.Data["object"] = &template
 	c.TplName = "screen_template/edit.html"
 }

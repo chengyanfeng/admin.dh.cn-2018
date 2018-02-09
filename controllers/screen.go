@@ -158,9 +158,11 @@ func (c *ScreenController) Remove() {
 		c.EchoJsonOk()
 	}
 }
-func (c *ScreenController) Add() {
+func (c *ScreenController) DoGenerateTemplate() {
 	DxScreenTemplate := new(models.DxScreenTemplate)
 	DxScreenTemplate.Name = c.GetString("name")
+	DxScreenTemplate.ScreenId = c.GetString("screen_id")
+	DxScreenTemplate.Description = c.GetString("description")
 	DxScreenTemplate.Status = 0
 	result := DxScreenTemplate.Save()
 	if !result {
@@ -169,6 +171,7 @@ func (c *ScreenController) Add() {
 		c.EchoJsonOk()
 	}
 }
-func (c *ScreenController) Create() {
-	c.TplName = "screen/create.html"
+func (c *ScreenController) GenerateTemplate() {
+	c.Data["ScreenID"] = c.GetString("id")
+	c.TplName = "screen/generate_template.html"
 }

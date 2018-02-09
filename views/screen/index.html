@@ -37,9 +37,8 @@
                         <td>{{.Config}}</td>
                         <td>
                             <ul class="actions" style="float: left;">
-                                <li><a action='new' object-id="{{.ObjectId}}"  title="创建">创建模版</a></li>|
+                                <li><a action='view' url="/admin/screen/generate_template?id={{.ObjectId}}"  title="生成模版">创建模版</a></li>|
                                 <li><a action='delete'  object-id="{{.ObjectId}}" title="删除" name="{{.Name}}">删除</a></li>
-
                             </ul>
                         </td>
                     </tr>

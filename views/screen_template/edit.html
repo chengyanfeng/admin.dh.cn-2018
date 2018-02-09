@@ -3,12 +3,12 @@
         <div class="span12 column">
             <form operation="update" object="admin/screen_template">
                 <div class="field-box">
-                    <label>模版名称：</label>
-                    <input name="name" id="name" class="span6 inline-input" type="text" value="{{.object.Name}}" required />
+                    <label>名称：</label>
+                    <input name="name" id="name" class="span9 inline-input" type="text" value="{{.object.Name}}" required />
                 </div>
                 <div class="field-box">
-                    <label>模版文件：</label>
-                    <input name="uplaod" type="text" id="uplaod" class="span9 inline-input file-uploader" type="text" required/>
+                    <label>描述：</label>
+                    <textarea name="description" id="description" class="span9 inline-input" rows="6" required>{{.object.Description}}</textarea>
                 </div>
                 <div class="field-box">
                     <label>&nbsp;</label>

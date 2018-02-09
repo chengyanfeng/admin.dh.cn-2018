@@ -50,16 +50,11 @@
                             <span class="line"></span>
                             <input type="checkbox" class="child_delect" id="child_delect">
                         </th>
-                        <th style="display:none;">
-                            <span class="line"></span>ID</th>
-                        <th style="width: 20%">
-                            <span class="line"></span>模版名称</th>
-                        <th style="width: 20%">
-                            <span class="line"></span>创建时间</th>
-                        <th style="width: 20%">
-                            <span class="line"></span>状态</th>
-                        <th style="width: 20%">
-                            <span class="line"></span>操作</th>
+                        <th style="display:none;"><span class="line"></span>ID</th>
+                        <th style="width: 25%"><span class="line"></span>模版名称</th>
+                        <th style="width: 40%"><span class="line"></span>模版描述</th>
+                        <th style="width: 10%"><span class="line"></span>状态</th>
+                        <th style="width: 20%"><span class="line"></span>操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,7 +65,7 @@
                         </td>
                         <td style="display:none;">{{.ObjectId}}</td>
                         <td>{{.Name}}</td>
-                        <td>{{.CreateTime}}</td>
+                        <td>{{.Description}}</td>
                         {{if eq .Status 1}}
                         <td>通过</td>
                         {{ else if eq .Status 0 }}
@@ -88,7 +83,7 @@
                                     <a action='update' object-id="{{.ObjectId}}" value="1" title="启用" name="{{.Name}}">启用</a>
                                 </li>| {{else if eq .Status 0 }}
                                 <li>
-                                    <a action='update' object-id="{{.ObjectId}}" value="1" title="待审核" name="{{.Name}}">待审核</a>
+                                    <a action='update' object-id="{{.ObjectId}}" value="1" title="待审核" name="{{.Name}}">审核</a>
                                 </li>| {{ end }}
                                 <li>
                                     <a action='edit' object-id="{{.ObjectId}}" title="编辑">编辑</a>

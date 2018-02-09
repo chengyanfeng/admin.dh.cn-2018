@@ -78,8 +78,8 @@ func init() {
 	beego.Router("admin/screen_template/listremove", &controllers.ScreenTemplateController{}, "post:ListRemove")
 	//大屏管理
 	beego.Router("admin/screen/list", &controllers.ScreenController{}, "get:List")
-	beego.Router("admin/screen/create", &controllers.ScreenController{}, "get:Create")
-	beego.Router("admin/screen/add", &controllers.ScreenController{}, "post:Add")
+	beego.Router("admin/screen/generate_template", &controllers.ScreenController{}, "get:GenerateTemplate")
+	beego.Router("admin/screen/do_generate_template", &controllers.ScreenController{}, "post:DoGenerateTemplate")
 	beego.Router("admin/screen/update", &controllers.ScreenController{}, "post:Update")
 	beego.Router("admin/screen/remove", &controllers.ScreenController{}, "get:Remove")
 	beego.Router("admin/screen/listremove", &controllers.ScreenController{}, "post:ListRemove")

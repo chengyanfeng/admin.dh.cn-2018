@@ -1,7 +1,3 @@
-
-
-
-
 /**
  * 错误提示
  * @param info
@@ -126,17 +122,16 @@ function common_list_init() {
     form.delegate("a[action='new']", 'click', function () {
         var object_name = $(this).parents(".search").attr('object');
         common_object_new(object_name, $(this), "modalEditAndAdd");
-            center("520px")
+        center("520px")
     });
     form.delegate("a[action='show']", 'click', function () {
         var object_name = $(this).parents(".search").attr('object');
         common_object_show(object_name, $(this).attr('object-id'), $(this));
     });
     form.delegate("a[action='edit']", 'click', function () {
-
         var object_name = $(this).parents(".search").attr('object');
         common_object_edit(object_name, $(this).attr('object-id'), $(this), "modalEditAndAdd");
-     center("520px")
+        center("520px")
     });
     form.delegate("a[action='delete']", 'click', function () {
         var object_name = $(this).parents(".search").attr('object');
