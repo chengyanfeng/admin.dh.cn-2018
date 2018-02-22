@@ -88,6 +88,11 @@ func init() {
 	beego.Router("admin/invitation_code/add", &controllers.InvitationCodeController{}, "get:Add")
 	beego.Router("admin/invitation_code/remove", &controllers.InvitationCodeController{}, "get:Remove")
 	beego.Router("admin/invitation_code/listremove", &controllers.InvitationCodeController{}, "post:ListRemove")
+
+	//数据权限
+	beego.Router("admin/sourceshare/list", &controllers.SourceShareController{}, "get:List")
+	beego.Router("admin/sourceshare/create", &controllers.SourceShareController{}, "get:Create")
+
 	//自动注入路由
 	//beego.AutoRouter(&controllers.CorpController{})
 	//beego.AutoRouter(&controllers.SourcetypeController{})

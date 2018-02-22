@@ -3,9 +3,11 @@ package controllers
 import (
 	"strconv"
 	"strings"
-
+	"common.dh.cn/models"
 	"common.dh.cn/controllers"
 	"common.dh.cn/utils"
+
+
 )
 
 var accountSub = []utils.P{
@@ -44,6 +46,13 @@ var screenSub = []utils.P{
 		"Name": "用户大屏管理",
 	},
 }
+var sourceshare = []utils.P{
+	utils.P{
+		"On": 0,
+		"Path": "/admin/sourceshare/list",
+		"Name": "工作表共享管理",
+	},
+}
 var invicodeSub = []utils.P{
 	utils.P{
 		"On":   0,
@@ -56,6 +65,7 @@ var Menu = []utils.P{
 		"On":   0,
 		"Path": "/admin/",
 		"Name": "首页",
+
 	},
 	utils.P{
 		"On":   0,
@@ -81,17 +91,56 @@ var Menu = []utils.P{
 		"Name": "邀请码管理",
 		"Sub":  invicodeSub,
 	},
+	utils.P{
+		"On": 0,
+		"Path": "/",
+		"Name": "数据权限管理",
+		"Sub": sourceshare,
+	},
 }
 
 type AdminController struct {
 	controllers.BaseController
 }
+func (c *AdminController)getList()([]utils.P){
+	filter:=utils.P{}
+	FListMap:=[]utils.P{}
+	list:=new(models.DhList).List(filter)
+	for _,fv :=range list{
+		if fv.FObjectId==""{
+			childmapList:=[]utils.P{}
+			listmap:=utils.P{}
+			listmap["On"]=0
+			listmap["Path"]=fv.Path
+			listmap["Name"]=fv.Name
+			for _,child:=range list{
+
+				if child.FObjectId==fv.ObjectId{
+					childmap:=utils.P{}
+					childmap["On"]=0
+					childmap["Path"]=child.Path
+					childmap["Name"]=child.Name
+					childmapList=append(childmapList,childmap)
+				}
+			}
+			if len(childmapList)>0{
+				listmap["Sub"]=childmapList
+			}
+			FListMap=append(FListMap,listmap)
+		}
+	}
+	return FListMap
+}
+
+
 
 func (c *AdminController) init(i int) {
 	c.Layout = "common/layout.html"
 	c.LayoutSections = make(map[string]string)
 	c.LayoutSections["HtmlHead"] = "common/header.html"
 	c.LayoutSections["HtmlFooter"] = "common/footer.html"
+	/*Menu:=c.getList()*/
+	Menu:=Menu
 	for k, v := range Menu {
 		if k != i {
 			v["On"] = 0

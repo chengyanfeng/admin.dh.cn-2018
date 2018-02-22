@@ -465,6 +465,7 @@ $('#listchangetype').on('click',
 function() {
     var object_name = $(this).parents(".search").attr('object');
     common_manage_changetype($(this), object_name, $(this).attr('object-id'), "changeType");
+center("520px");
 });
 
 /**

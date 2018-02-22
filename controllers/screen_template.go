@@ -70,7 +70,9 @@ func (c *ScreenTemplateController) List() {
 			Screen["Name"] = info.Name
 			Screen["Status"] = info.Status
 			Screen["CreateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
+			/*
 			Screen["Description"] = info.Description
+			*/
 			data = append(data, Screen)
 		}
 	}
@@ -89,7 +91,9 @@ func (c *ScreenTemplateController) Update() {
 		dxScreenTemplate.Name = c.GetString("name")
 	}
 	if c.GetString("description") != "" {
+		/*
 		dxScreenTemplate.Description = c.GetString("description")
+		*/
 	}
 	if c.GetString("status") != "" {
 		int, err := strconv.Atoi(c.GetString("status"))

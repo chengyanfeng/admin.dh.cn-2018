@@ -162,7 +162,9 @@ func (c *ScreenController) DoGenerateTemplate() {
 	DxScreenTemplate := new(models.DxScreenTemplate)
 	DxScreenTemplate.Name = c.GetString("name")
 	DxScreenTemplate.ScreenId = c.GetString("screen_id")
+	/*
 	DxScreenTemplate.Description = c.GetString("description")
+	*/
 	DxScreenTemplate.Status = 0
 	result := DxScreenTemplate.Save()
 	if !result {
