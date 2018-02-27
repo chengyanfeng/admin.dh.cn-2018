@@ -43,8 +43,8 @@ func (c *CorpController) List() {
 
 			number, _ := new(models.DhCorp).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total, _ = new(models.DhCorp).Query().SetCond(condor).Count()
-			if total % page_size != 0 {
-				total_page = total / page_size + 1
+			if total%page_size != 0 {
+				total_page = total/page_size + 1
 			} else {
 				total_page = total / page_size
 			}
@@ -151,6 +151,7 @@ func (c *CorpController) Add() {
 		c.EchoJsonOk()
 	}
 }
+
 func (c *CorpController) Remove() {
 	c.Require("id")
 	id := c.GetString("id")

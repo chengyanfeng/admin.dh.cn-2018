@@ -7,15 +7,15 @@ import (
 	"github.com/astaxie/beego/orm"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 type SourceShareController struct {
 	AdminController
 }
 
-
 func (c *SourceShareController) List() {
-	var mpurl = "datasource_share/list?"
+	var mpurl = "/admin/sourceshare/list?"
 	c.init(5)
 	var total, total_page int64
 	var list []*models.DiDatasource
@@ -42,8 +42,8 @@ func (c *SourceShareController) List() {
 
 			number, _ := new(models.DiDatasource).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
 			total, _ = new(models.DiDatasource).Query().SetCond(condor).Count()
-			if total % page_size != 0 {
-				total_page = total / page_size + 1
+			if total%page_size != 0 {
+				total_page = total/page_size + 1
 			} else {
 				total_page = total / page_size
 			}
@@ -68,7 +68,7 @@ func (c *SourceShareController) List() {
 		for _, info := range list {
 			Screen := utils.P{}
 			DiSourceShareFilter := utils.P{}
-			DiSourceShareFilter["sourceid"] = info.ObjectId
+			DiSourceShareFilter["DiDatasourceId"] = info.ObjectId
 			DiSourceShare := new(models.DiSourceShare).List(DiSourceShareFilter)
 			if len(DiSourceShare) > 0 {
 				DhCorpArray := make([]string, 1)
@@ -86,7 +86,7 @@ func (c *SourceShareController) List() {
 			}
 			Screen["ObjectId"] = info.ObjectId
 			Screen["Name"] = info.Name
-			Screen["format"] = info.Format
+			Screen["Format"] = info.Format
 			Screen["CreateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
 			Screen["UpdateTime"] = info.UpdateTime.Format("2006-01-02 15:04:05")
 			data = append(data, Screen)
@@ -96,10 +96,79 @@ func (c *SourceShareController) List() {
 	fmt.Println(data, "---------------------data--------------------")
 	c.Data["Pagination"] = PagerHtml(int(total), int(total_page), int(page_size), int(page), mpurl)
 }
+/**
+暂时无用，因为已经全部调用前端接口！！！所以，暂时不用这个接口
+ */
+func (c *SourceShareController) Create() {
 
-func (c *SourceShareController) Create(){
-
-	c.TplName="datasource_share/create.html"
-
+	c.TplName = "datasource_share/create.html"
 
 }
+/**
+暂时无用，因为已经全部调用前端接口！！！所以，暂时不用这个接口
+ */
+func (c *SourceShareController) Add() {
+
+	nameandtype := c.GetString("filename")
+	filetype,name:=filetype(nameandtype)
+	url := c.GetString("upurl")
+	DiDatasource := new(models.DiDatasource)
+	DiDatasource.Type="file"
+	DiDatasource.Format=filetype
+	DiDatasource.Name =name
+	DiDatasource.Url = url
+	result := DiDatasource.Save()
+	if !result {
+		c.EchoJsonErr("添加失败")
+	} else {
+		c.EchoJsonOk()
+	}
+
+}
+
+func filetype(filename string)(filetype string,name string){
+			int:=strings.LastIndex(filename,".")
+			name=filename[0:int]
+			filetype=filename[int:]
+			return filetype,name
+}
+
+func (c *SourceShareController) Remove() {
+	c.Require("id")
+	id := c.GetString("id")
+	DiDatasource:= new(models.DiDatasource).Find(id)
+	if DiDatasource == nil {
+		c.EchoJsonErr("数据源不存在")
+		c.StopRun()
+	}
+	result := DiDatasource.Delete(id)
+	if !result {
+		c.EchoJsonErr("删除失败")
+	} else {
+		c.EchoJsonOk()
+	}
+}
+
+func (c *SourceShareController) ListRemove() {
+	c.Require("datas")
+	datas := c.GetString("datas")
+	plist := *utils.JsonDecodeArrays([]byte(datas))
+	argerr := make([]string, 1)
+	for _, v := range plist {
+		DiDatasources := new(models.DiDatasource).Find(v["object_id"].(string))
+		if DiDatasources == nil {
+			argerr = append(argerr, v["object_id"].(string))
+		} else {
+			result := DiDatasources.Delete(v["object_id"].(string))
+			if !result {
+				argerr = append(argerr, v["object_id"].(string))
+			}
+		}
+	}
+	if len(argerr[0]) > 0 {
+		c.EchoJsonErr("部分删除失败")
+	}
+	c.EchoJsonOk()
+
+}
+

@@ -2,9 +2,15 @@ package controllers
 
 import (
 	"fmt"
-
+	_ "github.com/astaxie/beego/httplib"
 	"common.dh.cn/def"
 	"common.dh.cn/utils"
+	"io/ioutil"
+	"net/http"
+	"bytes"
+	"mime/multipart"
+	"io"
+
 )
 
 type IndexController struct {
@@ -40,4 +46,36 @@ func (c *IndexController) FileUploader() {
 		"file_index": c.GetString("file_index"),
 	}
 	c.EchoJson(result)
+}
+
+
+func (c *IndexController) Filetest() {
+	data,filename,_:= c.GetFile("data")
+		var b bytes.Buffer
+		w:=multipart.NewWriter(&b)
+		file1,_:=w.CreateFormFile("bin",filename.Filename)
+		io.Copy(file1,data)
+		fw,err:=w.CreateFormField("auth")
+		fw.Write([]byte("2f6f0ce5c7ca6ea09a2818f72ce4851d"))
+		w.Close()
+		req, err := http.NewRequest("POST", "https://dev.datahunter.cn/v2/api/upload", &b)
+	req.Header.Set("Content-Type", w.FormDataContentType())
+		req.Body=ioutil.NopCloser(&b)
+	if err != nil {
+		// handle error
+	}
+
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		// handle error
+	}
+	utils.ToP(string(body))
+
+	fmt.Println(utils.ToP(string(body)))
+	defer resp.Body.Close()
+
+		c.EchoJson(utils.ToP(string(body)))
 }

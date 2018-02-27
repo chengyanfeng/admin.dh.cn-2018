@@ -1,0 +1,177 @@
+<div id="pad-wrapper" class="form-page">
+    <div class="row-fluid form-wrapper">
+        <div class="span12 column">
+            <div style="float: right;height: 350px;width: 690px;overflow: auto">
+                <div><input id="filename" style="border-left:0px;border-top:0px;border-right: 0px;"/></div>
+            <table id="urltables" style="margin-top:30px;width:100%;border: 2px solid #F0F0F0;">
+
+            </table>
+            </div>
+            <div    style="width: 200px;height: 350px;margin-right: 0px;background-color: Lavender;">
+                <ul id="sheet">
+                </ul>
+            </div>
+        <div>
+            <input type="button" value="保存" style="background-color: #7aba7b;margin-left:500px; " onclick="save_data()"/>
+            <input type="button" value="取消" style="" onclick="window.location.reload()"/>
+
+        </div>
+        </div>
+
+    </div>
+</div>
+
+<script  type="text/javascript">
+    //把filname 放到input 中
+    $("#filename").val(filname)
+    //获取sheel列表
+     function getsheet() {
+
+        $.each(response1.msg.files,function (i,file) {
+            $("#sheet").append("<li>"+file.name+"</li>");
+        });
+
+        $.ajax({
+            processData: false,
+            contentType: false,
+            async: false,
+            type:'post',
+            url:"https://dev.datahunter.cn/rpc",
+            data:"{\"act\":\"v2/datasource/test_file\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"url\":"+ "\""+response1.msg.files[0].url+"\""+",\"format\":\""+ response1.msg.ext+"\"}}",
+            success:function (data) {
+                if(data.code==200){
+                    //获取头字段
+                   var  headtr="<tr id='headtr' style='width: 100%' >"
+                    $.each(data.msg.head,function (i,head) {
+                        if (head.type=="string"){
+                        headtr+="<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>"+"<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name'  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o="+head.o+" value="+head.n+"> <select id='selectType' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                "<option value='string' selected>字符</option>\n" +
+                                "<option value='number'>数值</option>\n" +
+                                "<option value='time'>时间</option>\n" +
+                                "</select></span>"+"</td>"
+                        }else if(head.type=="number"){
+                            headtr+="<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>"+"<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o= "+head.o+" value="+head.n+"> <select id='selectType' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                    "<option value='string' >字符</option>\n" +
+                                    "<option value='number' selected>数值</option>\n" +
+                                    "<option value='time'>时间</option>\n" +
+                                    "</select></span>"+"</td>"
+                        }else if(head.type=="time"){
+                            headtr+="<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>"+"<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o="+head.o+"value="+head.n+"> <select id='selectType' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                    "<option value='string' >字符</option>\n" +
+                                    "<option value='number'>数值</option>\n" +
+                                    "<option value='time' selected>时间</option>\n" +
+                                    "</select></span>"+"</td>"
+                        }
+                    })
+                    headtr=headtr+"</tr>"
+                    $("#urltables").append(headtr);
+
+                    //获取数据字段
+                    $.each(data.msg.body,function (i,lis) {
+                        //获取每列
+                        var tr="<tr>"
+                        $.each(lis,function (t,li) {
+                            if(i%2==1) {
+                                tr += "<td style='border: 1px solid #F0F0F0;background-color: #d9d9d9'>" + li + "</td>"
+                            }else{
+                                tr += "<td style='border: 1px solid #F0F0F0;'>" + li + "</td>"
+
+                            }
+                            })
+                        tr=tr+"</tr>"
+                        $("#urltables").append(tr);
+
+                    })
+
+                }
+
+            }
+        })
+    };
+    window.onload = getsheet();
+    //保存数据
+    function save_data() {
+        // console.log(get_data())
+        console.log(JSON.stringify(get_data()), 'post')
+        $.ajax({
+        processData: false,
+        contentType: false,
+        async: false,
+        type:'post',
+        url:"https://dev.datahunter.cn/rpc",
+        data: JSON.stringify(get_data()),
+        success:function (data) {
+           if(data.code==200){
+               common_close_dialog(true)
+
+           }
+
+        }
+    })
+    }
+    function get_data(){
+        var data={
+            act:'',
+            args:''
+        }
+            var args={
+            corp_id:'',
+                auth:'',
+                ds:'',
+
+            }
+            var ds = []
+            var th=[]
+
+
+        // 遍历 tr
+        $('#headtr').children('td').each(function(j){  // 遍历 tr 的各个 td
+            var thItem={
+                o:'',
+                n:'',
+                type:'',
+                hide:'',
+                k:''
+            }
+            thItem.n=$(this).find("input").val();
+            thItem.o=$(this).find("input").attr("o");
+            thItem.type=$(this).find("select").val();
+            thItem.k="";
+            thItem.hide=0;
+            th.push(thItem);
+
+        });
+
+        //遍历sheel的各项信息
+        $.each(response1.msg.files,function (i,file) {
+            var dsItem = {
+                url: '',
+                format: '',
+                type: '',
+                name:'',
+                group_id:'',
+                delete_line:'',
+                fh:'',
+                hide:'',
+                th:''
+
+            }
+            dsItem.url=file.url
+            dsItem.format=response1.msg.ext
+            dsItem.type="file"
+            dsItem.group_id="5850c142f502ec42a7000023"
+            dsItem.delete_line=0
+            dsItem.fh=1
+            dsItem.hide=0
+            dsItem.th=th
+            dsItem.name=filname.substring(0,filname.lastIndexOf("."))+"-"+file.name
+            ds.push(dsItem)
+        });
+        args.corp_id="5850c142f502ec42a7000023"
+        args.auth="2f6f0ce5c7ca6ea09a2818f72ce4851d"
+        args.ds=ds
+        data.act="v2/datasource/multi_save"
+        data.args=args
+        return data
+    }
+</script>

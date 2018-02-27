@@ -1,20 +1,22 @@
+
+
 /**
  * 获取当前宽度和屏幕总宽度，弹层居中
  * @param info
  */
 function popup(popupName) {
     var _scrollHeight = $(document).scrollTop(),
-    //获取当前窗口距离页面顶部高度
-    _windowHeight = $(window).height(),
-    //获取当前窗口高度
-    _windowWidth = $(window).width(),
-    //获取当前窗口宽度
-    _popupHeight = popupName.height(),
-    //获取弹出层高度
-    _popupWeight = popupName.width(); //获取弹出层宽度
+        //获取当前窗口距离页面顶部高度
+        _windowHeight = $(window).height(),
+        //获取当前窗口高度
+        _windowWidth = $(window).width(),
+        //获取当前窗口宽度
+        _popupHeight = popupName.height(),
+        //获取弹出层高度
+        _popupWeight = popupName.width(); //获取弹出层宽度
     _posiTop = (_windowHeight - _popupHeight) / 2 + _scrollHeight;
     _posiLeft = (_windowWidth - _popupWeight) / 2;
-     popupName.css({
+    popupName.css({
         "left": _posiLeft + "px",
         "display": "block"
     }); //设置position
@@ -22,7 +24,7 @@ function popup(popupName) {
 
 var formmysf = $('form.search');
 //停用,启动，状态 的 操作 绑定-->
-formmysf.delegate("a[action='update']", 'click',function() {
+formmysf.delegate("a[action='update']", 'click', function () {
     var object_name = $(this).parents(".search").attr('object');
     if (object_name == "admin/user") {
 
@@ -33,14 +35,15 @@ formmysf.delegate("a[action='update']", 'click',function() {
     }
 });
 //管理团队绑定-->
-formmysf.delegate("a[action='ManageCorp']", 'click',function() {
+formmysf.delegate("a[action='ManageCorp']", 'click', function () {
     var object_name = $(this).parents(".search").attr('object');
     common_manage_corp($(this), object_name, $(this).attr('object-id'), "modalcorp");
- center("1000px")
+    center("1000px")
 });
+
 /**
-  * 用户管理，删除添加的提示框 !自定义
-  */
+ * 用户管理，删除添加的提示框 !自定义
+ */
 function common_submit_ing_crop(timer) {
     swal({
         title: "",
@@ -52,78 +55,78 @@ function common_submit_ing_crop(timer) {
 }
 
 //管理用户团队---移除-->
-$('body').on('click', '#userCorp tbody td a[action="ManageRemoveAdd"]',function() {
+$('body').on('click', '#userCorp tbody td a[action="ManageRemoveAdd"]', function () {
 
     common_delect_add_user_corp($(this), $(this).attr('user-id'), $(this).attr('object-id'));
 })
 // 管理所有团队--添加用户-->
-$('body').on('click', '#AllCorp tbody td a[action="ManageRemoveAdd"]',function() {
+$('body').on('click', '#AllCorp tbody td a[action="ManageRemoveAdd"]', function () {
 
     common_delect_add_user_corp($(this), $("#addUserCorp").attr('user-id'), $(this).attr('object-id'));
 })
 //管理团队-搜索团队-->
-$('body').on('click', '#corpSearch',function() {
+$('body').on('click', '#corpSearch', function () {
 
     common_manage_corp($(this), "admin/user", $(this).attr('object-id'), "modalcorp", $("#selectCorp").val());
 })
 //管理团队角色-->
-$('body').on('change', '#userCorp tbody td select[id="userRole"]',function() {
+$('body').on('change', '#userCorp tbody td select[id="userRole"]', function () {
 
     common_delect_add_user_corp($(this), $(this).parent("td").next().children().attr("user-id"), $(this).parent("td").next().children().attr("object-id"));
 })
 //管理用户屏-->
-formmysf.delegate("a[action='userScreen']", 'click',function() {
+formmysf.delegate("a[action='userScreen']", 'click', function () {
     var object_name = $(this).parents(".search").attr('object');
     common_manage_screen($(this), object_name, $(this).attr('object-id'), "modaluserscreen");
-     center("520px")
+    center("520px")
 });
 
 //管理用户大屏---移除-->
-$('body').on('click', '#userScreen tbody td a[action="ManageScreenRemove"]',function() {
+$('body').on('click', '#userScreen tbody td a[action="ManageScreenRemove"]', function () {
     common_delect_userscreen($(this), $("#addUserScreen").attr('user-id'), $(this).attr('object-id'));
 })
 
 //管理团队成员绑定--通用-->
-formmysf.delegate("a[action='BangDing']", 'click',function() {
+formmysf.delegate("a[action='BangDing']", 'click', function () {
     var object_name = $(this).parents(".search").attr('object');
     common_manage_bangding($(this), object_name, $(this).attr('object-id'), "modalcorp");
     center("1000px")
 });
 //管理团队成员绑定--通用-移除->
-$('body').on('click', '#leftTable tbody td a[action="RemoveAdd"]',function() {
+$('body').on('click', '#leftTable tbody td a[action="RemoveAdd"]', function () {
     var object_name = $("#pad-wrapper").attr('object');
     var object_id = $("#pad-wrapper").attr('object-id');
     common_remove_add_user($(this), object_name, object_id, "modalcorp");
 });
 //管理团队成员绑定--通用-添加->
-$('body').on('click', '#rightTable tbody td a[action="RemoveAdd"]',function() {
+$('body').on('click', '#rightTable tbody td a[action="RemoveAdd"]', function () {
     var object_name = $("#pad-wrapper").attr('object');
     var object_id = $("#pad-wrapper").attr('object-id');
     common_remove_add_user($(this), object_name, object_id, "modalcorp");
 });
 
 //管理团队角色-->
-$('body').on('change', '#leftTable tbody td select[id="role"]',function() {
+$('body').on('change', '#leftTable tbody td select[id="role"]', function () {
     var object_name = $("#pad-wrapper").attr('object');
     var object_id = $(this).attr('object-id');
     var corp_id = $("#pad-wrapper").attr('object-id');
     common_change_role($(this), object_name, object_id, corp_id, "modalcorp")
 });
 // 管理团队-搜索团队-->
-$('body').on('click', '#userSearch',function() {
+$('body').on('click', '#userSearch', function () {
     var object_name = $("#pad-wrapper").attr('object');
     var object_id = $("#pad-wrapper").attr('object-id');
     common_manage_bangding($(this), object_name, object_id, "modalcorp", $("#selectCorp").val());
 })
 
 // 管理大屏-主页删除通用->
-$('body').on('click', '#remove',function() {
+$('body').on('click', '#remove', function () {
     var object_name = $("#pad-wrapper").attr('object');
     var object_id = $("#pad-wrapper").attr('object-id');
     common_manage_bangding($(this), object_name, object_id, "modalcorp", $("#selectCorp").val());
 });
 //邀请码--添加->
-formmysf.delegate("a[action='addcode']", 'click',function() {
+formmysf.delegate("a[action='addcode']", 'click', function () {
     var object_name = $(this).parents(".search").attr('object');
     var amount = $("#codeamont").attr("value")
 
@@ -131,21 +134,21 @@ formmysf.delegate("a[action='addcode']", 'click',function() {
 });
 
 // 获取表格焦点-->
-$('body').on('mouseover', ".showlastone",function() {
+$('body').on('mouseover', ".showlastone", function () {
     $(this).children("td:last ").find("a").css("display", "")
     console.log($(this).children("td:last").attr("test"))
 });
 // 失去表格焦点-->
-$('body').on('mouseout', ".showlastone",function() {
+$('body').on('mouseout', ".showlastone", function () {
     $(this).children("td:last ").find("a").css("display", "none")
 });
 //数据显示--详情显示-->
-$('body').on('click', "a[action='BangDingData']",function() {
+$('body').on('click', "a[action='BangDingData']", function () {
     var object_name = $(this).parents(".search").attr('object');
     common_manage_bangding($(this), object_name, $(this).attr('object-id'), "modalcorp");
-     center("1200px")
-           // 数据表格初始化
-           getColumns()
+    center("1200px")
+    // 数据表格初始化
+    getColumns()
 });
 
 /**
@@ -156,22 +159,22 @@ $('body').on('click', "a[action='BangDingData']",function() {
 function common_update_status_avatar(object_name, object_id, name, username) {
     if (name == 'Down') {
         common_ajax_get('/' + object_name + '/updateStatusAva?id=' + object_id + '&status=-1',
-        function() {
-            window.location.reload(true);
-        },
-        true, "确定停用" + username + "吗？停用后无法登录");
+            function () {
+                window.location.reload(true);
+            },
+            true, "确定停用" + username + "吗？停用后无法登录");
     } else if (name == 'Up') {
         common_ajax_get('/' + object_name + '/updateStatusAva?id=' + object_id + '&status=1',
-        function() {
-            window.location.reload(true);
-        },
-        true, "确定启用" + username + "吗？");
+            function () {
+                window.location.reload(true);
+            },
+            true, "确定启用" + username + "吗？");
     } else {
         common_ajax_get('/' + object_name + '/updateStatusAva?id=' + object_id + '&status=1',
-        function() {
-            window.location.reload(true);
-        },
-        true, "确定审核" + username + "通过？");
+            function () {
+                window.location.reload(true);
+            },
+            true, "确定审核" + username + "通过？");
     }
 }
 
@@ -182,14 +185,14 @@ function common_update_status_avatar(object_name, object_id, name, username) {
  */
 function common_update_status(object_name, object_id, name, value, title) {
     common_ajax_post('/' + object_name + '/update',
-    {
-        "id":object_id,
-        "status":value
-    },
-    function() {
-        window.location.reload(true);
-    },
-    true, "确定" + title + name + "?");
+        {
+            "id": object_id,
+            "status": value
+        },
+        function () {
+            window.location.reload(true);
+        },
+        true, "确定" + title + name + "?");
 }
 
 /**
@@ -231,7 +234,7 @@ function common_delect_add_user_corp(button, user_id, object_id) {
     var title = button.attr('title');
     var corpid = button.attr('corpid');
     var value = button.attr("value");
-     var url = ""
+    var url = ""
     if (title == '移除用户') {
         url = '/admin/user/delectAndAddCorp?id=' + object_id + "&user_id=" + user_id + "&title=" + 1 + "&corp_id=" + corpid;
     }
@@ -243,10 +246,10 @@ function common_delect_add_user_corp(button, user_id, object_id) {
     }
     var redirecturl = '/admin/user/getCorp?id=' + user_id;
     common_ajax_get_corp_screen(url,
-    function() {
-        common_open_dialog(title, redirecturl)
-    },
-    true, "确定" + title + "吗？", user_id, redirecturl);
+        function () {
+            common_open_dialog(title, redirecturl)
+        },
+        true, "确定" + title + "吗？", user_id, redirecturl);
 }
 
 /**
@@ -257,17 +260,17 @@ function common_delect_add_user_corp(button, user_id, object_id) {
 function common_remove_add_user(button, object_name, object_id, modal) {
     var title = button.attr('title');
     var headtitle = button.attr('headtitle');
-     var parametervalue = button.attr("parametervalue");
-     var method = button.attr("method") ;
-     var RedirectMethod = button.attr("redirectMethod") ;
-     var parametername = button.attr("parametername") ;
-     var removed = button.attr("removed");
-     var url = '/' + object_name + '/' + method + '?id=' + object_id + '&' + parametername + '=' + parametervalue + '&removed=' + removed
+    var parametervalue = button.attr("parametervalue");
+    var method = button.attr("method");
+    var RedirectMethod = button.attr("redirectMethod");
+    var parametername = button.attr("parametername");
+    var removed = button.attr("removed");
+    var url = '/' + object_name + '/' + method + '?id=' + object_id + '&' + parametername + '=' + parametervalue + '&removed=' + removed
     var redirecturl = '/' + object_name + '/' + RedirectMethod + '?id=' + object_id;
-    common_ajax_get_corp_screen(url,function() {
-        common_open_dialog(headtitle, redirecturl)
-    },
-    true, "确定" + title + "吗？", object_id, redirecturl);
+    common_ajax_get_corp_screen(url, function () {
+            common_open_dialog(headtitle, redirecturl)
+        },
+        true, "确定" + title + "吗？", object_id, redirecturl);
 }
 
 /**
@@ -277,17 +280,17 @@ function common_remove_add_user(button, object_name, object_id, modal) {
  */
 function common_change_role(button, object_name, object_id, corp_id, modal) {
     var title = button.attr('title');
-    var parametername = button.attr("parametername") ;
-    var parametervalue = button.attr("value") ;
-    var method = button.attr("method") ;
+    var parametername = button.attr("parametername");
+    var parametervalue = button.attr("value");
+    var method = button.attr("method");
     var RedirectMethod = button.attr("redirectMethod");
-     var url = '/' + object_name + '/' + method + '?id=' + object_id + '&' + parametername + '=' + parametervalue
+    var url = '/' + object_name + '/' + method + '?id=' + object_id + '&' + parametername + '=' + parametervalue
     var redirecturl = '/' + object_name + '/' + RedirectMethod + '?id=' + corp_id;
     common_ajax_get_corp_screen(url,
-    function() {
-        common_open_dialog(title, redirecturl)
-    },
-    true, "确定" + title + "吗？", object_id, redirecturl);
+        function () {
+            common_open_dialog(title, redirecturl)
+        },
+        true, "确定" + title + "吗？", object_id, redirecturl);
 }
 
 /**
@@ -300,10 +303,10 @@ function common_delect_userscreen(button, user_id, object_id) {
     var url = '/user/delectUserScreen?id=' + object_id + "&user_id=" + user_id;
     var redirecturl = '/user/getUserScreen?id=' + user_id;
     common_ajax_get_corp_screen(url,
-    function() {
-        common_open_dialog(title, redirecturl)
-    },
-    true, "确定" + title + "吗？", user_id, redirecturl);
+        function () {
+            common_open_dialog(title, redirecturl)
+        },
+        true, "确定" + title + "吗？", user_id, redirecturl);
 }
 
 /**
@@ -343,49 +346,49 @@ function common_manage_bangding(button, object_name, object_id, modal, corpname)
 function common_ajax_get_corp_screen(url, success_callback, confirm, confirm_info, user_id, redirecturl) {
     if (confirm && confirm_info) {
         common_confirm(confirm_info,
-        function(is_confirm) {
-            if (!is_confirm) {
-                return false;
-            }
-            $.ajax({
-                type: "get",
-                dataType: "json",
-                url: url,
-                beforeSend: function() {
-                    common_submit_ing_crop(500);
+            function (is_confirm) {
+                if (!is_confirm) {
+                    return false;
+                }
+                $.ajax({
+                    type: "get",
+                    dataType: "json",
+                    url: url,
+                    beforeSend: function () {
+                        common_submit_ing_crop(500);
 
-                },
-                success: function(result) {
-                    if (result.code == 200) {
-                        if (result.msg != "ok") {
+                    },
+                    success: function (result) {
+                        if (result.code == 200) {
+                            if (result.msg != "ok") {
+                                common_error(result.msg);
+                            }
+                            success_callback(result);
+                        } else {
                             common_error(result.msg);
                         }
-                        success_callback(result);
-                    } else {
-                        common_error(result.msg);
+                    },
+                    error: function () {
+                        common_error('接口异常');
                     }
-                },
-                error: function() {
-                    common_error('接口异常');
-                }
+                });
             });
-        });
     } else {
         $.ajax({
             type: "get",
             dataType: "json",
             url: url,
-            beforeSend: function() {
+            beforeSend: function () {
                 common_submit_ing();
             },
-            success: function(result) {
+            success: function (result) {
                 if (result.code == 200) {
 
-} else {
+                } else {
                     common_error(result.msg);
                 }
             },
-            error: function() {
+            error: function () {
                 common_error('接口异常');
             }
         });
@@ -393,7 +396,7 @@ function common_ajax_get_corp_screen(url, success_callback, confirm, confirm_inf
 }
 
 //全部选中
-$("#child_delect").change(function() {
+$("#child_delect").change(function () {
 
     var flag = $("#child_delect").prop("checked");
     if (flag == true) {
@@ -408,10 +411,10 @@ $("#child_delect").change(function() {
     }
 });
 // 部分选中
-$(".list_delect").each(function() {
+$(".list_delect").each(function () {
     var i = 0
 
-    $(".list_delect").change(function() {
+    $(".list_delect").change(function () {
 
         var flag = $(this).prop("checked");
         if (flag == true) {
@@ -423,11 +426,11 @@ $(".list_delect").each(function() {
 
             $("#child_delect").parent("span").attr("class", "checked");
             $("#listdelect").attr("class", "btn-flat default").attr("disabled", false);
-             $("#listchangetype").attr("class", "btn-flat default").attr("disabled", false);
+            $("#listchangetype").attr("class", "btn-flat default").attr("disabled", false);
 
         } else {
             $("#child_delect").parent("span").attr("class", "");
-             $("#listdelect").attr("class", "btn btn-lg ").attr("disabled", true);
+            $("#listdelect").attr("class", "btn btn-lg ").attr("disabled", true);
             $("#listchangetype").attr("class", "btn btn-lg ").attr("disabled", true);
         }
     });
@@ -435,38 +438,38 @@ $(".list_delect").each(function() {
 });
 //批量删除
 $('#listdelect').on('click',
-function() {
-    var object_name = $(this).parents(".search").attr('object');
-    var title = $(this).parents(".search").attr('name');
-    var datas = "datas=["
-    var data = "";
-    $(".list_delect").each(function() {
-        if (flag = $(this).prop("checked") == true) {
-            data = "{\"object_id\":\"" + $(this).parents("td").next().text() + "\"" + "}";
-            if (datas == "datas=[") {
-                datas = datas + data;
-            } else {
-                datas = datas + "," + data;
+    function () {
+        var object_name = $(this).parents(".search").attr('object');
+        var title = $(this).parents(".search").attr('name');
+        var datas = "datas=["
+        var data = "";
+        $(".list_delect").each(function () {
+            if (flag = $(this).prop("checked") == true) {
+                data = "{\"object_id\":\"" + $(this).parents("td").next().text() + "\"" + "}";
+                if (datas == "datas=[") {
+                    datas = datas + data;
+                } else {
+                    datas = datas + "," + data;
+                }
+
             }
+        });
+        datas = datas + "]"
 
-        }
-    });
-    datas = datas + "]"
+        common_ajax_post("/" + object_name + "/listremove", datas,
+            function () {
+                window.location.reload(true);
+            },
+            true, "确认(删除/更新)全部" + title + "吗？");
 
-    common_ajax_post("/" + object_name + "/listremove", datas,
-    function() {
-        window.location.reload(true);
-    },
-    true, "确认(删除/更新)全部" + title + "吗？");
-
-})
+    })
 //批量修改绑定
 $('#listchangetype').on('click',
-function() {
-    var object_name = $(this).parents(".search").attr('object');
-    common_manage_changetype($(this), object_name, $(this).attr('object-id'), "changeType");
-center("520px");
-});
+    function () {
+        var object_name = $(this).parents(".search").attr('object');
+        common_manage_changetype($(this), object_name, $(this).attr('object-id'), "changeType");
+        center("520px");
+    });
 
 /**
  * 批量修改
@@ -501,47 +504,47 @@ function common_manage_changetype(button, object_name, object_id, modal) {
  */
 
 $('body').on('click', '#changeType',
-function() {
-    var datas = "datas=["
-    var data = "";
-    $(".list_delect").each(function() {
-        if (flag = $(this).prop("checked") == true) {
-            data = "{\"object_id\":\"" + $(this).parents("td").next().text() + "\"" + "}";
-            if (datas == "datas=[") {
-                datas = datas + data;
-            } else {
-                datas = datas + "," + data;
+    function () {
+        var datas = "datas=["
+        var data = "";
+        $(".list_delect").each(function () {
+            if (flag = $(this).prop("checked") == true) {
+                data = "{\"object_id\":\"" + $(this).parents("td").next().text() + "\"" + "}";
+                if (datas == "datas=[") {
+                    datas = datas + data;
+                } else {
+                    datas = datas + "," + data;
+                }
+
             }
-
+        });
+        datas = datas + "]"
+        if ($('#changType-I').prop("checked") == true) {
+            datas = datas + "&changType-I=1"
+        } else {
+            datas = datas + "&changType-I=0"
         }
-    });
-    datas = datas + "]"
-    if ($('#changType-I').prop("checked") == true) {
-        datas = datas + "&changType-I=1"
-    } else {
-        datas = datas + "&changType-I=0"
-    }
-    if ($('#changType-X').prop("checked") == true) {
-        datas = datas + "&changType-X=1"
-    } else {
-        datas = datas + "&changType-X=0"
-    }
+        if ($('#changType-X').prop("checked") == true) {
+            datas = datas + "&changType-X=1"
+        } else {
+            datas = datas + "&changType-X=0"
+        }
 
-    common_ajax_post("/admin/user/listChangeType", datas,
-    function() {
-        window.location.reload(true);
-    },
-    true, "确认修改全部用户吗？");
+        common_ajax_post("/admin/user/listChangeType", datas,
+            function () {
+                window.location.reload(true);
+            },
+            true, "确认修改全部用户吗？");
 
-})
+    })
 
 var pos = 0;
 var LIST_ITEM_SIZE = 100;
 //滚动条距底部的距离
 var BOTTOM_OFFSET = 0;
 createListItems();
-$(document).ready(function() {
-    $("body #dialogchange").scroll(function() {
+$(document).ready(function () {
+    $("body #dialogchange").scroll(function () {
         var $currentWindow = $(window);
         //当前窗口的高度
         var windowHeight = $currentWindow.height();
@@ -566,18 +569,18 @@ function createListItems() {
     var mylist = mydocument.getElementById("AllCorp");
     var docFragments = mydocument.createDocumentFragment();
     common_ajax_get_data("/admin/user/getuserdata",
-    function() {
+        function () {
 
-        for (var i = pos; i < pos + LIST_ITEM_SIZE; ++i) {
-            var liItem = mydocument.createElement("li");
-            liItem.innerHTML = "This is item " + i;
-            docFragments.appendChild(liItem);
-        }
+            for (var i = pos; i < pos + LIST_ITEM_SIZE; ++i) {
+                var liItem = mydocument.createElement("li");
+                liItem.innerHTML = "This is item " + i;
+                docFragments.appendChild(liItem);
+            }
 
-        pos += LIST_ITEM_SIZE;
+            pos += LIST_ITEM_SIZE;
 
-        /* mylist.appendChild(docFragments);*/
-    });
+            /* mylist.appendChild(docFragments);*/
+        });
 }
 
 function common_ajax_get_data(url, success_callback) {
@@ -586,14 +589,14 @@ function common_ajax_get_data(url, success_callback) {
         type: "get",
         dataType: "json",
         url: url,
-        success: function(result) {
+        success: function (result) {
             if (result.code == 200) {
                 success_callback(result);
             } else {
                 common_error(result.msg);
             }
         },
-        error: function() {
+        error: function () {
             common_error('接口异常');
         }
     });
@@ -611,7 +614,7 @@ function common_manage_screen(button, object_name, object_id, modal, corpname) {
     var url = '/' + object_name + '/getUserScreen?id=' + object_id;
     var query = button.attr("query");
     var methods = button.attr("methods");
-     if (query) {
+    if (query) {
 
         url += "?" + query;
     }
@@ -625,75 +628,79 @@ function common_manage_screen(button, object_name, object_id, modal, corpname) {
     }
 }
 
-function center(width){
-$("#dialogchange").css("width", width);
-$("#dialogchange").css("margin", "0px");
-         popup($("#dialogchange"));
+function center(width) {
+    $("#dialogchange").css("width", width);
+    $("#dialogchange").css("margin", "0px");
+    popup($("#dialogchange"));
 
 }
+
 var peopleOptions;
+
 // 人口列表加载
 function tableItem() {
     peopleOptions = {
-            dataType : "json",
-            method : "post", // 使用get请求到服务器获取数据
-            url : "",
-            contentType : "application/x-www-form-urlencoded",// 重要否则POST会报错
-            striped : false, // 表格显示条纹
-            pagination : false, // 启动分页
-            pageSize : 10, // 每页显示的记录数
-            pageNumber : 1, // 当前第几页
-            pageList : [ 10, 20, 50 ], // 记录数可选列表
-            uniqueId : "id",
-            showColumns : true, // 显示下拉框勾选要显示的列
-            showToggle : true, // 显示 切换试图（table/card）按钮
-            clickToSelect : true, // 点击可选
-            singleSelect : true, // 禁止多选
-            maintainSelected : true, // 在点击分页按钮或搜索按钮时，将记住checkbox的选择项
-            sortable : true, // 禁止所有列的排序
-             //dataField: "msg",
-            sortOrder: "asc",
-            sidePagination : "server", // 表示服务端请求 后台分页
-            toolbar : "#toolbar",// 指明自定义的toolbar
-            queryParamsType : "undefined",
-            queryParams : function queryParams(params) {
-                var param = {
-                    pageNumber : params.pageNumber,
-                    pageSize : params.pageSize,
+        dataType: "json",
+        method: "post", // 使用get请求到服务器获取数据
+        url: "",
+        contentType: "application/x-www-form-urlencoded",// 重要否则POST会报错
+        striped: false, // 表格显示条纹
+        pagination: false, // 启动分页
+        pageSize: 10, // 每页显示的记录数
+        pageNumber: 1, // 当前第几页
+        pageList: [10, 20, 50], // 记录数可选列表
+        uniqueId: "id",
+        showColumns: true, // 显示下拉框勾选要显示的列
+        showToggle: true, // 显示 切换试图（table/card）按钮
+        clickToSelect: true, // 点击可选
+        singleSelect: true, // 禁止多选
+        maintainSelected: true, // 在点击分页按钮或搜索按钮时，将记住checkbox的选择项
+        sortable: true, // 禁止所有列的排序
+        //dataField: "msg",
+        sortOrder: "asc",
+        sidePagination: "server", // 表示服务端请求 后台分页
+        toolbar: "#toolbar",// 指明自定义的toolbar
+        queryParamsType: "undefined",
+        queryParams: function queryParams(params) {
+            var param = {
+                pageNumber: params.pageNumber,
+                pageSize: params.pageSize,
 
+            };
+            return param;
+        },
+        responseHandler: function (res) { // 格式化数据
+            console.log(res);
+            if (res.msg.total != undefined)
+                tmp = {
+                    total: res.msg.total,
+                    rows: res.msg.rows
                 };
-                return param;
-            },
-            responseHandler : function(res) { // 格式化数据
-                                           console.log(res);
-                                           if (res.msg.total != undefined)
-                                               tmp = {
-                                                   total : res.msg.total,
-                                                   rows : res.msg.rows
-                                               };
-                                           if (res.msg.total == undefined)
-                                               tmp = {
-                                                   total : res.msg.length,
-                                                   rows : res.msg
-                                               };
-                                           return tmp;
-    },
-columns :"",
+            if (res.msg.total == undefined)
+                tmp = {
+                    total: res.msg.length,
+                    rows: res.msg
+                };
+            return tmp;
+        },
+        columns: "",
 
 
-};
-$table = $("#wokaotesttable").bootstrapTable(peopleOptions);
+    };
+    $table = $("#wokaotesttable").bootstrapTable(peopleOptions);
 }
-var myColumns=[]
+
+var myColumns = []
+
 function getColumns() {
 // 加载动态表格
     $.ajax({
-        url:"https://www.datahunter.cn/rpc" ,
-        data : "{\"act\":\"datasource/get\",\"args\":{\"auth\":\"2c5d02beded0a39456391cf8ea76fd7a\",\"_id\":\"59531d91adee7573b5254a54\"}}",
-        type : 'post',
-        dataType : "json",
-        async : false,
-        success : function(returnValue) {
+        url: "https://www.datahunter.cn/rpc",
+        data: "{\"act\":\"datasource/get\",\"args\":{\"auth\":\"2c5d02beded0a39456391cf8ea76fd7a\",\"_id\":\"59531d91adee7573b5254a54\"}}",
+        type: 'post',
+        dataType: "json",
+        async: false,
+        success: function (returnValue) {
 
             // 未查询到相应的列，展示默认列
             if (returnValue.retCode == "0") {
@@ -702,31 +709,34 @@ function getColumns() {
             } else {
                 // 异步获取要动态生成的列
                 var arr = returnValue.msg.th;
-                $.each(arr, function(i, item) {
-                 myColumns.push({
-                        "field" : item.o,
-                        "title" : item.n,
-                        "hide" : true,
-                        "align" : 'center',
-                        "valign" : 'middle',
-                       "sortable":'true',
-                        });
-                        });
-               //初始化tables
-             tableItem();
-            $table.bootstrapTable(
-           "refreshOptions",
-           {
-            url:"https://www.datahunter.cn/rpc", // 获取数据的地址
-            queryParams :"{\"act\":\"datasource/data\",\"args\":{\"auth\":\"2c5d02beded0a39456391cf8ea76fd7a\",\"_id\":\"59531d91adee7573b5254a54\"}}",
-             columns:myColumns,
+                $.each(arr, function (i, item) {
+                    myColumns.push({
+                        "field": item.o,
+                        "title": item.n,
+                        "hide": true,
+                        "align": 'center',
+                        "valign": 'middle',
+                        "sortable": 'true',
+                    });
+                });
+                //初始化tables
+                tableItem();
+                $table.bootstrapTable(
+                    "refreshOptions",
+                    {
+                        url: "https://www.datahunter.cn/rpc", // 获取数据的地址
+                        queryParams: "{\"act\":\"datasource/data\",\"args\":{\"auth\":\"2c5d02beded0a39456391cf8ea76fd7a\",\"_id\":\"59531d91adee7573b5254a54\"}}",
+                        columns: myColumns,
 
-           }
-           );
+                    }
+                );
 
             }
         }
 
     });
-}
+};
+
+
+
 

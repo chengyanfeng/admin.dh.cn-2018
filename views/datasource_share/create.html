@@ -1,0 +1,112 @@
+<div id="" class="">
+    <div class="row-fluid form-wrapper" style="margin-bottom: 0px;">
+        <form operation="add" object="/https://dev.datahunter.cn/v2/api/upload/" id="dataform">
+            <span id="tip" class="color:red"></span>
+            <div style="">
+                工作表类型：<select class="" id="select" style="margin-left:0px;width:75px;height:30px">
+                <option value=".xls,xlsx">Excle</option>
+                <option value=".csv">CSV</option>
+            </select>
+
+            </div>
+            <input value="" id="filename" name="filename" type="hidden"/>
+            上传文件：
+            <div class="dropzone"  enctype="multipart/form-data"
+                   id="myDropzone" style="left:76px;top:11px;width:213px;margin-left:60px;">
+
+                <div class="am-text-success dz-message">
+                    将文件拖拽到此处<br>或点此打开文件管理器选择文件
+                </div>
+
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    var response1=""
+    var filname=""
+    Dropzone.autoDiscover = true;
+    var myDropzone = new Dropzone("#myDropzone", {
+        url: "/admin/file_test",
+        addRemoveLinks: false,
+        method: 'post',
+        maxFiles: 1,
+        paramName: 'data',
+        filesizeBase: 1024,
+        uploadMultiple: false,
+        previewsContainer: null,
+        maxFilesize: 1,
+        clickable: true,
+        acceptedFiles: '.csv,.xls,.xlsx',
+        dictInvalidFileType: "你不能上传该类型文件,文件类型只能是*.jpg,*.gif,*.png。",
+        dictFileTooBig: "文件过大上传文件最大支持.",
+        sending: function (file, xhr, formData) {
+
+            if ($("#select").attr("value").indexOf(file.name.split(".")[1]) < 0) {
+                $("#tip").html("上传文件类型不匹配").css("color", "red")
+                this.removeFile(file);
+                return false;
+            } else {
+                $("#tip").html("")
+            }
+            console.log(file);
+            formData.append("size", file.size);
+            formData.append("name", file.name);
+            formData.append("total", "1");
+            formData.append("auth", "2f6f0ce5c7ca6ea09a2818f72ce4851d");
+            filname=file.name
+            $("#filename").val(file.name)
+            console.log(file.name)
+
+        },
+        success: function (file, response, e) {
+            if (response.total == 1) {
+                $("#upurl").val(response.real_url)
+            }
+           console.log(response);
+            response1=response;
+            center("1000px")
+            common_open_dialog("test","/admin/views/edit.html")
+
+        },
+        complete: function (file) {
+
+            files = this.getRejectedFiles()
+            for (var i = 0; i < files.length; i++) {
+                this.removeFile(files[i]);
+                $("#tip").html("上传文件太大重新上传").css("color", "red")
+            }
+        },
+
+        maxfilesreached: function (files) {
+            files = this.getRejectedFiles()
+            for (var i = 0; i < files.length; i++) {
+                this.removeFile(files[i]);
+            }
+        },
+        maxfilesexceeded: function (file) {
+            $("#tip").html("只能上传一个文件")
+            this.removeFile(file);
+        }
+
+
+    });
+
+    $("#select").change(function () {
+        $("#tip").html("")
+        var type = $(this).attr("value")
+
+//动态改变参数,但是现在不起作用。
+        Dropzone.options.myAwesomeDropzone = {
+            acceptedFiles: type
+
+        }
+    });
+
+
+</script>
+

@@ -8,6 +8,8 @@ import (
 func main() {
 	beego.SetStaticPath("/upload", "upload")
 	beego.SetStaticPath("/admin/static", "static")
+	beego.SetStaticPath("/admin/views", "views/datasource_share")
 	beego.BConfig.WebConfig.Session.SessionOn = true
+
 	beego.Run()
 }
