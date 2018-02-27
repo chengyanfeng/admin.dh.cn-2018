@@ -91,6 +91,7 @@ func init() {
 	beego.Router("admin/invitation_code/remove", &controllers.InvitationCodeController{}, "get:Remove")
 	beego.Router("admin/invitation_code/listremove", &controllers.InvitationCodeController{}, "post:ListRemove")
 
+
 	//数据权限
 	beego.Router("admin/sourceshare/list", &controllers.SourceShareController{}, "get:List")
 	beego.Router("admin/sourceshare/create", &controllers.SourceShareController{}, "get:Create")
