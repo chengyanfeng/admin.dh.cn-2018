@@ -70,6 +70,8 @@ func init() {
 	beego.Router("admin/datasource_pub/update", &controllers.DatasourcePubController{}, "post:Update")
 	beego.Router("admin/datasource_pub/remove", &controllers.DatasourcePubController{}, "get:Remove")
 	beego.Router("admin/datasource_pub/listremove", &controllers.DatasourcePubController{}, "post:ListRemove")
+	beego.Router("admin/datasource_pub/showdata", &controllers.DatasourcePubController{}, "get:ShowData")
+
 	//大屏模版管理
 	beego.Router("admin/screen_template/list", &controllers.ScreenTemplateController{}, "get:List")
 	beego.Router("admin/screen_template/create", &controllers.ScreenTemplateController{}, "get:Create")
@@ -98,6 +100,7 @@ func init() {
 	beego.Router("admin/sourceshare/add", &controllers.SourceShareController{}, "post:Add")
 	beego.Router("admin/sourceshare/remove", &controllers.SourceShareController{}, "get:Remove")
 	beego.Router("admin/sourceshare/listremove", &controllers.SourceShareController{}, "post:ListRemove")
+	beego.Router("admin/sourceshare/showdata", &controllers.SourceShareController{}, "get:ShowData")
 
 	//自动注入路由
 	//beego.AutoRouter(&controllers.CorpController{})

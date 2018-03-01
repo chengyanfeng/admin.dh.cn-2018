@@ -1,5 +1,3 @@
-
-
 /**
  * 获取当前宽度和屏幕总宽度，弹层居中
  * @param info
@@ -38,7 +36,7 @@ formmysf.delegate("a[action='update']", 'click', function () {
 formmysf.delegate("a[action='ManageCorp']", 'click', function () {
     var object_name = $(this).parents(".search").attr('object');
     common_manage_corp($(this), object_name, $(this).attr('object-id'), "modalcorp");
-    center("1000px")
+    center("1200px")
 });
 
 /**
@@ -148,7 +146,7 @@ $('body').on('click', "a[action='BangDingData']", function () {
     common_manage_bangding($(this), object_name, $(this).attr('object-id'), "modalcorp");
     center("1200px")
     // 数据表格初始化
-    getColumns()
+    /*getColumns()*/
 });
 
 /**
@@ -320,6 +318,7 @@ function common_manage_bangding(button, object_name, object_id, modal, corpname)
     var methods = button.attr('methods');
     var method = button.attr('Rmethod');
     var url = '/' + object_name + '/' + method + '?id=' + object_id;
+
     if (corpname != "undefined") {
         url = url + "&corpName=" + corpname
     }
@@ -622,9 +621,7 @@ function common_manage_screen(button, object_name, object_id, modal, corpname) {
 
         window.location.href = url;
     } else {
-
         common_open_dialog(title, url, modal);
-
     }
 }
 
@@ -635,107 +632,8 @@ function center(width) {
 
 }
 
-var peopleOptions;
-
-// 人口列表加载
-function tableItem() {
-    peopleOptions = {
-        dataType: "json",
-        method: "post", // 使用get请求到服务器获取数据
-        url: "",
-        contentType: "application/x-www-form-urlencoded",// 重要否则POST会报错
-        striped: false, // 表格显示条纹
-        pagination: false, // 启动分页
-        pageSize: 10, // 每页显示的记录数
-        pageNumber: 1, // 当前第几页
-        pageList: [10, 20, 50], // 记录数可选列表
-        uniqueId: "id",
-        showColumns: true, // 显示下拉框勾选要显示的列
-        showToggle: true, // 显示 切换试图（table/card）按钮
-        clickToSelect: true, // 点击可选
-        singleSelect: true, // 禁止多选
-        maintainSelected: true, // 在点击分页按钮或搜索按钮时，将记住checkbox的选择项
-        sortable: true, // 禁止所有列的排序
-        //dataField: "msg",
-        sortOrder: "asc",
-        sidePagination: "server", // 表示服务端请求 后台分页
-        toolbar: "#toolbar",// 指明自定义的toolbar
-        queryParamsType: "undefined",
-        queryParams: function queryParams(params) {
-            var param = {
-                pageNumber: params.pageNumber,
-                pageSize: params.pageSize,
-
-            };
-            return param;
-        },
-        responseHandler: function (res) { // 格式化数据
-            console.log(res);
-            if (res.msg.total != undefined)
-                tmp = {
-                    total: res.msg.total,
-                    rows: res.msg.rows
-                };
-            if (res.msg.total == undefined)
-                tmp = {
-                    total: res.msg.length,
-                    rows: res.msg
-                };
-            return tmp;
-        },
-        columns: "",
 
 
-    };
-    $table = $("#wokaotesttable").bootstrapTable(peopleOptions);
-}
-
-var myColumns = []
-
-function getColumns() {
-// 加载动态表格
-    $.ajax({
-        url: "https://www.datahunter.cn/rpc",
-        data: "{\"act\":\"datasource/get\",\"args\":{\"auth\":\"2c5d02beded0a39456391cf8ea76fd7a\",\"_id\":\"59531d91adee7573b5254a54\"}}",
-        type: 'post',
-        dataType: "json",
-        async: false,
-        success: function (returnValue) {
-
-            // 未查询到相应的列，展示默认列
-            if (returnValue.retCode == "0") {
-                //没查到列的时候把之前的列再给它
-                myColumns = $table.bootstrapTable('getOptions').columns[0];
-            } else {
-                // 异步获取要动态生成的列
-                var arr = returnValue.msg.th;
-                $.each(arr, function (i, item) {
-                    myColumns.push({
-                        "field": item.o,
-                        "title": item.n,
-                        "hide": true,
-                        "align": 'center',
-                        "valign": 'middle',
-                        "sortable": 'true',
-                    });
-                });
-                //初始化tables
-                tableItem();
-                $table.bootstrapTable(
-                    "refreshOptions",
-                    {
-                        url: "https://www.datahunter.cn/rpc", // 获取数据的地址
-                        queryParams: "{\"act\":\"datasource/data\",\"args\":{\"auth\":\"2c5d02beded0a39456391cf8ea76fd7a\",\"_id\":\"59531d91adee7573b5254a54\"}}",
-                        columns: myColumns,
-
-                    }
-                );
-
-            }
-        }
-
-    });
-};
 
 
 

@@ -85,6 +85,7 @@ func (c *SourceShareController) List() {
 				Screen["Status"] = 0
 			}
 			Screen["ObjectId"] = info.ObjectId
+			Screen["Url"]=info.Url
 			Screen["Name"] = info.Name
 			Screen["Format"] = info.Format
 			Screen["CreateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
@@ -171,4 +172,8 @@ func (c *SourceShareController) ListRemove() {
 	c.EchoJsonOk()
 
 }
-
+func (c *SourceShareController) ShowData() {
+	id:=c.GetString("id")
+	c.Data["url"]=id
+	c.TplName = "datasource_share/showData.html"
+}
