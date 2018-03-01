@@ -41,6 +41,8 @@
                 <input type="submit" class="btn-flat default" value="搜索"  >
 
             </div>
+            <a class="btn-flat default" action='new' title="数据库连接" style="float:right;margin-right:40px">数据库连接</a>
+
             <a class="btn-flat default" action='new' title="新建工作表" style="float:right;margin-right:40px">新建工作表</a>
 
         </div>
@@ -76,9 +78,9 @@
                         <td>
                             <ul class="actions" style="float: left;">
                                 {{ if eq .Status 1 }}
-                                <li><a action='update' object-id="{{.ObjectId}}" value="0" title="停用" name="{{.Name}}"> 停用</a></li>|
+                                <li><a action='update' object-id="{{.ObjectId}}" value="0" title="停用" name="{{.Name}}"> 未共享</a></li>|
                                 {{else if  eq .Status 0 }}
-                                <li><a action='update' object-id="{{.ObjectId}}" value="1" title="待审核" name="{{.Name}}">启用</a></li>|
+                                <li><a action='update' object-id="{{.ObjectId}}" value="1" title="待审核" name="{{.Name}}">共享</a></li>|
                                 {{ end }}
                                 <li><a action='BangDingData'  Rmethod="showdata" object-id="{{.ObjectId}}" title="数据详情" >数据详情</a></li>|
                                 <li><a action='delete'  object-id="{{.ObjectId}}" title="删除" name="{{.Name}}">删除</a></li>

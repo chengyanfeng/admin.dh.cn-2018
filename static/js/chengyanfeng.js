@@ -81,6 +81,7 @@ formmysf.delegate("a[action='userScreen']", 'click', function () {
 
 //管理用户大屏---移除-->
 $('body').on('click', '#userScreen tbody td a[action="ManageScreenRemove"]', function () {
+
     common_delect_userscreen($(this), $("#addUserScreen").attr('user-id'), $(this).attr('object-id'));
 })
 
@@ -298,8 +299,8 @@ function common_change_role(button, object_name, object_id, corp_id, modal) {
  */
 function common_delect_userscreen(button, user_id, object_id) {
     var title = button.attr('title');
-    var url = '/user/delectUserScreen?id=' + object_id + "&user_id=" + user_id;
-    var redirecturl = '/user/getUserScreen?id=' + user_id;
+    var url = '/admin/user/delectUserScreen?id=' + object_id + "&user_id=" + user_id;
+    var redirecturl = '/admin/user/getUserScreen?id=' + user_id;
     common_ajax_get_corp_screen(url,
         function () {
             common_open_dialog(title, redirecturl)

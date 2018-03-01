@@ -93,7 +93,7 @@
                                 {{else if  eq .Status 0 }}
                                 <li><a action='update' object-id="{{.ObjectId}}" value="1" title="启用" name="{{.Name}}">启用</a></li>|
                                 {{ end }}
-                                <li><a action='BangDingData'  Rmethod="showdata" object-id="{{.ObjectId}}" title="数据详情" >数据详情</a></li>|
+                                <li><a action='BangDingData'  Rmethod="showdata" object-id="{{.DisourceObjectId}}" title="数据详情" >数据详情</a></li>|
                                 <li><a action='edit' object-id="{{.ObjectId}}"  title="编辑数据源">编辑</a></li>|
                                 <li><a action='delete'  object-id="{{.ObjectId}}" title="删除" name="{{.Name}}">删除</a></li>
 
