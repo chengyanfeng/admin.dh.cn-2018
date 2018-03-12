@@ -1,0 +1,159 @@
+<div id="" class="">
+    <div class="row-fluid form-wrapper" style="margin-bottom: 0px;">
+        <form operation="add" object="/https://dev.datahunter.cn/v2/api/upload/" id="dataform">
+            <span id="tip" class="color:red"></span>
+            <div style="">
+                工作表类型：<select class="" id="select" style="margin-left:0px;width:75px;height:30px">
+                <option value=".xls,xlsx">已有连接</option>
+                <option value="mysql">mysql</option>
+                <option value="mysql">mysql</option>
+
+            </select>
+            </div>
+            <input value="" id="filename" name="filename" type="hidden"/>
+            数据库：
+            <table id="dbtables" style="width:480px">
+
+            </table>
+
+        </form>
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    var dbid="";
+    var db="{}";
+    //获取的是已经连接的数据库
+    function getconnect_db() {
+        //清空表
+        $('#urltables').html("")
+
+        $.ajax({
+            processData: false,
+            contentType: false,
+            async: false,
+            type: 'post',
+            url: "https://dev.datahunter.cn/rpc",
+            data: "{\"act\":\"v2/connect/list\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\" }}",
+            success: function (data) {
+                if (data.code == 200) {
+
+                    //获取每列
+                    var tr = ""
+                    $.each(data.msg, function (i, db) {
+                        tr += "<tr> <td  align=\"center\" class='dblist' style='border: 1px solid #F0F0F0;background-color: #d9d9d9' format="+db.format+" dbid=" + db._id + ">" + db.name + "</td></tr>"
+                    });
+
+                    $("#dbtables").append(tr);
+
+                }
+
+            }
+
+        });
+
+
+    }
+
+    window.onload = getconnect_db();
+
+    //点击获取连接的数据
+    $(".dblist").bind('click', function () {
+
+        dbid=$(this).attr("dbid")
+        dbformat=$(this).attr("format")
+        debugger
+        center("1000px")
+        common_open_dialog("数据库连接","/admin/views/dbconnectdata.html")
+    });
+
+    //选取数据库的连接
+    $("#select").change(function () {
+
+     var db  = $("#select option:selected").text()
+
+        if (db=="mysql"){
+            $('#dbtables').empty();
+          var   dbtabchild="<div> 服务器:<input id='host' style='' placeholder='请输入服务器地址'/> </div>" +
+                    "<div>  端   口:<input id='port' style='' placeholder='3306'/></div>" +
+                    "<div> 数据库:<input id='name' style='' placeholder='请输入数据库名称'/></div>" +
+                    "<div> 用户名:<input id='username' style='' placeholder='请输入用户名'/></div>" +
+                    "<div> 密  码:<input id='password'  type='password' style='' placeholder='请输入密码'/></div>" +
+                  "<div>\n" +
+                  "                <input type=\"button\" value=\"保存\" id=\"saveSheet\"  class=\"btn btn-lg \" style=\"margin-left:0px; \"\n" +
+                  "                       onclick=\"save_connect()\"/>\n" +
+                  "                <input type=\"button\" value=\"取消\" class=\"btn btn-lg\" style=\"\" onclick=\"window.location.reload()\"/>\n" +
+                  "\n" +
+                  "            </div>"
+
+                    $("#dbtables").append(dbtabchild)
+
+        }
+    })
+    function save_connect() {
+
+        var dbconnectsave={
+            act:'',
+            args:''
+        }
+        var args={
+            corp_id:'',
+            auth:'',
+            format:'',
+            type:'type',
+            db:''
+        }
+        var dbs={
+            host:'',
+            port:'',
+            name:'',
+            username:'',
+            password:''
+        }
+       if($("#host").attr("value").length=0){
+           alert("请输入服务器地址");
+       }
+        if($("#port").attr("value").length=0){
+            alert("请输入端口号");
+        }
+        if($("#username").attr("value").length=0){
+            alert("请输入用户名");
+        }
+        if($("#password").attr("value").length=0){
+            alert("请输入密码");
+        }
+        dbs.name=$("#name").attr("value")
+        dbs.username=$("#username").attr("value")
+        dbs.password=$("#password").attr("value")
+        dbs.port=$("#port").attr("value")
+        dbs.host=$("#host").attr("value")
+        args.db=dbs
+        args.auth="2f6f0ce5c7ca6ea09a2818f72ce4851d"
+        args.corp_id="5850c142f502ec42a7000023"
+        args.format=$("#select option:selected").text();
+        dbconnectsave.args=args
+        dbconnectsave.act="v2/connect/save"
+        $.ajax({
+            processData: false,
+            contentType: false,
+            async: false,
+            type: 'post',
+            url: "https://dev.datahunter.cn/rpc",
+            data: JSON.stringify(dbconnectsave),
+            success: function (data) {
+                if (data.code == 200) {
+               dbid =data.msg._id
+                    dbformat=$("#select option:selected").text()
+                    alert(data)
+                    center("1000px")
+                    common_open_dialog("数据库连接","/admin/views/dbconnectdata.html")
+                }
+
+            }
+
+        });
+
+    }
+</script>

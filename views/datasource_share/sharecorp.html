@@ -1,0 +1,45 @@
+<div id="pad-wrapper" class="form-page">
+    <div class="row-fluid form-wrapper">
+        <div class="span12 column">
+            <div style="float: right;height: 350px;width: 690px;overflow: auto">
+                <div><input id="filename" style="border-left:0px;border-top:0px;border-right: 0px;"/></div>
+                <table operation="update" object="admin/user" id="userCorp"  class="table table-bordered table-hover" style="border: 0px solid #dddddd !important;">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    {{- range .dhcorps}}
+                    <tr class="showlastone">
+                        <td style="border-style:none;width:100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Name}}</td>
+                        <td style="border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Email}}</td>
+
+                        <td style="border-style:none;width: 116px;overflow: hidden;text-overflow: ellipsis;float:left;height:43px;">
+                            <select  name="userRole" id="userRole" title="改变用户角色" class="userRole" style="height:28px;width:90px;">
+                            {{ if eq  .Role "0"}}
+                                <option value="1" >管理员</option>
+                                <option value="0" selected>普通成员</option>
+                            {{ else }}
+                                <option value="1" selected>管理员</option>
+                                <option value="0">普通成员</option>
+                            {{ end }}
+                            </select>
+                        </td>
+                        <td style="border-style:none;width: 50px;overflow: hidden;text-overflow: ellipsis;height:43px;float:left;"><a action='ManageRemoveAdd' object-id="{{.ObjectId}}" user-id="{{.Userid}}" corpid = "{{.CorpId}}" style="cursor:pointer;display:none" title="移除用户" >移除</a>
+                        </td>
+                    </tr>
+                    {{- end}}
+                    </tbody>
+                </table>
+
+            </table>
+            </div>
+
+        <div>
+            <input type="button" value="保存" style="background-color: #7aba7b;margin-left:500px; " onclick="save_data()"/>
+            <input type="button" value="取消" style="" onclick="window.location.reload()"/>
+
+        </div>
+        </div>
+
+    </div>
+</div>
+

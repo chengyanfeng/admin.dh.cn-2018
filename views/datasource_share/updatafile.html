@@ -1,0 +1,393 @@
+<div id="pad-wrapper" class="form-page">
+    <div class="row-fluid form-wrapper">
+        <div class="span12 column">
+            <div style="float: right;height: 350px;width: 690px;overflow: auto">
+                <div><input id="filename"  style="border-left:0px;border-top:0px;border-right: 0px;"/></div>
+                <table id="urltables" style="margin-top:30px;width:100%;border: 2px solid #F0F0F0;">
+
+                </table>
+            </div>
+            <div style="width: 200px;height: 350px;margin-right: 0px;background-color: Lavender;">
+                <ul id="sheet">
+                  <input type="checkbox" class="Tchild_delect" id="Tchild_delect" value="全部" /> <li style='list-style:none'>全部</li>
+                </ul>
+            </div>
+            <div>
+                <input type="button" value="保存" id="saveSheet" disabled class="btn btn-lg " style="margin-left:500px; "
+                       onclick="save_data()"/>
+                <input type="button" value="取消" class="btn btn-lg" style="" onclick="window.location.reload()"/>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    //把filname 放到input 中
+    $("#filename").val(filname)
+    //获取sheel列表
+    var dataSource = []
+
+    function getsheet() {
+
+
+        $.each(response1.msg.files, function (i, file) {
+
+            $("#sheet").append("<span> <input type=\"checkbox\" id=\"child\" name="+file.name+"  url= " + file.url + " \" class=\"Tlist_delect\">\n <li style='list-style:none' url=" + file.url + " class='sheetname' name=" + file.name + ">" + file.name + "</li> </span>");
+            //获取数据源
+            var th = []
+            var sourcehead = {
+                th: '',
+                name: ''
+            }
+
+            get_sheet_data(file.name, file.url);
+            //获取sheet的表头并且保存
+            th = get_sheet_head(th)
+            sourcehead.th = th
+            sourcehead.name = file.name
+            dataSource.push(sourcehead)
+
+        });
+    };
+
+    //获取每个sheet的数据,是从datasource获取的表头
+    function get_sheet_datasource_data(name, url) {
+        //清空表
+        $('#urltables').html("")
+
+        $.ajax({
+            processData: false,
+            contentType: false,
+            async: false,
+            type: 'post',
+            url: "https://dev.datahunter.cn/rpc",
+            data: "{\"act\":\"v2/datasource/test_file\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"url\":" + "\"" + url + "\"" + ",\"format\":\"" + response1.msg.ext + "\"}}",
+            success: function (data) {
+                if (data.code == 200) {
+                    //获取头字段
+                    var headtr = "<tr id='headtr' style='width: 100%' >"
+                    for (var i = 0; i < dataSource.length; i++) {
+                        if (dataSource[i].name == name) {
+                            for (var b = 0; b < dataSource[i].th.length; b++) {
+
+                                if (dataSource[i].th[b].type == "string") {
+
+                                    headtr += "<td data-key='co' style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + dataSource[i].th[b].o + " value=" + dataSource[i].th[b].n + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                            "<option value='string' selected>字符</option>\n" +
+                                            "<option value='number'>数值</option>\n" +
+                                            "<option value='time'>时间</option>\n" +
+                                            "</select></span>" + "</td>"
+                                } else if (dataSource[i].th[b].type == "number") {
+
+                                    headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o= " + dataSource[i].th[b].o + " value=" + dataSource[i].th[b].n + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                            "<option value='string' >字符</option>\n" +
+                                            "<option value='number' selected>数值</option>\n" +
+                                            "<option value='time'>时间</option>\n" +
+                                            "</select></span>" + "</td>"
+                                } else if (dataSource[i].th[b].type == "time") {
+                                    headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + dataSource[i].th[b].o + "value=" + dataSource[i].th[b].n + "> <select id='selectType' class='sheelselect'  style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                            "<option value='string' >字符</option>\n" +
+                                            "<option value='number'>数值</option>\n" +
+                                            "<option value='time' selected>时间</option>\n" +
+                                            "</select></span>" + "</td>"
+                                }
+                            }
+                        }
+                    }
+                    headtr = headtr + "</tr>"
+                    $("#urltables").append(headtr);
+                    //获取数据字段
+
+                    if (data.msg.body != null) {
+
+                        $.each(data.msg.body, function (i, lis) {
+                            //获取每列
+                            var tr = "<tr>"
+                            $.each(lis, function (t, li) {
+                                if (i % 2 == 1) {
+                                    tr += "<td style='border: 1px solid #F0F0F0;background-color: #d9d9d9'>" + li + "</td>"
+                                } else {
+                                    tr += "<td style='border: 1px solid #F0F0F0;'>" + li + "</td>"
+
+                                }
+                            })
+                            tr = tr + "</tr>"
+                            $("#urltables").append(tr);
+
+                        })
+                    }
+
+                }
+
+            }
+
+        });
+
+
+    }
+
+    //获取每个sheet的数据
+    function get_sheet_data(name, url) {
+        //清空表
+        $('#urltables').html("")
+
+        $.ajax({
+            processData: false,
+            contentType: false,
+            async: false,
+            type: 'post',
+            url: "https://dev.datahunter.cn/rpc",
+            data: "{\"act\":\"v2/datasource/test_file\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"url\":" + "\"" + url + "\"" + ",\"format\":\"" + response1.msg.ext + "\"}}",
+            success: function (data) {
+                if (data.code == 200) {
+                    console.log(data.msg.head, 'head')
+                    //获取头字段
+                    console
+                    var headtr = "<tr id='headtr' style='width: 100%' >"
+                    $.each(data.msg.head, function (i, head) {
+                        if (head.type == "string") {
+                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + head.o + " value=" + head.n + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                    "<option value='string' selected>字符</option>\n" +
+                                    "<option value='number'>数值</option>\n" +
+                                    "<option value='time'>时间</option>\n" +
+                                    "</select></span>" + "</td>"
+                        } else if (head.type == "number") {
+                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o= " + head.o + " value=" + head.n + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                    "<option value='string' >字符</option>\n" +
+                                    "<option value='number' selected>数值</option>\n" +
+                                    "<option value='time'>时间</option>\n" +
+                                    "</select></span>" + "</td>"
+                        } else if (head.type == "time") {
+                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + head.o + "value=" + head.n + "> <select id='selectType' class='sheelselect'  style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                    "<option value='string' >字符</option>\n" +
+                                    "<option value='number'>数值</option>\n" +
+                                    "<option value='time' selected>时间</option>\n" +
+                                    "</select></span>" + "</td>"
+                        }
+                    })
+                    headtr = headtr + "</tr>"
+                    $("#urltables").append(headtr);
+                    console.log(headtr, 'headtr')
+                    //获取数据字段
+
+                    if (data.msg.body != null) {
+
+                        $.each(data.msg.body, function (i, lis) {
+                            //获取每列
+                            var tr = "<tr>"
+                            $.each(lis, function (t, li) {
+                                if (i % 2 == 1) {
+                                    tr += "<td style='border: 1px solid #F0F0F0;background-color: #d9d9d9'>" + li + "</td>"
+                                } else {
+                                    tr += "<td style='border: 1px solid #F0F0F0;'>" + li + "</td>"
+
+                                }
+                            })
+                            tr = tr + "</tr>"
+                            $("#urltables").append(tr);
+
+                        })
+                    }
+
+                }
+
+            }
+
+        });
+
+
+    }
+
+    //获取sheel表头
+    function get_sheet_head(th) {
+
+        $('#headtr').children('td').each(function (j) {  // 遍历 tr 的各个 td
+
+            var thItem = {
+                o: '',
+                n: '',
+                type: '',
+                hide: '',
+                k: '',
+                name: ''
+            }
+            thItem.n = $(this).find("input").val();
+            thItem.o = $(this).find("input").attr("o");
+            thItem.type = $(this).find("select").val();
+            thItem.k = "";
+            thItem.hide = 0;
+            thItem.name = $(this).find("input").attr("sheetname");
+            th.push(thItem);
+
+        });
+        return th
+    }
+    window.onload = inputclick();
+    window.onload = getsheet();
+    window.onload =selectclick();
+
+    //保存数据
+    function save_data() {
+        // console.log(get_data())
+        console.log(JSON.stringify(get_data()), 'post')
+        debugger
+        $.ajax({
+            processData: false,
+            contentType: false,
+            async: false,
+            type: 'post',
+            url: "https://dev.datahunter.cn/rpc",
+            data: JSON.stringify(get_data()),
+            success: function (data) {
+                if (data.code == 200) {
+                    common_close_dialog(true)
+
+                }
+                if (data.code == 405) {
+                    debugger
+                    var a = data.msg[0]
+                    alert("保存失败，" + data.msg[0].name + "的" + data.msg[0].err + "请修改后重新保存")
+                }
+
+            }
+        })
+    }
+
+    //获取sheel的数据
+    function get_data() {
+
+        var data = {
+            act: '',
+            args: ''
+        }
+        var args = {
+            corp_id: '',
+            auth: '',
+            ds: '',
+
+        }
+        var ds = []
+        //遍历sheel的各项信息
+        $.each(response1.msg.files, function (i, file) {
+            $(".Tlist_delect").each(function () {
+                if (flag = $(this).prop("checked") == true) {
+
+                    if($(this).attr("name")==file.name){
+
+                    var dsItem = {
+                        url: '',
+                        format: '',
+                        type: '',
+                        name: '',
+                        group_id: '',
+                        delete_line: '',
+                        fh: '',
+                        hide: '',
+                        th: ''
+
+                    }
+                    for (var i = 0; i < dataSource.length; i++) {
+                        if (file.name == dataSource[i].name) {
+                            dsItem.th = dataSource[i].th
+
+                        }
+                    }
+                    dsItem.url = file.url
+                    dsItem.format = response1.msg.ext
+                    dsItem.type = "file"
+                    dsItem.group_id = "5850c142f502ec42a7000023"
+                    dsItem.delete_line = 0
+                    dsItem.fh = 1
+                    dsItem.hide = 0
+                    dsItem.name = filname.substring(0, filname.lastIndexOf(".")) + "-" + file.name
+                    ds.push(dsItem)
+
+                }}
+            })
+
+        });
+
+
+        args.corp_id = "5850c142f502ec42a7000023"
+        args.auth = "2f6f0ce5c7ca6ea09a2818f72ce4851d"
+        args.ds = ds
+        data.act = "v2/datasource/multi_save"
+        data.args = args
+        return data
+    }
+
+
+    //全部选中
+    $("#Tchild_delect").change(function () {
+
+        var flag = $("#Tchild_delect").prop("checked");
+
+        if (flag == true) {
+            $(".Tlist_delect").attr("checked", "true");
+            $("#saveSheet").attr("class", "btn-flat default").attr("disabled", false);
+
+        } else {
+            $(".Tlist_delect").removeAttrs("checked");
+            $("#saveSheet").attr("class", "btn btn-lg ").attr("disabled", true);
+
+        }
+    });
+    //部分选中
+    $(".Tlist_delect").each(function () {
+        var i = 0
+
+        $(".Tlist_delect").change(function () {
+
+            var flag = $(this).prop("checked");
+            if (flag == true) {
+                i = i + 1
+            } else {
+                i = i - 1
+            }
+            if (i != 0) {
+
+                $("#Tchild_delect").attr("checked", "true");
+                $("#saveSheet").attr("class", "btn-flat default").attr("disabled", false);
+
+            } else {
+                $("#Tchild_delect").removeAttrs("checked");
+                $("#saveSheet").attr("class", "btn btn-lg ").attr("disabled", true);
+            }
+        });
+
+    });
+
+
+    $(".sheetname").bind('click', function () {
+        get_sheet_datasource_data($(this).attr("name"), $(this).attr("url"))
+        inputclick ();
+        selectclick ();
+    });
+    //修改列表名的绑定事件
+    function inputclick (){  $(".filedsname").bind('blur', function () {
+
+        var th = []
+        th = get_sheet_head(th)
+        for (var i = 0; i < dataSource.length; i++)
+            if (dataSource[i].name == th[0].name) {
+                dataSource[i].th = th
+            }
+
+    });}
+    //修改列表名的属性绑定事件
+  function selectclick (){  $(".sheelselect").change(function () {
+
+        var th = []
+        th = get_sheet_head(th)
+        debugger
+        for (var i = 0; i < dataSource.length; i++)
+            if (dataSource[i].name == th[0].name) {
+                dataSource[i].th = th
+            }
+
+    });
+  }
+
+</script>

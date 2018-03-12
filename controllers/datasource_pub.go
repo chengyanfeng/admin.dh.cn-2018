@@ -252,7 +252,7 @@ func (c *DatasourcePubController) Edit() {
 	}
 	c.Data["sourceTypelist"] = typelist
 	c.Data["object"] = &DiDatasourceData
-	c.TplName = "datasource_pub/edit.html"
+	c.TplName = "datasource_pub/updatafile.html"
 }
 func (c *DatasourcePubController) Add() {
 	DiDatasourcePub := new(models.DiDatasourcePub)

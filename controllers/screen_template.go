@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	"strconv"
-
 	"common.dh.cn/models"
 	"common.dh.cn/utils"
 	"github.com/astaxie/beego/orm"
@@ -12,7 +11,6 @@ import (
 type ScreenTemplateController struct {
 	AdminController
 }
-
 func (c *ScreenTemplateController) List() {
 	var mpurl = "/screen_template/list?"
 	c.init(3)
@@ -161,5 +159,19 @@ func (c *ScreenTemplateController) Edit() {
 		c.StopRun()
 	}
 	c.Data["object"] = &template
-	c.TplName = "screen_template/edit.html"
+	c.TplName = "screen_template/updatafile.html"
+}
+func (c *ScreenTemplateController) Add() {
+	c.Require("id")
+	id := c.GetString("id")
+	template := new(models.DxScreenTemplate).Find(id)
+	if template == nil {
+		c.EchoJsonErr("模版不存在")
+		c.StopRun()
+	}
+	c.Data["object"] = &template
+
+
+
+	c.TplName = "screen_template/updatafile.html"
 }

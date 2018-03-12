@@ -130,7 +130,7 @@ func (c *CorpController) Edit() {
 	}
 
 	c.Data["object"] = &corp
-	c.TplName = "corp/edit.html"
+	c.TplName = "corp/updatafile.html"
 }
 func (c *CorpController) Add() {
 	Corp := new(models.DhCorp)

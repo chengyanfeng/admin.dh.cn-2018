@@ -177,3 +177,29 @@ func (c *SourceShareController) ShowData() {
 	c.Data["url"]=id
 	c.TplName = "datasource_share/showData.html"
 }
+
+func (c *SourceShareController) ShareCorp() {
+	id:=c.GetString("id")
+	c.Data["id"]=id
+	//获取所有的团队
+	 dhcorps:=[]models.DhCorp{}
+	filtersAllUser := map[string]interface{}{}
+	filtersAllUser["status__gte"] = 0
+	list := new(models.DhCorp).OrderList(filtersAllUser, "-create_time")
+	for _,v:=range list{
+		dhcorp:=models.DhCorp{}
+		dhcorp.ObjectId=v.ObjectId
+		dhcorp.Email=v.Email
+		dhcorp.Name=v.Name
+		dhcorps=append(dhcorps, dhcorp)
+	}
+	c.Data["dhcorps"]=dhcorps
+	c.TplName = "datasource_share/sharecorp.html"
+}
+
+
+func (c *SourceShareController) DbConnect() {
+
+	c.TplName = "datasource_share/dbconnect.html"
+}
+

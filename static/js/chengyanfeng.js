@@ -39,6 +39,7 @@ formmysf.delegate("a[action='ManageCorp']", 'click', function () {
     center("1200px")
 });
 
+
 /**
  * 用户管理，删除添加的提示框 !自定义
  */
@@ -64,14 +65,20 @@ $('body').on('click', '#AllCorp tbody td a[action="ManageRemoveAdd"]', function 
 })
 //管理团队-搜索团队-->
 $('body').on('click', '#corpSearch', function () {
-
     common_manage_corp($(this), "admin/user", $(this).attr('object-id'), "modalcorp", $("#selectCorp").val());
 })
 //管理团队角色-->
 $('body').on('change', '#userCorp tbody td select[id="userRole"]', function () {
 
     common_delect_add_user_corp($(this), $(this).parent("td").next().children().attr("user-id"), $(this).parent("td").next().children().attr("object-id"));
-})
+});
+//数据库连接
+$('#dbconnect').on('click', function () {
+    var object_name = $(this).parents(".search").attr('object');
+    common_object_dbconnect(object_name, $(this));
+    center("520px")
+
+});
 //管理用户屏-->
 formmysf.delegate("a[action='userScreen']", 'click', function () {
     var object_name = $(this).parents(".search").attr('object');
@@ -498,6 +505,28 @@ function common_manage_changetype(button, object_name, object_id, modal) {
 }
 
 /**
+ * 数据库连接(通用)
+ * @param object_name
+ * @param button
+ * @param modal
+ */
+function common_object_dbconnect(object_name, button, modal) {
+    var title = button.attr('title');
+    var query = button.attr('query');
+    var methods = button.attr('methods');
+    var url = '/' + object_name + '/' + methods;
+    if (query) {
+        url += "?" + query;
+    }
+    if (methods == 'window') {
+        window.location.href = url;
+    } else {
+        common_open_dialog(title, url, modal);
+    }
+}
+
+
+/**
  * 批量修改提交
  * @param object_name
  * @param object_id
@@ -632,6 +661,9 @@ function center(width) {
     popup($("#dialogchange"));
 
 }
+
+
+
 
 
 
