@@ -6,7 +6,7 @@
                 工作表类型：<select class="" id="select" style="margin-left:0px;width:75px;height:30px">
                 <option value=".xls,xlsx">已有连接</option>
                 <option value="mysql">mysql</option>
-                <option value="mysql">mysql</option>
+                <option value="orcle">orcle</option>
 
             </select>
             </div>
@@ -74,7 +74,7 @@
 
      var db  = $("#select option:selected").text()
 
-        if (db=="mysql"){
+
             $('#dbtables').empty();
           var   dbtabchild="<div> 服务器:<input id='host' style='' placeholder='请输入服务器地址'/> </div>" +
                     "<div>  端   口:<input id='port' style='' placeholder='3306'/></div>" +
@@ -90,7 +90,7 @@
 
                     $("#dbtables").append(dbtabchild)
 
-        }
+
     })
     function save_connect() {
 
@@ -149,6 +149,8 @@
                     alert(data)
                     center("1000px")
                     common_open_dialog("数据库连接","/admin/views/dbconnectdata.html")
+                }else {
+                    alert(data.msg)
                 }
 
             }

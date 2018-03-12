@@ -80,7 +80,7 @@
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/table_info\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"table\":" + "\"" + name + "\"" + ",\"connect_id\":\"" + dbid + "\"}}",
+            data: "{\"act\":\"v2/datasource/table_info\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"table\":" + "\"" + name + "\"" + ",\"connect_id\":\"" + dbid +"\",\"db\":\""+db+"\"}}",
             success: function (data) {
                 if (data.code == 200) {
                     //获取头字段
@@ -88,29 +88,29 @@
                     for (var i = 0; i < dataSource.length; i++) {
                         if (dataSource[i].name == name) {
                             for (var b = 0; b < dataSource[i].th.length; b++) {
-
+                                    debugger
                                 if (dataSource[i].th[b].type == "varchar"||dataSource[i].th[b].type == "series") {
 
-                                    headtr += "<td data-key='co' style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + dataSource[i].th[b].o + " value=" + dataSource[i].th[b].n + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                    headtr += "<td data-key='co' style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ dataSource[i].th[b].o +"\""+ "  value="+"\"" + dataSource[i].th[b].n +"\""+ "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                             "<option value='varchar' selected>字符</option>\n" +
                                             "<option value='number'>数值</option>\n" +
                                             "<option value='date'>时间</option>\n" +
                                             "</select></span>" + "</td>"
                                 } else if (dataSource[i].th[b].type == "number"||dataSource[i].th[b].type == "int") {
 
-                                    headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o= " + dataSource[i].th[b].o + " value=" + dataSource[i].th[b].n + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                    headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o= " +"\""+ dataSource[i].th[b].o +"\""+ " value=" +"\""+ dataSource[i].th[b].n +"\""+ "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                             "<option value='series' >字符</option>\n" +
                                             "<option value='number' selected>数值</option>\n" +
                                             "<option value='date'>时间</option>\n" +
                                             "</select></span>" + "</td>"
                                 } else if (dataSource[i].th[b].type == "time"||dataSource[i].th[b].type == "date") {
-                                    headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + dataSource[i].th[b].o + "value=" + dataSource[i].th[b].n + "> <select id='selectType' class='sheelselect'  style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                    headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ dataSource[i].th[b].o +"\""+ " value=" +"\""+ dataSource[i].th[b].n +"\""+ "> <select id='selectType' class='sheelselect'  style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                             "<option value='series' >字符</option>\n" +
                                             "<option value='number'>数值</option>\n" +
                                             "<option value='date' selected>时间</option>\n" +
                                             "</select></span>" + "</td>"
                                 }else {
-                                    headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + dataSource[i].th[b].o + "value=" + dataSource[i].th[b].n + "> <select id='selectType' class='sheelselect'  style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                                    headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ dataSource[i].th[b].o +"\""+ " value=" +"\""+ dataSource[i].th[b].n +"\""+ "> <select id='selectType' class='sheelselect'  style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                             "<option value='series' selected>字符</option>\n" +
                                             "<option value='number'>数值</option>\n" +
                                             "<option value='date' selected>时间</option>\n" +
@@ -128,13 +128,20 @@
                         $.each(data.msg.body, function (i, lis) {
                             //获取每列
                             var tr = "<tr>"
-                            $.each(lis, function (t, li) {
-                                if (i % 2 == 1) {
-                                    tr += "<td style='border: 1px solid #F0F0F0;background-color: #d9d9d9'>" + li + "</td>"
-                                } else {
-                                    tr += "<td style='border: 1px solid #F0F0F0;'>" + li + "</td>"
+                            $.each($("#headtr td"), function (t, headli) {
+                                $.each(lis, function (t, li) {
 
-                                }
+                                    if($(headli).find("input").val()==t) {
+                                        debugger
+                                        if (i % 2 == 1) {
+                                            tr += "<td style='border: 1px solid #F0F0F0;background-color: #d9d9d9'>" + li + "</td>"
+                                        } else {
+                                            tr += "<td style='border: 1px solid #F0F0F0;'>" + li + "</td>"
+
+                                        }
+
+                                    }
+                                })
                             })
                             tr = tr + "</tr>"
                             $("#urltables").append(tr);
@@ -161,7 +168,7 @@
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/table_info\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"table\":" + "\"" + name + "\"" + ",\"connect_id\":\"" + dbid +",\"db\":\""+db+"\"}}",
+            data: "{\"act\":\"v2/datasource/table_info\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"table\":" + "\"" + name + "\"" + ",\"connect_id\":\"" + dbid +"\",\"db\":\""+db+"\"}}",
             success: function (data) {
                 if (data.code == 200) {
                     console.log(data.msg.head, 'head')
@@ -170,26 +177,28 @@
                     var headtr = "<tr id='headtr' style='width: 100%' >"
                     $.each(data.msg.head, function (i, head) {
 
+                debugger
+
                         if (head.type == "varchar") {
-                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + head.o + " value=" + head.o + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ head.o +"\""+ " value=" +"\""+ head.o +"\""+ "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='series' selected>字符</option>\n" +
                                     "<option value='number'>数值</option>\n" +
                                     "<option value='date'>时间</option>\n" +
                                     "</select></span>" + "</td>"
                         } else if (head.type == "int") {
-                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o= " + head.o + " value=" + head.o + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o= " +"\""+ head.o +"\""+ " value=" +"\""+ head.o +"\""+ "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='series' >字符</option>\n" +
                                     "<option value='number' selected>数值</option>\n" +
                                     "<option value='date'>时间</option>\n" +
                                     "</select></span>" + "</td>"
                         } else if (head.type == "date") {
-                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + head.o + "value=" + head.o + "> <select id='selectType' class='sheelselect'  style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ head.o+"\"" + " value =" +"\""+ head.o +"\""+ "> <select id='selectType' class='sheelselect'  style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='series' >字符</option>\n" +
                                     "<option value='number'>数值</option>\n" +
                                     "<option value='date' selected>时间</option>\n" +
                                     "</select></span>" + "</td>"
                         }else{
-                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + head.o + " value=" + head.o + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
+                            headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ head.o +"\""+ " value=" +"\""+ head.o +"\""+ "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='series' selected>字符</option>\n" +
                                     "<option value='number'>数值</option>\n" +
                                     "<option value='date'>时间</option>\n" +
@@ -206,13 +215,21 @@
                         $.each(data.msg.body, function (i, lis) {
                             //获取每列
                             var tr = "<tr>"
+                            console.log(i)
+                            console.log(lis)
+                            $.each($("#headtr td"), function (t, headli){
+
                             $.each(lis, function (t, li) {
+
+                                if($(headli).find("input").val()==t){
                                 if (i % 2 == 1) {
                                     tr += "<td style='border: 1px solid #F0F0F0;background-color: #d9d9d9'>" + li + "</td>"
                                 } else {
                                     tr += "<td style='border: 1px solid #F0F0F0;'>" + li + "</td>"
 
-                                }
+                                }}
+                            })
+
                             })
                             tr = tr + "</tr>"
                             $("#urltables").append(tr);
@@ -223,6 +240,7 @@
                 }
 
             }
+
 
         });
 

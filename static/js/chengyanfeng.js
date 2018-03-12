@@ -152,7 +152,7 @@ $('body').on('mouseout', ".showlastone", function () {
 $('body').on('click', "a[action='BangDingData']", function () {
     var object_name = $(this).parents(".search").attr('object');
     common_manage_bangding($(this), object_name, $(this).attr('object-id'), "modalcorp");
-    center("1200px")
+    center("500px")
     // 数据表格初始化
     /*getColumns()*/
 });
