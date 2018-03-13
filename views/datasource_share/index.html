@@ -78,9 +78,9 @@
                         <td>
                             <ul class="actions" style="float: left;">
                                 {{ if eq .Status 1 }}
-                                <li><a action='BangDingData' Rmethod="sharecorp" object-id="{{.ObjectId}}" value="0" title="未共享" name="{{.Name}}"> 未共享</a></li>|
+                                <li><a action='sharecorp' Rmethod="sharecorp" object-id="{{.ObjectId}}" value="0" title="共享团队" name="{{.Name}}"> 未共享</a></li>|
                                 {{else if  eq .Status 0 }}
-                                <li><a action='BangDingData' Rmethod="sharecorp" object-id="{{.ObjectId}}" value="1" title="共享" name="{{.Name}}">共享</a></li>|
+                                <li><a action='sharecorp' Rmethod="sharecorp" object-id="{{.ObjectId}}" value="1" title="共享团队" name="{{.Name}}">共享</a></li>|
                                 {{ end }}
                                 <li><a action='BangDingData'  Rmethod="showdata" object-id="{{.ObjectId}}" title="数据详情" >数据详情</a></li>|
                                 <li><a action='delete'  object-id="{{.ObjectId}}" title="删除" name="{{.Name}}">删除</a></li>

@@ -115,7 +115,7 @@ func (c *UserController) Edit() {
 		c.StopRun()
 	}
 	c.Data["object"] = &user
-	c.TplName = "user/updatafile.html"
+	c.TplName = "user/edit.html"
 }
 func (c *UserController) Add() {
 	user := new(models.DhUser)

@@ -103,6 +103,7 @@ func init() {
 	beego.Router("admin/sourceshare/showdata", &controllers.SourceShareController{}, "get:ShowData")
 	beego.Router("admin/sourceshare/sharecorp", &controllers.SourceShareController{}, "get:ShareCorp")
 	beego.Router("admin/sourceshare/dbconnect", &controllers.SourceShareController{}, "get:DbConnect")
+	beego.Router("admin/sourceshare/savesharecorp", &controllers.SourceShareController{}, "post:SaveShareCorp")
 
 	//自动注入路由
 	//beego.AutoRouter(&controllers.CorpController{})

@@ -191,6 +191,7 @@ func (c *SourceShareController) ShareCorp() {
 		dhcorp.ObjectId=v.ObjectId
 		dhcorp.Email=v.Email
 		dhcorp.Name=v.Name
+		dhcorp.Status=1
 		dhcorps=append(dhcorps, dhcorp)
 	}
 	c.Data["dhcorps"]=dhcorps
@@ -202,4 +203,13 @@ func (c *SourceShareController) DbConnect() {
 
 	c.TplName = "datasource_share/dbconnect.html"
 }
+
+func (c *SourceShareController) SaveShareCorp() {
+	p := c.FormToP("datasourceid", "args")
+
+	 print(utils.ToString((p["datasourceid"])),"---------------")
+	c.Data["url"]=p
+	c.TplName = "datasource_share/showData.html"
+}
+
 

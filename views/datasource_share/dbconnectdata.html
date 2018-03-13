@@ -83,6 +83,7 @@
             data: "{\"act\":\"v2/datasource/table_info\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"table\":" + "\"" + name + "\"" + ",\"connect_id\":\"" + dbid +"\",\"db\":\""+db+"\"}}",
             success: function (data) {
                 if (data.code == 200) {
+                    debugger
                     //获取头字段
                     var headtr = "<tr id='headtr' style='width: 100%' >"
                     for (var i = 0; i < dataSource.length; i++) {
