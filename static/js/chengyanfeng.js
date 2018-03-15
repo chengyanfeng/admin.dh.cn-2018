@@ -158,6 +158,7 @@ $('body').on('click', "a[action='BangDingData']", function () {
 });
 $('body').on('click', "a[action='sharecorp']", function () {
     var object_name = $(this).parents(".search").attr('object');
+
     common_manage_bangding($(this), object_name, $(this).attr('object-id'), "modalcorp");
     center("600px")
 });
@@ -330,9 +331,16 @@ function common_manage_bangding(button, object_name, object_id, modal, corpname)
     var query = button.attr('query');
     var methods = button.attr('methods');
     var method = button.attr('Rmethod');
+    var corpIdlist=button.attr("corpidlist")
+
+
     var url = '/' + object_name + '/' + method + '?id=' + object_id;
 
-    if (corpname != "undefined") {
+    if (corpIdlist != undefined) {
+        url = url + "&corpIdlist=" + corpIdlist
+    }
+
+    if (corpname != undefined) {
         url = url + "&corpName=" + corpname
     }
 

@@ -11,7 +11,7 @@
                 {{- range .dhcorps}}
                 <tr class="showlastone">
                     <td style="border-style:none;width:30px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">
-                        <input type="checkbox" class="sharecorplist"></td>
+                        <input type="checkbox" class="sharecorplist" flagstatus="{{.Status}}" ></td>
                     <td style="border-style:none;width:100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Name}}</td>
                     <td style="border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Email}}</td>
 
@@ -21,9 +21,9 @@
                         {{ if eq  .Status 0}}
                             <option value="1">全部显示</option>
                             <option value="0" selected>部分显示</option>
-                        {{ else }}
+                      {{else}}
                             <option value="1" selected>全部显示</option>
-                            <option value="0">部分显示</option>
+                            <option value="0" >部分显示</option>
                         {{ end }}
                         </select>
                     </td>
@@ -69,6 +69,16 @@
             $(this).parent().parent().children('td:eq(3)').css('display', 'none')
         }
     })
+   function showfilter() {
+       $.each($(".sharecorplist"),function () {
+           var flag = $(this).prop("checked")
+           if (flag == true) {
+               $(this).parent().parent().children('td:eq(3)').css('display', '')
+           } else {
+               $(this).parent().parent().children('td:eq(3)').css('display', 'none')
+           }
+       })
+   }
     $(".sharecorp").change(function () {
         var flag = $(this).attr("value")
         var corpid = $(this).parent().parent().children('td:eq(4)').text()
@@ -120,19 +130,47 @@
         datasourceid: '',
         args: ''
     }
-    var showfilter = {
-        n: '',
-        show: '',
-        corpid: ''
-    }
+
     var cacheshowfilters = []
+
     function savefilter() {
+
+        var cropfilterlist=[]
+        var corpfilter={
+            filter:'',
+            corpid:''
+        }
         $.each($("#datasharefilter tr"), function (i, tr) {
+            var showfilter = {
+                n: '',
+                show: '',
+
+            }
             showfilter.n = $(tr).find('td:eq(0)').text()
             showfilter.show = $($(this).find('td:eq(1)')).find('option:selected').val()
-            showfilter.corpid = $(tr).find('td:eq(2)').text()
-            cacheshowfilters.push(showfilter)
-        })
+            cropfilterlist.push(showfilter)
+          })
+        corpfilter.corpid=$(tr).find('td:eq(2)').text()
+        corpfilter.filter=cropfilterlist
+        if (cacheshowfilters.length>0){
+            var flag=1
+            $.each(cacheshowfilters,function (i,showfilters) {
+
+                if (showfilters.corpid==corpfilter.corpid){
+                    cacheshowfilters[i].filter=corpfilter.filter;
+                    flag=0
+                    return false
+                }
+            })
+
+            debugger
+            if (flag==1){
+                cacheshowfilters.push(corpfilter)
+                }
+
+        }else {
+        cacheshowfilters.push(corpfilter)
+        }
 
         $("#partshow").css("display", "none")
         center("600px");
@@ -143,13 +181,15 @@
         center("600px")
         $("#partshow").css("display", "none")
     }
+    var fomdata=new FormData()
     function save_sharecorp() {
+        debugger
         var sendshowfilters = []
 
         $.each($(".sharecorplist"),function (i,td) {
             var flag = $(td).prop("checked");
             if(flag==true){
-                if($($(td).parent().parent().children('td:eq(3)')).find('option:selected').val()=="部分显示"){
+                if($($(td).parent().parent().children('td:eq(3)')).find('option:selected').val()=="0"){
                     $.each(cacheshowfilters, function (i, cacheshowfilter) {
                         if (cacheshowfilter.corpid == $(td).parent().parent().children('td:eq(4)').text()) {
                             sendshowfilters.push(cacheshowfilter)
@@ -157,7 +197,13 @@
 
                     })
                 }else {
-                    sendshowfilters.push("1")
+                   var corpfilter={
+                       filter:'',
+                       corpid:''
+                   }
+                   corpfilter.filter="1"
+                    corpfilter.corpid=$(td).parent().parent().children('td:eq(4)').text()
+                    sendshowfilters.push(corpfilter)
                 }
 
 
@@ -167,6 +213,7 @@
         })
         datasourcefilter.args=sendshowfilters
         datasourcefilter.datasourceid=$("#datashareid").val()
+        fomdata.append("data",JSON.stringify(datasourcefilter))
 
         $.ajax({
             processData: false,
@@ -174,11 +221,30 @@
             async: false,
             type: 'post',
             url: "/admin/sourceshare/savesharecorp",
-            data: JSON.stringify(datasourcefilter),
+            data: fomdata,
             success: function (data) {
-
+                if (data.code==200){
+                    window.location.reload(true);
+                }
+                else {
+                       alert(data.msg)
+                }
             }
         })
 
     }
+    function checkcorp() {
+        $.each($(".sharecorplist"),function () {
+
+            var status = $(this).attr("flagstatus")
+            if (status=='2'||status=='0'){
+                debugger
+                $(this).attr("checked",true);
+            }
+        })
+    }
+
+    window.onload = checkcorp();
+
+    window.onload = showfilter();
 </script>

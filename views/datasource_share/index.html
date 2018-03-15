@@ -75,10 +75,11 @@
 
                         {{ end }}
                         <td>{{.CorpName}}</td>
+                        <td id="corpIdList" style="display:none;">{{.CorpIdList}}</td>
                         <td>
                             <ul class="actions" style="float: left;">
                                 {{ if eq .Status 1 }}
-                                <li><a action='sharecorp' Rmethod="sharecorp" object-id="{{.ObjectId}}" value="0" title="共享团队" name="{{.Name}}"> 未共享</a></li>|
+                                <li><a action='sharecorp' Rmethod="sharecorp" object-id="{{.ObjectId}}" value="0" title="共享团队" name="{{.Name}}" corpidlist="{{.CorpIdList}}"> 编辑共享</a></li>|
                                 {{else if  eq .Status 0 }}
                                 <li><a action='sharecorp' Rmethod="sharecorp" object-id="{{.ObjectId}}" value="1" title="共享团队" name="{{.Name}}">共享</a></li>|
                                 {{ end }}

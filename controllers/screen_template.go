@@ -159,7 +159,7 @@ func (c *ScreenTemplateController) Edit() {
 		c.StopRun()
 	}
 	c.Data["object"] = &template
-	c.TplName = "screen_template/updatafile.html"
+	c.TplName = "screen_template/edit.html"
 }
 func (c *ScreenTemplateController) Add() {
 	c.Require("id")

@@ -71,13 +71,34 @@ func (c *SourceShareController) List() {
 			DiSourceShareFilter["DiDatasourceId"] = info.ObjectId
 			DiSourceShare := new(models.DiSourceShare).List(DiSourceShareFilter)
 			if len(DiSourceShare) > 0 {
-				DhCorpArray := make([]string, 1)
+				DhCorpArray := make([]string, 0)
+				DhCorpIdArray:=make([]string,0)
 				for _, v := range DiSourceShare {
 					DhCorpfilter := utils.P{}
 					DhCorpfilter["object_id"] = v.Corpid
-					DhCorp := new(models.DhCorp).Find(DhCorpfilter)
+					DhCorp := new(models.DhCorp).Find(v.Corpid)
+					fmt.Print(DhCorp)
+					if len(DhCorpArray)>0{
+
+						flag:=0
+						for _,v:=range DhCorpArray {
+							if v==DhCorp.Name{
+							flag=1
+							}
+						}
+					if flag==0{
+						DhCorpIdArray=append(DhCorpIdArray,DhCorp.ObjectId)
+						DhCorpArray = append(DhCorpArray, DhCorp.Name)
+
+
+
+						}
+						}else {
+						DhCorpIdArray=append(DhCorpIdArray,DhCorp.ObjectId)
 					DhCorpArray = append(DhCorpArray, DhCorp.Name)
+					}
 				}
+				Screen["CorpIdList"] = utils.ToString(DhCorpIdArray)
 				Screen["CorpName"] = utils.ToString(DhCorpArray)
 				Screen["Status"] = 1
 			} else {
@@ -180,6 +201,9 @@ func (c *SourceShareController) ShowData() {
 
 func (c *SourceShareController) ShareCorp() {
 	id:=c.GetString("id")
+	corpidlist:=c.GetString("corpIdlist")
+	corplist:=strings.Split(corpidlist,",")
+	fmt.Print(corpidlist)
 	c.Data["id"]=id
 	//获取所有的团队
 	 dhcorps:=[]models.DhCorp{}
@@ -191,8 +215,32 @@ func (c *SourceShareController) ShareCorp() {
 		dhcorp.ObjectId=v.ObjectId
 		dhcorp.Email=v.Email
 		dhcorp.Name=v.Name
-		dhcorp.Status=1
-		dhcorps=append(dhcorps, dhcorp)
+		if len(corplist)>0{
+		for _,corp:=range corplist{
+			if v.ObjectId==corp{
+				diSourceSharefilter:=utils.P{}
+				diSourceSharefilter["di_datasource_id"]=id
+				diSourceSharefilter["corpid"]=corp
+				DiSourceShare := new(models.DiSourceShare).List(diSourceSharefilter)
+				if DiSourceShare[0].Fields=="1"{
+					dhcorp.Status=2
+					break
+				}else {
+
+					dhcorp.Status=0
+					break
+				}
+			}else {
+			dhcorp.Status=1
+
+			}
+		}
+			dhcorps=append(dhcorps, dhcorp)
+		} else {
+			dhcorp.Status=1
+			dhcorps=append(dhcorps, dhcorp)
+		}
+
 	}
 	c.Data["dhcorps"]=dhcorps
 	c.TplName = "datasource_share/sharecorp.html"
@@ -205,11 +253,43 @@ func (c *SourceShareController) DbConnect() {
 }
 
 func (c *SourceShareController) SaveShareCorp() {
-	p := c.FormToP("datasourceid", "args")
 
-	 print(utils.ToString((p["datasourceid"])),"---------------")
-	c.Data["url"]=p
-	c.TplName = "datasource_share/showData.html"
+	data:=c.GetString("data")
+
+	a:=	*utils.JsonDecode([]byte(utils.ToString(data)))
+
+	datasourceid:=a["datasourceid"]
+	fmt.Print(datasourceid)
+	args:=a["args"]
+	fmt.Print(args)
+	m:=args.([]interface{})
+	for _,v:=range m{
+		corp:=make(map[string]interface{})
+		fiter:=v.(map[string]interface{})
+		corp["corp_id"]=fiter["corpid"]
+		parameter:=fiter["filter"]
+
+		//查询出团队的所有成员
+		DhUserCorp := new(models.DhUserCorp).OrderList(corp, "-create_time")
+		fmt.Print(DhUserCorp)
+		for _,v:=range DhUserCorp{
+			disourceshare:=new(models.DiSourceShare)
+			disourceshare.DiDatasourceId=utils.ToString(datasourceid);
+			disourceshare.Auth=v.ObjectId
+			disourceshare.Corpid=v.CorpId
+			disourceshare.Fields=utils.ToString(parameter)
+			flag := disourceshare.Save()
+			if flag==true{
+				//暂时不做处理
+
+			}
+
+
+
+		}
+
+	}
+	c.EchoJsonOk()
 }
 
 

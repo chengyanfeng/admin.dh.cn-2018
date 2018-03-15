@@ -140,7 +140,7 @@ func (c *DatasourceTypeController) Edit() {
 	}
 
 	c.Data["object"] = &DiDatasourceType
-	c.TplName = "datasource_type/updatafile.html"
+	c.TplName = "datasource_type/edit.html"
 }
 func (c *DatasourceTypeController) Add() {
 	DiDatasourceType := new(models.DiDatasourceType)
