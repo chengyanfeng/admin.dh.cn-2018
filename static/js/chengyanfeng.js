@@ -1,4 +1,9 @@
 /**
+ * 获取user_id 全局变量
+ */
+var auth_userid=$("#Auth").attr("auth_id")
+
+/**
  * 获取当前宽度和屏幕总宽度，弹层居中
  * @param info
  */

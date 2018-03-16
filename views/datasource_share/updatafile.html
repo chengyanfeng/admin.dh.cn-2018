@@ -63,7 +63,7 @@
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/test_file\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"url\":" + "\"" + url + "\"" + ",\"format\":\"" + response1.msg.ext + "\"}}",
+            data: "{\"act\":\"v2/datasource/test_file\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\",\"url\":" + "\"" + url + "\"" + ",\"format\":\"" + response1.msg.ext + "\"}}",
             success: function (data) {
                 if (data.code == 200) {
                     //获取头字段
@@ -139,7 +139,7 @@
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/test_file\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"url\":" + "\"" + url + "\"" + ",\"format\":\"" + response1.msg.ext + "\"}}",
+            data: "{\"act\":\"v2/datasource/test_file\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\",\"url\":" + "\"" + url + "\"" + ",\"format\":\"" + response1.msg.ext + "\"}}",
             success: function (data) {
                 if (data.code == 200) {
                     console.log(data.msg.head, 'head')
@@ -311,7 +311,7 @@
 
 
         args.corp_id = "5850c142f502ec42a7000023"
-        args.auth = "2f6f0ce5c7ca6ea09a2818f72ce4851d"
+        args.auth=auth_userid
         args.ds = ds
         data.act = "v2/datasource/multi_save"
         data.args = args

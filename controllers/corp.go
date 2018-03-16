@@ -60,7 +60,6 @@ func (c *CorpController) List() {
 			filters["status"] = int
 			mpurl = mpurl + "&status=" + status
 		} else {
-
 			c.Data["status"] = "nil"
 		}
 

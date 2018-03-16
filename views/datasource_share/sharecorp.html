@@ -1,8 +1,8 @@
 <div id="pad-wrapper" class="form-page">
     <div class="row-fluid form-wrapper">
-        <div class="span12 column" style="overflow: auto;height: 350px;float:left">
+        <div class="span12 column" style="overflow: auto;height: 350px;width:490px;float:left" id="userCorp" >
             <input id="datashareid" style="display: none" value="{{.id}}"/>
-            <table operation="update" object="admin/datasource" id="userCorp" class="table table-bordered table-hover"
+            <table operation="update" object="admin/datasource"  class="table table-bordered table-hover"
                    style="border: 0px solid #dddddd !important;">
                 <thead>
                 </thead>
@@ -11,7 +11,7 @@
                 {{- range .dhcorps}}
                 <tr class="showlastone">
                     <td style="border-style:none;width:30px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">
-                        <input type="checkbox" class="sharecorplist" flagstatus="{{.Status}}" ></td>
+                        <input type="checkbox" class="sharecorplist" flagstatus="{{.Status}}"  filter="{{.Vcode}}"></td>
                     <td style="border-style:none;width:100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Name}}</td>
                     <td style="border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Email}}</td>
 
@@ -35,10 +35,11 @@
                 {{- end}}
                 </tbody>
             </table>
-        </div>
-        <div class="span12 column" id="partshow" style="overflow: auto;height: 350px;float:right;display:none">
 
-            <table operation="update" object="admin/datasource" id="datasharefilter"
+        </div>
+        <div class="span12 column" id="datasharefilter"  style="overflow: auto;height: 350px;width:490px;float:right;display:none"  >
+
+            <table operation="update" object="admin/datasource"
                    class="table table-bordered table-hover" style="border: 0px solid #dddddd !important;">
                 <thead>
                 </thead>
@@ -46,16 +47,17 @@
                 </tbody>
 
             </table>
-            <div>
-                <input type="button" value="保存" style="background-color: #7aba7b;margin-left:300px; "
-                       onclick="savefilter()"/>
-                <input type="button" value="取消" style="" onclick="cancelfilter()"/>
-            </div>
+
         </div>
-        <div>
-            <input type="button" value="保存" style="background-color: #7aba7b;margin-left:300px; "
+        <div id="savefilter" style="display:none ">
+            <input type="button" value="保存" style="margin-left:200px;margin-top: 20px"
+                   onclick="savefilter()" class="btn-flat default"/>
+            {{/*<input type="button" value="取消" class="btn btn-lg"  style="" onclick="cancelfilter()"/>*/}}
+        </div>
+        <div id="save_sharecorp" style="">
+            <input type="button" value="保存" id="savesharedata"  class="btn-flat default" style="margin-left:300px; "
                    onclick="save_sharecorp()"/>
-            <input type="button" value="取消" style="" onclick="window.location.reload()"/>
+            <input type="button" value="取消" style="" class="btn btn-lg"   onclick="window.location.reload()"/>
 
         </div>
     </div>
@@ -83,13 +85,15 @@
         var flag = $(this).attr("value")
         var corpid = $(this).parent().parent().children('td:eq(4)').text()
         if (flag == 0) {
-            center('1000px');
-            $("#partshow").css("display", "")
+
+            //显示字段选项
+            $("#datasharefilter").css("display", "")
+            $("#savefilter").css("display","")
+           //隐藏团队表
+           $("#userCorp").css("display","none")
+            $("#save_sharecorp").css("display","none")
             var dataid = $("#datashareid").val()
             getfilterlist(dataid, corpid);
-        } else {
-            center('600px');
-            $("#partshow").css("display", "none")
 
         }
     })
@@ -100,7 +104,7 @@
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/get\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"_id\":\"" + dataid + "\"}}",
+            data: "{\"act\":\"v2/datasource/get\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\",\"_id\":\"" + dataid + "\"}}",
             success: function (data) {
 
                 if (data.code == 200) {
@@ -108,7 +112,7 @@
                     $("#datasharefilter").empty()
                     console.log(data.msg.th)
                     $.each(data.msg.th, function (i, th) {
-                        debugger
+
                         tr = "<tr class=\"datafilter\"> <td style=\"border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" + th.n + "</td> " +
                                 "<td style=\"border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" +
                                 "<select id='fitershow' style=\"height:28px;width:90px;\"  > " +
@@ -171,15 +175,27 @@
         }else {
         cacheshowfilters.push(corpfilter)
         }
+        //显示团队表隐藏字段表
+        //隐藏字段选项
+        $("#datasharefilter").css("display", "none")
+        $("#savefilter").css("display","none")
+        //显示团队表
+        $("#userCorp").css("display","")
+        $("#save_sharecorp").css("display","")
 
-        $("#partshow").css("display", "none")
-        center("600px");
+
+
 
 
     }
     function cancelfilter() {
-        center("600px")
-        $("#partshow").css("display", "none")
+        //隐藏字段选项
+        $("#datasharefilter").css("display", "none")
+        $("#savefilter").css("display","none")
+        //显示团队表
+        $("#userCorp").css("display","")
+        $("#save_sharecorp").css("display","")
+
     }
     var fomdata=new FormData()
     function save_sharecorp() {
@@ -234,12 +250,25 @@
 
     }
     function checkcorp() {
+        //判断哪个团队是被选取的，依次要自动checked
         $.each($(".sharecorplist"),function () {
 
             var status = $(this).attr("flagstatus")
             if (status=='2'||status=='0'){
                 debugger
                 $(this).attr("checked",true);
+            }
+            if(status=='0'){
+                var cachesfilter=""
+                var corpfilter={
+                    filter:'',
+                    corpid:''
+                }
+                cachesfilter=$(this).attr("filter")
+                corpfilter.corpid=$(this).parent().parent().find('td:eq(4)').text()
+                corpfilter.filter=cachesfilter
+                cacheshowfilters.push(corpfilter)
+                console.log(cachesfilter)
             }
         })
     }

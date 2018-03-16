@@ -4,7 +4,7 @@
             <span id="tip" class="color:red"></span>
             <div style="">
                 工作表类型：<select class="" id="select" style="margin-left:0px;width:75px;height:30px">
-                <option value=".xls,xlsx">已有连接</option>
+                <option value="已有连接">已有连接</option>
                 <option value="mysql">mysql</option>
                 <option value="orcle">orcle</option>
 
@@ -36,17 +36,24 @@
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/connect/list\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\" }}",
+            data: "{\"act\":\"v2/connect/list\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\" }}",
             success: function (data) {
                 if (data.code == 200) {
 
                     //获取每列
-                    var tr = ""
+                    var tr = "<tr>"
                     $.each(data.msg, function (i, db) {
-                        tr += "<tr> <td  align=\"center\" class='dblist' style='border: 1px solid #F0F0F0;background-color: #d9d9d9' format="+db.format+" dbid=" + db._id + ">" + db.name + "</td></tr>"
+                        j=i+1
+
+                        tr +=  "<td  align=\"center\" class='dblist' style='border: 1px solid #F0F0F0;height:100px;background-color: #d9d9d9' format="+db.format+" dbid=" + db._id + ">" + db.name + "</td>" ;
+                        if (j%3==0) {
+                            tr += "</tr>"
+                            $("#dbtables").append(tr);
+                            tr="<tr>"
+                        }
                     });
 
-                    $("#dbtables").append(tr);
+
 
                 }
 
@@ -64,7 +71,7 @@
 
         dbid=$(this).attr("dbid")
         dbformat=$(this).attr("format")
-        debugger
+
         center("1000px")
         common_open_dialog("数据库连接","/admin/views/dbconnectdata.html")
     });
@@ -73,15 +80,15 @@
     $("#select").change(function () {
 
      var db  = $("#select option:selected").text()
-
+        if (db!="已有连接"){
 
             $('#dbtables').empty();
-          var   dbtabchild="<div> 服务器:<input id='host' style='' placeholder='请输入服务器地址'/> </div>" +
-                    "<div>  端   口:<input id='port' style='' placeholder='3306'/></div>" +
-                    "<div> 数据库:<input id='name' style='' placeholder='请输入数据库名称'/></div>" +
-                    "<div> 用户名:<input id='username' style='' placeholder='请输入用户名'/></div>" +
-                    "<div> 密  码:<input id='password'  type='password' style='' placeholder='请输入密码'/></div>" +
-                  "<div>\n" +
+          var   dbtabchild="<div style='margin-left: 30px;margin-bottom: 10px'> 服务器:<input id='host' style='' placeholder='请输入服务器地址'/> </div>" +
+                    "<div style='margin-left: 30px;margin-bottom: 10px' >  端&nbsp;&nbsp;&nbsp;口:<input id='port' style='' placeholder='3306'/></div>" +
+                    "<div style='margin-left: 30px;margin-bottom: 10px'> 数据库:<input id='name' style='' placeholder='请输入数据库名称'/></div>" +
+                    "<div style='margin-left: 30px;margin-bottom: 10px'> 用户名:<input id='username' style='' placeholder='请输入用户名'/></div>" +
+                    "<div style='margin-left: 30px;margin-bottom: 10px'> 密 &nbsp; 码:<input id='password'  type='password' style='' placeholder='请输入密码'/></div>" +
+                  "<div  style='margin-left: 180px'   >\n" +
                   "                <input type=\"button\" value=\"保存\" id=\"saveSheet\"  class=\"btn btn-lg \" style=\"margin-left:0px; \"\n" +
                   "                       onclick=\"save_connect()\"/>\n" +
                   "                <input type=\"button\" value=\"取消\" class=\"btn btn-lg\" style=\"\" onclick=\"window.location.reload()\"/>\n" +
@@ -89,7 +96,10 @@
                   "            </div>"
 
                     $("#dbtables").append(dbtabchild)
-
+        }else{
+            $('#dbtables').empty();
+            getconnect_db()
+        }
 
     })
     function save_connect() {
@@ -130,7 +140,7 @@
         dbs.port=$("#port").attr("value")
         dbs.host=$("#host").attr("value")
         args.db=dbs
-        args.auth="2f6f0ce5c7ca6ea09a2818f72ce4851d"
+        args.auth=auth_userid
         args.corp_id="5850c142f502ec42a7000023"
         args.format=$("#select option:selected").text();
         dbconnectsave.args=args

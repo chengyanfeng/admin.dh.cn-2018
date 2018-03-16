@@ -4,10 +4,11 @@ import (
 	"common.dh.cn/utils"
 	"common.dh.cn/models"
 
-	"github.com/astaxie/beego/orm"
+
 	"fmt"
 	"strconv"
 	"strings"
+
 )
 
 type SourceShareController struct {
@@ -23,25 +24,37 @@ func (c *SourceShareController) List() {
 	page, _ := c.GetInt64("page", 1)
 	page_size, _ := c.GetInt64("page_size", 10)
 	filters := map[string]interface{}{}
+	userid:=utils.P{}
+	userid["user_id"]=c.GetSession("Object_id")
+
+	//获取user的团队id
+	 corp_id_list:=[]string{}
+corplist:=new(models.DhUserCorp).List(userid)
+	corp_id_list=append(corp_id_list,utils.ToString(userid["user_id"]))
+	for _,v :=range corplist{
+		corp_id_list=append(corp_id_list,v.CorpId )
+
+	}
+
 	search := c.GetString("search")
 	status := c.GetString("status")
 	if len(search) > 0 {
-		cond := orm.NewCondition()
+		qs:=new(models.DiDatasource).Query()
 		if len(search) > 0 {
 			c.Data["search"] = search
 			mpurl = mpurl + "&search=" + search
-			condor := cond.Or("name__icontains", search)
+			qs=qs.Filter("name__icontains",search)
 			if len(status) > 0 {
 				c.Data["status"] = status
 				int, _ := strconv.Atoi(status)
 				mpurl = mpurl + "&status=" + status
-				condor = cond.AndCond(condor).And("status", int)
+				qs=qs.Filter("status",int)
 			} else {
 				c.Data["status"] = "nil"
 			}
 
-			number, _ := new(models.DiDatasource).Query().Offset((page - 1) * page_size).Limit(page_size).SetCond(condor).OrderBy("-create_time").All(&list)
-			total, _ = new(models.DiDatasource).Query().SetCond(condor).Count()
+			number, _ := qs.Filter("group_id__in",corp_id_list).Offset((page - 1) * page_size).Limit(page_size).OrderBy("-create_time").All(&list)
+			total, _ = qs.Filter("group_id__in",corp_id_list).Count()
 			if total%page_size != 0 {
 				total_page = total/page_size + 1
 			} else {
@@ -55,12 +68,19 @@ func (c *SourceShareController) List() {
 			c.Data["status"] = status
 			int, _ := strconv.Atoi(status)
 			filters["status"] = int
+
 			mpurl = mpurl + "&status=" + status
 		} else {
 			c.Data["status"] = "nil"
 		}
-
-		total, total_page, list = new(models.DiDatasource).OrderPager(page, page_size, filters, "-create_time")
+		number, _ := new(models.DiDatasource).Query().Filter("group_id__in",corp_id_list).Offset((page - 1) * page_size).Limit(page_size).OrderBy("-create_time").All(&list)
+		total, _ = new(models.DiDatasource).Query().Filter("group_id__in",corp_id_list).Count()
+		if total%page_size != 0 {
+			total_page = total/page_size + 1
+		} else {
+			total_page = total / page_size
+		}
+		fmt.Print(number)
 		fmt.Println(list, "---------------------list--------------------")
 	}
 	data := []utils.P{}
@@ -222,11 +242,13 @@ func (c *SourceShareController) ShareCorp() {
 				diSourceSharefilter["di_datasource_id"]=id
 				diSourceSharefilter["corpid"]=corp
 				DiSourceShare := new(models.DiSourceShare).List(diSourceSharefilter)
+				//由于查询出的成员是一样的分享状态，和字段控制，所以只取第一个就行了
 				if DiSourceShare[0].Fields=="1"{
 					dhcorp.Status=2
 					break
 				}else {
-
+		//由于创建dhcorp 时候没有创建多余字段，所以我暂时利用vcode 字段来存储东西
+					dhcorp.Vcode=DiSourceShare[0].Fields
 					dhcorp.Status=0
 					break
 				}
@@ -264,11 +286,22 @@ func (c *SourceShareController) SaveShareCorp() {
 	fmt.Print(args)
 	m:=args.([]interface{})
 	for _,v:=range m{
+		deletefilter:=utils.P{}
 		corp:=make(map[string]interface{})
 		fiter:=v.(map[string]interface{})
 		corp["corp_id"]=fiter["corpid"]
-		parameter:=fiter["filter"]
+		deletefilter["corpid"]=fiter["corpid"]
+		deletefilter["di_datasource_id"]=datasourceid
+		 delectlist:=new(models.DiSourceShare).OrderList(deletefilter)
+		 fmt.Print(delectlist)
+		 for _,v:=range delectlist{
+			 //先全部删除团队和数据源的信息
+			 flag:=new(models.DiSourceShare).Delete(v.ObjectId)
+			 fmt.Print(flag)
+		 }
 
+
+		parameter:=fiter["filter"]
 		//查询出团队的所有成员
 		DhUserCorp := new(models.DhUserCorp).OrderList(corp, "-create_time")
 		fmt.Print(DhUserCorp)

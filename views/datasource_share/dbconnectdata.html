@@ -35,7 +35,7 @@
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/tables\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"connect_id\":" + "\"" + dbid + "\"" + ",\"db\":\"" + db + "\"}}",
+            data: "{\"act\":\"v2/datasource/tables\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\",\"connect_id\":" + "\"" + dbid + "\"" + ",\"db\":\"" + db + "\"}}",
             success: function (data) {
 
                 if (data.code == 200) {
@@ -80,16 +80,16 @@
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/table_info\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"table\":" + "\"" + name + "\"" + ",\"connect_id\":\"" + dbid +"\",\"db\":\""+db+"\"}}",
+            data: "{\"act\":\"v2/datasource/table_info\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\",\"table\":" + "\"" + name + "\"" + ",\"connect_id\":\"" + dbid +"\",\"db\":\""+db+"\"}}",
             success: function (data) {
                 if (data.code == 200) {
-                    debugger
+
                     //获取头字段
                     var headtr = "<tr id='headtr' style='width: 100%' >"
                     for (var i = 0; i < dataSource.length; i++) {
                         if (dataSource[i].name == name) {
                             for (var b = 0; b < dataSource[i].th.length; b++) {
-                                    debugger
+
                                 if (dataSource[i].th[b].type == "varchar"||dataSource[i].th[b].type == "series") {
 
                                     headtr += "<td data-key='co' style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + "  style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ dataSource[i].th[b].o +"\""+ "  value="+"\"" + dataSource[i].th[b].n +"\""+ "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
@@ -133,7 +133,7 @@
                                 $.each(lis, function (t, li) {
 
                                     if($(headli).find("input").val()==t) {
-                                        debugger
+
                                         if (i % 2 == 1) {
                                             tr += "<td style='border: 1px solid #F0F0F0;background-color: #d9d9d9'>" + li + "</td>"
                                         } else {
@@ -169,7 +169,7 @@
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/table_info\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\"2f6f0ce5c7ca6ea09a2818f72ce4851d\",\"table\":" + "\"" + name + "\"" + ",\"connect_id\":\"" + dbid +"\",\"db\":\""+db+"\"}}",
+            data: "{\"act\":\"v2/datasource/table_info\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\",\"table\":" + "\"" + name + "\"" + ",\"connect_id\":\"" + dbid +"\",\"db\":\""+db+"\"}}",
             success: function (data) {
                 if (data.code == 200) {
                     console.log(data.msg.head, 'head')
@@ -178,7 +178,7 @@
                     var headtr = "<tr id='headtr' style='width: 100%' >"
                     $.each(data.msg.head, function (i, head) {
 
-                debugger
+
 
                         if (head.type == "varchar") {
                             headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ head.o +"\""+ " value=" +"\""+ head.o +"\""+ "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
@@ -289,7 +289,7 @@
             success: function (data) {
                 if (data.code == 200) {
                     common_close_dialog(true)
-                    debugger
+
 
                 }
                 if (data.code == 405) {
@@ -367,7 +367,7 @@ $.each(sheellist, function (i, file) {
 
 
         args.corp_id = "5850c142f502ec42a7000023"
-        args.auth = "2f6f0ce5c7ca6ea09a2818f72ce4851d"
+        args.auth = auth_userid
         args.ds = ds
         data.act = "v2/datasource/multi_save"
         data.args = args
