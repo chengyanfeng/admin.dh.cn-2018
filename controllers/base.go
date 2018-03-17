@@ -158,7 +158,7 @@ func (c *AdminController) init(i int) {
 	Authname := c.GetSession("Authname")
 	c.Data["Authname"] = Authname
 	c.Data["auth_id"]=c.GetSession("auth")
-
+	c.Data["Object_id"]=c.GetSession("Object_id")
 	c.Data["Menu"] = Menu
 }
 

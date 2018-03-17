@@ -56,14 +56,25 @@
     function get_sheet_datasource_data(name, url) {
         //清空表
         $('#urltables').html("")
+        //获取数据库全局参数
+        ShareDataSourceArgs.format=response1.msg.ext
+        ShareDataSourceArgs.url=url
+        //清空不需要的参数值
+        ShareDataSourceArgs._id=""
+        ShareDataSourceArgs.connect_id=""
+        ShareDataSourceArgs.db=""
+        ShareDataSourceArgs.table=""
 
+        //发送的参数
+        data.act="v2/datasource/test_file"
+        data.args=ShareDataSourceArgs
         $.ajax({
             processData: false,
             contentType: false,
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/test_file\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\",\"url\":" + "\"" + url + "\"" + ",\"format\":\"" + response1.msg.ext + "\"}}",
+            data: JSON.stringify(data),
             success: function (data) {
                 if (data.code == 200) {
                     //获取头字段
@@ -133,13 +144,25 @@
         //清空表
         $('#urltables').html("")
 
+        //获取数据库全局参数
+        ShareDataSourceArgs.format=response1.msg.ext
+        ShareDataSourceArgs.url=url
+        //清空不需要的参数值
+        ShareDataSourceArgs._id=""
+        ShareDataSourceArgs.connect_id=""
+        ShareDataSourceArgs.db=""
+        ShareDataSourceArgs.table=""
+
+        //发送的参数
+        data.act="v2/datasource/test_file"
+        data.args=ShareDataSourceArgs
         $.ajax({
             processData: false,
             contentType: false,
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/test_file\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\",\"url\":" + "\"" + url + "\"" + ",\"format\":\"" + response1.msg.ext + "\"}}",
+            data: JSON.stringify(data),
             success: function (data) {
                 if (data.code == 200) {
                     console.log(data.msg.head, 'head')
@@ -297,7 +320,7 @@
                     dsItem.url = file.url
                     dsItem.format = response1.msg.ext
                     dsItem.type = "file"
-                    dsItem.group_id = "5850c142f502ec42a7000023"
+                    dsItem.group_id = user_id
                     dsItem.delete_line = 0
                     dsItem.fh = 1
                     dsItem.hide = 0
@@ -310,7 +333,7 @@
         });
 
 
-        args.corp_id = "5850c142f502ec42a7000023"
+        args.corp_id = user_id
         args.auth=auth_userid
         args.ds = ds
         data.act = "v2/datasource/multi_save"

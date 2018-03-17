@@ -29,28 +29,35 @@
     function getconnect_db() {
         //清空表
         $('#urltables').html("")
-
+        data.act="v2/connect/list"
+        data.args=ShareDataSourceArgs
         $.ajax({
             processData: false,
             contentType: false,
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/connect/list\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\" }}",
+            data: JSON.stringify(data),
             success: function (data) {
                 if (data.code == 200) {
-
+                    console.log(data.msg)
                     //获取每列
                     var tr = "<tr>"
                     $.each(data.msg, function (i, db) {
                         j=i+1
 
-                        tr +=  "<td  align=\"center\" class='dblist' style='border: 1px solid #F0F0F0;height:100px;background-color: #d9d9d9' format="+db.format+" dbid=" + db._id + ">" + db.name + "</td>" ;
+                        tr +=  "<td  align=\"center\" class='dblist' style='border: 3px solid #F0F0F0;cursor:pointer;height:100px;background-color: #CCFFFF' format="+db.format+" dbid=" + db._id + ">" + db.name + "</td>" ;
                         if (j%3==0) {
                             tr += "</tr>"
                             $("#dbtables").append(tr);
                             tr="<tr>"
-                        }
+                        }else {
+                            if (data.msg.length==j){
+                                tr += "</tr>"
+                                $("#dbtables").append(tr);
+                            }
+
+                                    }
                     });
 
 
@@ -141,7 +148,7 @@
         dbs.host=$("#host").attr("value")
         args.db=dbs
         args.auth=auth_userid
-        args.corp_id="5850c142f502ec42a7000023"
+        args.corp_id=user_id
         args.format=$("#select option:selected").text();
         dbconnectsave.args=args
         dbconnectsave.act="v2/connect/save"

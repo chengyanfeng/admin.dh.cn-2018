@@ -1,7 +1,8 @@
 /**
- * 获取user_id 全局变量
+ * 获取auth_id 和user_id 全局变量
  */
 var auth_userid=$("#Auth").attr("auth_id")
+var user_id=$("#Auth").attr("user_id")
 
 /**
  * 获取当前宽度和屏幕总宽度，弹层居中
@@ -677,6 +678,30 @@ function center(width) {
     $("#dialogchange").css("width", width);
     $("#dialogchange").css("margin", "0px");
     popup($("#dialogchange"));
+
+}
+
+//定义数据源分享的全局变量data 和url
+
+var data={
+    act:"",
+    args:""
+
+}
+//分享所发送的所有参数的集合。
+/*function ShareDataSourceArgs1({connect_id,db}) {
+    this.obj={corp_id:user_id,auth:auth_userid,connect_id:connect_id,db:db}
+
+}*/
+ShareDataSourceArgs={
+    corp_id:user_id,
+    auth:auth_userid,
+    connect_id:'',
+    db:'{}',
+    table:'',
+    _id:'',
+    url:'',
+    format:''
 
 }
 

@@ -98,13 +98,25 @@
         }
     })
     function getfilterlist(dataid, corpid) {
+        //获取数据库全局参数
+        ShareDataSourceArgs._id=dataid
+
+        //清空不需要的参数值
+        ShareDataSourceArgs.format=""
+        ShareDataSourceArgs.connect_id=""
+        ShareDataSourceArgs.db=""
+        ShareDataSourceArgs.table=""
+        ShareDataSourceArgs.url=""
+        //发送的参数
+        data.act="v2/datasource/get"
+        data.args=ShareDataSourceArgs
         $.ajax({
             processData: false,
             contentType: false,
             async: false,
             type: 'post',
             url: "https://dev.datahunter.cn/rpc",
-            data: "{\"act\":\"v2/datasource/get\",\"args\":{\"corp_id\":\"5850c142f502ec42a7000023\",\"auth\":\""+auth_userid+"\",\"_id\":\"" + dataid + "\"}}",
+            data: JSON.stringify(data),
             success: function (data) {
 
                 if (data.code == 200) {
