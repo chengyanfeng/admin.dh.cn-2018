@@ -95,8 +95,8 @@ corplist:=new(models.DhUserCorp).List(userid)
 				DhCorpIdArray:=make([]string,0)
 				for _, v := range DiSourceShare {
 					DhCorpfilter := utils.P{}
-					DhCorpfilter["object_id"] = v.Corpid
-					DhCorp := new(models.DhCorp).Find(v.Corpid)
+					DhCorpfilter["object_id"] = v.CorpId
+					DhCorp := new(models.DhCorp).Find(v.CorpId)
 					fmt.Print(DhCorp)
 					if len(DhCorpArray)>0{
 
@@ -224,7 +224,12 @@ func (c *SourceShareController) ShareCorp() {
 	corpidlist:=c.GetString("corpIdlist")
 	corplist:=strings.Split(corpidlist,",")
 	fmt.Print(corpidlist)
+	//数据源id
 	c.Data["id"]=id
+	//获取数据源name
+	didatasource:=new(models.DiDatasource).Find(id)
+	c.Data["DatasourceName"]=didatasource.Name
+
 	//获取所有的团队
 	 dhcorps:=[]models.DhCorp{}
 	filtersAllUser := map[string]interface{}{}
@@ -281,6 +286,7 @@ func (c *SourceShareController) SaveShareCorp() {
 	a:=	*utils.JsonDecode([]byte(utils.ToString(data)))
 
 	datasourceid:=a["datasourceid"]
+	datasourcename:=a["datasourcename"]
 	fmt.Print(datasourceid)
 	args:=a["args"]
 	fmt.Print(args)
@@ -308,13 +314,39 @@ func (c *SourceShareController) SaveShareCorp() {
 		for _,v:=range DhUserCorp{
 			disourceshare:=new(models.DiSourceShare)
 			disourceshare.DiDatasourceId=utils.ToString(datasourceid);
-			disourceshare.Auth=v.ObjectId
-			disourceshare.Corpid=v.CorpId
+			disourceshare.UserId=v.ObjectId
+			disourceshare.CorpId=v.CorpId
+			disourceshare.Name=utils.ToString(datasourcename)
 			disourceshare.Fields=utils.ToString(parameter)
+			//如果字段不是为1 的话，说明是部分显示
+			if parameter=="1"{
+			disourceshare.Ifshow="1"
+			}else {
+				disourceshare.Ifshow="0"
+			}
 			flag := disourceshare.Save()
 			if flag==true{
-				//暂时不做处理
+		//保存到关联表中
+		//先把上面保存的数据，根据uerid,和corpid,和dataource_id 三个条件确定一个数据 查询出来
+			dhrelationmap:=map[string]interface{}{}
+			dhrelationmap["user_id"]=v.ObjectId
+			dhrelationmap["corp_id"]=v.CorpId
+			dhrelationmap["di_datasource_id"]=utils.ToString(datasourceid)
+			fmt.Println(dhrelationmap,"---------map------")
+			//查询出上面保存的那条数据
+		disourceshareandrelation:=new(models.DiSourceShare).Find(dhrelationmap)
+		dhrelation:=new(models.DhRelation)
+		dhrelation.Name=disourceshareandrelation.Name
+		dhrelation.CorpId=disourceshareandrelation.CorpId
+		dhrelation.UserId=disourceshareandrelation.UserId
+		dhrelation.RelateId=disourceshareandrelation.ObjectId
+		dhrelation.Auth="Hshare"
+		dhrelation.RelateType="di_dataource"
 
+		shareflag:=dhrelation.Save()
+		if shareflag==true{
+			//暂时不做处理
+		}
 			}
 
 

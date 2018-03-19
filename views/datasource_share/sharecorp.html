@@ -1,7 +1,7 @@
 <div id="pad-wrapper" class="form-page">
     <div class="row-fluid form-wrapper">
         <div class="span12 column" style="overflow: auto;height: 350px;width:490px;float:left" id="userCorp" >
-            <input id="datashareid" style="display: none" value="{{.id}}"/>
+            <input id="datashareid" style="display: none" name="{{.DatasourceName}}" value="{{.id}}"/>
             <table operation="update" object="admin/datasource"  class="table table-bordered table-hover"
                    style="border: 0px solid #dddddd !important;">
                 <thead>
@@ -72,6 +72,7 @@
         }
     })
    function showfilter() {
+
        $.each($(".sharecorplist"),function () {
            var flag = $(this).prop("checked")
            if (flag == true) {
@@ -94,6 +95,10 @@
             $("#save_sharecorp").css("display","none")
             var dataid = $("#datashareid").val()
             getfilterlist(dataid, corpid);
+            //给上面添加进去的元素绑定筛选事件
+            savafield()
+
+
 
         }
     })
@@ -126,13 +131,14 @@
                     $.each(data.msg.th, function (i, th) {
 
                         tr = "<tr class=\"datafilter\"> <td style=\"border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" + th.n + "</td> " +
-                                "<td style=\"border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" +
-                                "<select id='fitershow' style=\"height:28px;width:90px;\"  > " +
+                                "<td style=\"border-style:none;width:115px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" +
+                                "<select   class='fitershow' style=\"height:28px;width:90px;\"  > " +
                                 "<option value='1' selected> 显示</option>" +
                                 "<option value='0'>不显示</option>" +
                                 "</select>" +
                                 "</td>" +
                                 " <td style='display: none'>" + corpid + "</td>" +
+                                "<td style='display: none;border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;'>字段:<input class='field'  placeholder='字段用,隔开' style='width: 117px;float: none;'></input> " +
                                 "</tr>"
                         $("#datasharefilter").append(tr)
                     })
@@ -143,6 +149,7 @@
         })
     }
     var datasourcefilter = {
+        datasourcename:'',
         datasourceid: '',
         args: ''
     }
@@ -160,10 +167,12 @@
             var showfilter = {
                 n: '',
                 show: '',
+                field:''
 
             }
-            showfilter.n = $(tr).find('td:eq(0)').text()
+            showfilter.n = $(this).find('td:eq(0)').text()
             showfilter.show = $($(this).find('td:eq(1)')).find('option:selected').val()
+            showfilter.field = $($(this).find('td:eq(3)')).find(':input').val()
             cropfilterlist.push(showfilter)
           })
         corpfilter.corpid=$(tr).find('td:eq(2)').text()
@@ -241,6 +250,7 @@
         })
         datasourcefilter.args=sendshowfilters
         datasourcefilter.datasourceid=$("#datashareid").val()
+        datasourcefilter.datasourcename=$("#datashareid").attr("name")
         fomdata.append("data",JSON.stringify(datasourcefilter))
 
         $.ajax({
@@ -252,6 +262,7 @@
             data: fomdata,
             success: function (data) {
                 if (data.code==200){
+
                     window.location.reload(true);
                 }
                 else {
@@ -284,6 +295,24 @@
             }
         })
     }
+    //判断显示的字段
+function savafield() {
+
+    $(".fitershow").change(function () {
+        var flag = $(this).val()
+        if (flag=='0'){
+            $(this).parent().next().next().css("display","")
+
+            debugger
+        }else {
+            $($(this).parent().next().next()).find("input").attr("value","")
+            $(this).parent().next().next().css("display","none")
+        }
+    })
+
+
+}
+
 
     window.onload = checkcorp();
 
