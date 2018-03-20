@@ -313,16 +313,16 @@ func (c *SourceShareController) SaveShareCorp() {
 		fmt.Print(DhUserCorp)
 		for _,v:=range DhUserCorp{
 			disourceshare:=new(models.DiSourceShare)
-			disourceshare.DiDatasourceId=utils.ToString(datasourceid);
+			disourceshare.DatasourceId=utils.ToString(datasourceid);
 			disourceshare.UserId=v.ObjectId
 			disourceshare.CorpId=v.CorpId
 			disourceshare.Name=utils.ToString(datasourcename)
 			disourceshare.Fields=utils.ToString(parameter)
 			//如果字段不是为1 的话，说明是部分显示
 			if parameter=="1"{
-			disourceshare.Ifshow="1"
+			disourceshare.IsFullShow="1"
 			}else {
-				disourceshare.Ifshow="0"
+				disourceshare.IsFullShow="0"
 			}
 			flag := disourceshare.Save()
 			if flag==true{
