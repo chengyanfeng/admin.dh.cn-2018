@@ -18,17 +18,17 @@
             <div class="filter-field">
                 <span>状态:</span>
                 <select  name="status" id="status" class="select2" style="width: 140px;height:30px">
-                    {{if eq .status "nil"}}
+                    {{if eq .shareflag "nil"}}
                     <option value="" selected="selected" >全部</option>
                     <option value="0" >停用</option>
                     <option value="1" >启用</option>
 
-                    {{else if eq .status "0"}}
+                    {{else if eq .shareflag "0"}}
                     <option value=""  >全部</option>
                     <option value="0" selected="selected">停用</option>
                     <option value="1" >启用</option>
 
-                    {{else if eq .status "1"}}
+                    {{else if eq .shareflag "1"}}
                     <option value=""  >全部</option>
                     <option value="0" >停用</option>
                     <option value="1" selected="selected">启用</option>
