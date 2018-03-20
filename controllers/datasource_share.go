@@ -88,7 +88,7 @@ corplist:=new(models.DhUserCorp).List(userid)
 		for _, info := range list {
 			Screen := utils.P{}
 			DiSourceShareFilter := utils.P{}
-			DiSourceShareFilter["DiDatasourceId"] = info.ObjectId
+			DiSourceShareFilter["DatasourceId"] = info.ObjectId
 			DiSourceShare := new(models.DiSourceShare).List(DiSourceShareFilter)
 			if len(DiSourceShare) > 0 {
 				DhCorpArray := make([]string, 0)
@@ -244,7 +244,7 @@ func (c *SourceShareController) ShareCorp() {
 		for _,corp:=range corplist{
 			if v.ObjectId==corp{
 				diSourceSharefilter:=utils.P{}
-				diSourceSharefilter["di_datasource_id"]=id
+				diSourceSharefilter["datasource_id"]=id
 				diSourceSharefilter["corpid"]=corp
 				DiSourceShare := new(models.DiSourceShare).List(diSourceSharefilter)
 				//由于查询出的成员是一样的分享状态，和字段控制，所以只取第一个就行了
@@ -297,7 +297,7 @@ func (c *SourceShareController) SaveShareCorp() {
 		fiter:=v.(map[string]interface{})
 		corp["corp_id"]=fiter["corpid"]
 		deletefilter["corpid"]=fiter["corpid"]
-		deletefilter["di_datasource_id"]=datasourceid
+		deletefilter["datasource_id"]=datasourceid
 		 delectlist:=new(models.DiSourceShare).OrderList(deletefilter)
 		 fmt.Print(delectlist)
 		 for _,v:=range delectlist{
@@ -331,7 +331,7 @@ func (c *SourceShareController) SaveShareCorp() {
 			dhrelationmap:=map[string]interface{}{}
 			dhrelationmap["user_id"]=v.ObjectId
 			dhrelationmap["corp_id"]=v.CorpId
-			dhrelationmap["di_datasource_id"]=utils.ToString(datasourceid)
+			dhrelationmap["datasource_id"]=utils.ToString(datasourceid)
 			fmt.Println(dhrelationmap,"---------map------")
 			//查询出上面保存的那条数据
 		disourceshareandrelation:=new(models.DiSourceShare).Find(dhrelationmap)
