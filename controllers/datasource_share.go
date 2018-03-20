@@ -37,18 +37,18 @@ corplist:=new(models.DhUserCorp).List(userid)
 	}
 
 	search := c.GetString("search")
-	status := c.GetString("status")
+	shareflag  := c.GetString("status")
 	if len(search) > 0 {
 		qs:=new(models.DiDatasource).Query()
 		if len(search) > 0 {
 			c.Data["search"] = search
 			mpurl = mpurl + "&search=" + search
 			qs=qs.Filter("name__icontains",search)
-			if len(status) > 0 {
-				c.Data["status"] = status
-				int, _ := strconv.Atoi(status)
-				mpurl = mpurl + "&status=" + status
-				qs=qs.Filter("status",int)
+			if len(shareflag ) > 0 {
+				c.Data["shareflag"] = shareflag
+				int, _ := strconv.Atoi(shareflag )
+				mpurl = mpurl + "&status=" + shareflag
+				qs=qs.Filter("share_flag",int)
 			} else {
 				c.Data["status"] = "nil"
 			}
@@ -64,14 +64,14 @@ corplist:=new(models.DhUserCorp).List(userid)
 		}
 
 	} else {
-		if len(status) > 0 {
-			c.Data["status"] = status
-			int, _ := strconv.Atoi(status)
+		if len(shareflag) > 0 {
+			c.Data["shareflag"] = shareflag
+			int, _ := strconv.Atoi(shareflag)
 			filters["status"] = int
 
-			mpurl = mpurl + "&status=" + status
+			mpurl = mpurl + "&status=" + shareflag
 		} else {
-			c.Data["status"] = "nil"
+			c.Data["share_flag"] = "nil"
 		}
 		number, _ := new(models.DiDatasource).Query().Filter("group_id__in",corp_id_list).Offset((page - 1) * page_size).Limit(page_size).OrderBy("-create_time").All(&list)
 		total, _ = new(models.DiDatasource).Query().Filter("group_id__in",corp_id_list).Count()
