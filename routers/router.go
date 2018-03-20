@@ -18,7 +18,9 @@ func init() {
 	beego.InsertFilter("admin/invitationcode/*", beego.BeforeRouter, BaseFilter)
 	//上传文件
 	beego.Router("admin/file_upload", &controllers.IndexController{}, "post:FileUploader")
-	//登录
+	beego.Router("admin/file_test", &controllers.IndexController{}, "post:Filetest")
+
+	//登录Filetest
 	beego.Router("admin/login", &controllers.LoginController{}, "get:Get")
 	beego.Router("admin/login", &controllers.LoginController{}, "post:Login")
 	beego.Router("admin/logout", &controllers.LoginController{}, "get:Quit")
@@ -68,6 +70,8 @@ func init() {
 	beego.Router("admin/datasource_pub/update", &controllers.DatasourcePubController{}, "post:Update")
 	beego.Router("admin/datasource_pub/remove", &controllers.DatasourcePubController{}, "get:Remove")
 	beego.Router("admin/datasource_pub/listremove", &controllers.DatasourcePubController{}, "post:ListRemove")
+	beego.Router("admin/datasource_pub/showdata", &controllers.DatasourcePubController{}, "get:ShowData")
+
 	//大屏模版管理
 	beego.Router("admin/screen_template/list", &controllers.ScreenTemplateController{}, "get:List")
 	beego.Router("admin/screen_template/create", &controllers.ScreenTemplateController{}, "get:Create")
@@ -88,6 +92,19 @@ func init() {
 	beego.Router("admin/invitation_code/add", &controllers.InvitationCodeController{}, "get:Add")
 	beego.Router("admin/invitation_code/remove", &controllers.InvitationCodeController{}, "get:Remove")
 	beego.Router("admin/invitation_code/listremove", &controllers.InvitationCodeController{}, "post:ListRemove")
+
+
+	//数据权限
+	beego.Router("admin/sourceshare/list", &controllers.SourceShareController{}, "get:List")
+	beego.Router("admin/sourceshare/create", &controllers.SourceShareController{}, "get:Create")
+	beego.Router("admin/sourceshare/add", &controllers.SourceShareController{}, "post:Add")
+	beego.Router("admin/sourceshare/remove", &controllers.SourceShareController{}, "get:Remove")
+	beego.Router("admin/sourceshare/listremove", &controllers.SourceShareController{}, "post:ListRemove")
+	beego.Router("admin/sourceshare/showdata", &controllers.SourceShareController{}, "get:ShowData")
+	beego.Router("admin/sourceshare/sharecorp", &controllers.SourceShareController{}, "get:ShareCorp")
+	beego.Router("admin/sourceshare/dbconnect", &controllers.SourceShareController{}, "get:DbConnect")
+	beego.Router("admin/sourceshare/savesharecorp", &controllers.SourceShareController{}, "post:SaveShareCorp")
+
 	//自动注入路由
 	//beego.AutoRouter(&controllers.CorpController{})
 	//beego.AutoRouter(&controllers.SourcetypeController{})

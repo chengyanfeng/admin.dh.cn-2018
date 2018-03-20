@@ -2,20 +2,21 @@
     <div class="row-fluid form-wrapper">
         <div class="span12 column" style="position:relative;height:355px">
             <div class="form-group" style="position:absolute;height:30px;width:100%">
+
             </div>
         <table id="wokaotesttable">
         </table>
             <input  id="dataurl" value="{{.url}}"  style="display: none"/>
-
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
     var peopleOptions;
     var myColumns = []
     var arg = {
-        corp_id:"5850c142f502ec42a7000023",
-        auth:"2f6f0ce5c7ca6ea09a2818f72ce4851d",
+        corp_id:user_id,
+        auth:auth_userid,
         _id:$("#dataurl").val()
     }
     var dataname = {
@@ -78,9 +79,7 @@
         };
         $table = $("#wokaotesttable").bootstrapTable(peopleOptions);
     }
-
-
-    function getColumns() {
+function getColumns() {
 // 加载动态表格
         $.ajax({
             url: "https://dev.datahunter.cn/rpc",
@@ -128,5 +127,4 @@
     };
     window.onload=getColumns();
 </script>
-
 

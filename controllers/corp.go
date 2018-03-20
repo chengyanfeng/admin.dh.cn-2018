@@ -60,7 +60,6 @@ func (c *CorpController) List() {
 			filters["status"] = int
 			mpurl = mpurl + "&status=" + status
 		} else {
-
 			c.Data["status"] = "nil"
 		}
 
@@ -151,6 +150,7 @@ func (c *CorpController) Add() {
 		c.EchoJsonOk()
 	}
 }
+
 func (c *CorpController) Remove() {
 	c.Require("id")
 	id := c.GetString("id")

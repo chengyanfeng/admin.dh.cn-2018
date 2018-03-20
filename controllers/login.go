@@ -33,6 +33,7 @@ func (c *LoginController) Login() {
 		c.StopRun()
 	}
 	c.SetSession("auth", user.Auth)
+	c.SetSession("Object_id",user.ObjectId)
 	c.SetSession("Authname", user.Name)
 	c.EchoJsonOk()
 }

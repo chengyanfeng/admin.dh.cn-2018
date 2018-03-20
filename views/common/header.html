@@ -19,6 +19,9 @@
     <link href="/admin/static/css/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
     <link href="/admin/static/css/sweetalert.css" rel="stylesheet" type="text/css" />
     <link href="/admin/static/css/uploader.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/basic.min.css" rel="stylesheet" type="text/css" />
+    <link href="/admin/static/css/dropzone.min.css" rel="stylesheet" type="text/css" />
+
     <link href="/admin/static/css/chengyanfeng.css" rel="stylesheet" type="text/css" />
 
 </head>
@@ -30,7 +33,7 @@
             </a>
             <ul class="nav pull-right">
                 <li class="settings hidden-phone">
-        <a class="dropdown-toggle hidden-phone">欢迎,{{ .Authname}}&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        <a class="dropdown-toggle hidden-phone"  id="Auth"  auth_id="{{.auth_id}}" user_id="{{.Object_id}}">欢迎,{{ .Authname}}&nbsp;&nbsp;&nbsp;&nbsp;</a>
                 </li>
                 <li class="settings hidden-phone">
                     <a href="/admin/logout" class="dropdown-toggle hidden-phone">退出登录</a>

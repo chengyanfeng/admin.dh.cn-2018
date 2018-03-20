@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	"strconv"
-
 	"common.dh.cn/models"
 	"common.dh.cn/utils"
 	"github.com/astaxie/beego/orm"
@@ -12,7 +11,6 @@ import (
 type ScreenTemplateController struct {
 	AdminController
 }
-
 func (c *ScreenTemplateController) List() {
 	var mpurl = "/screen_template/list?"
 	c.init(3)
@@ -70,7 +68,9 @@ func (c *ScreenTemplateController) List() {
 			Screen["Name"] = info.Name
 			Screen["Status"] = info.Status
 			Screen["CreateTime"] = info.CreateTime.Format("2006-01-02 15:04:05")
+			/*
 			Screen["Description"] = info.Description
+			*/
 			data = append(data, Screen)
 		}
 	}
@@ -89,7 +89,9 @@ func (c *ScreenTemplateController) Update() {
 		dxScreenTemplate.Name = c.GetString("name")
 	}
 	if c.GetString("description") != "" {
+		/*
 		dxScreenTemplate.Description = c.GetString("description")
+		*/
 	}
 	if c.GetString("status") != "" {
 		int, err := strconv.Atoi(c.GetString("status"))
@@ -158,4 +160,18 @@ func (c *ScreenTemplateController) Edit() {
 	}
 	c.Data["object"] = &template
 	c.TplName = "screen_template/edit.html"
+}
+func (c *ScreenTemplateController) Add() {
+	c.Require("id")
+	id := c.GetString("id")
+	template := new(models.DxScreenTemplate).Find(id)
+	if template == nil {
+		c.EchoJsonErr("模版不存在")
+		c.StopRun()
+	}
+	c.Data["object"] = &template
+
+
+
+	c.TplName = "screen_template/updatafile.html"
 }

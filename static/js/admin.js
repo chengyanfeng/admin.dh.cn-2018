@@ -861,7 +861,7 @@ function common_init_uploader(input, view) {
     var uploader = new Duploader({
         btn_open: input,
         multiple: false,
-        upload_url: "/file_upload",
+        upload_url: "/admin/file_upload",
         upload_type: "post"
     });
     console.log(input)

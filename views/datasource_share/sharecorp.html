@@ -1,0 +1,320 @@
+<div id="pad-wrapper" class="form-page">
+    <div class="row-fluid form-wrapper">
+        <div class="span12 column" style="overflow: auto;height: 350px;width:490px;float:left" id="userCorp" >
+            <input id="datashareid" style="display: none" name="{{.DatasourceName}}" value="{{.id}}"/>
+            <table operation="update" object="admin/datasource"  class="table table-bordered table-hover"
+                   style="border: 0px solid #dddddd !important;">
+                <thead>
+                </thead>
+                <tbody>
+
+                {{- range .dhcorps}}
+                <tr class="showlastone">
+                    <td style="border-style:none;width:30px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">
+                        <input type="checkbox" class="sharecorplist" flagstatus="{{.Status}}"  filter="{{.Vcode}}"></td>
+                    <td style="border-style:none;width:100px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Name}}</td>
+                    <td style="border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;">{{.Email}}</td>
+
+                    <td style="border-style:none;width: 116px;overflow: hidden;text-overflow: ellipsis;float:left;height:43px;display: none">
+                        <select name="sharecorp" id="sharecorp" title="改变用户角色" class="sharecorp"
+                                style="height:28px;width:90px;">
+                        {{ if eq  .Status 0}}
+                            <option value="1">全部显示</option>
+                            <option value="0" selected>部分显示</option>
+                      {{else}}
+                            <option value="1" selected>全部显示</option>
+                            <option value="0" >部分显示</option>
+                        {{ end }}
+                        </select>
+                    </td>
+
+                    <td style="display: none" Object_id="{{.ObjectId}}">{{.ObjectId}}</td>
+
+
+                </tr>
+                {{- end}}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="span12 column" id="datasharefilter"  style="overflow: auto;height: 350px;width:490px;float:right;display:none"  >
+
+            <table operation="update" object="admin/datasource"
+                   class="table table-bordered table-hover" style="border: 0px solid #dddddd !important;">
+                <thead>
+                </thead>
+                <tbody>
+                </tbody>
+
+            </table>
+
+        </div>
+        <div id="savefilter" style="display:none ">
+            <input type="button" value="保存" style="margin-left:200px;margin-top: 20px"
+                   onclick="savefilter()" class="btn-flat default"/>
+            {{/*<input type="button" value="取消" class="btn btn-lg"  style="" onclick="cancelfilter()"/>*/}}
+        </div>
+        <div id="save_sharecorp" style="">
+            <input type="button" value="保存" id="savesharedata"  class="btn-flat default" style="margin-left:300px; "
+                   onclick="save_sharecorp()"/>
+            <input type="button" value="取消" style="" class="btn btn-lg"   onclick="window.location.reload()"/>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(".sharecorplist").change(function () {
+        var flag = $(this).prop("checked")
+        if (flag == true) {
+            $(this).parent().parent().children('td:eq(3)').css('display', '')
+        } else {
+            $(this).parent().parent().children('td:eq(3)').css('display', 'none')
+        }
+    })
+   function showfilter() {
+
+       $.each($(".sharecorplist"),function () {
+           var flag = $(this).prop("checked")
+           if (flag == true) {
+               $(this).parent().parent().children('td:eq(3)').css('display', '')
+           } else {
+               $(this).parent().parent().children('td:eq(3)').css('display', 'none')
+           }
+       })
+   }
+    $(".sharecorp").change(function () {
+        var flag = $(this).attr("value")
+        var corpid = $(this).parent().parent().children('td:eq(4)').text()
+        if (flag == 0) {
+
+            //显示字段选项
+            $("#datasharefilter").css("display", "")
+            $("#savefilter").css("display","")
+           //隐藏团队表
+           $("#userCorp").css("display","none")
+            $("#save_sharecorp").css("display","none")
+            var dataid = $("#datashareid").val()
+            getfilterlist(dataid, corpid);
+            //给上面添加进去的元素绑定筛选事件
+            savafield()
+
+
+
+        }
+    })
+    function getfilterlist(dataid, corpid) {
+        //获取数据库全局参数
+        ShareDataSourceArgs._id=dataid
+
+        //清空不需要的参数值
+        ShareDataSourceArgs.format=""
+        ShareDataSourceArgs.connect_id=""
+        ShareDataSourceArgs.db=""
+        ShareDataSourceArgs.table=""
+        ShareDataSourceArgs.url=""
+        //发送的参数
+        data.act="v2/datasource/get"
+        data.args=ShareDataSourceArgs
+        $.ajax({
+            processData: false,
+            contentType: false,
+            async: false,
+            type: 'post',
+            url: "https://dev.datahunter.cn/rpc",
+            data: JSON.stringify(data),
+            success: function (data) {
+
+                if (data.code == 200) {
+
+                    $("#datasharefilter").empty()
+                    console.log(data.msg.th)
+                    $.each(data.msg.th, function (i, th) {
+
+                        tr = "<tr class=\"datafilter\"> <td style=\"border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" + th.n + "</td> " +
+                                "<td style=\"border-style:none;width:115px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" +
+                                "<select   class='fitershow' style=\"height:28px;width:90px;\"  > " +
+                                "<option value='1' selected> 显示</option>" +
+                                "<option value='0'>不显示</option>" +
+                                "</select>" +
+                                "</td>" +
+                                " <td style='display: none'>" + corpid + "</td>" +
+                                "<td style='display: none;border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;'>字段:<input class='field'  placeholder='字段用,隔开' style='width: 117px;float: none;'></input> " +
+                                "</tr>"
+                        $("#datasharefilter").append(tr)
+                    })
+
+
+                }
+            }
+        })
+    }
+    var datasourcefilter = {
+        datasourcename:'',
+        datasourceid: '',
+        args: ''
+    }
+
+    var cacheshowfilters = []
+
+    function savefilter() {
+
+        var cropfilterlist=[]
+        var corpfilter={
+            filter:'',
+            corpid:''
+        }
+        $.each($("#datasharefilter tr"), function (i, tr) {
+            var showfilter = {
+                n: '',
+                show: '',
+                field:''
+
+            }
+            showfilter.n = $(this).find('td:eq(0)').text()
+            showfilter.show = $($(this).find('td:eq(1)')).find('option:selected').val()
+            showfilter.field = $($(this).find('td:eq(3)')).find(':input').val()
+            cropfilterlist.push(showfilter)
+          })
+        corpfilter.corpid=$(tr).find('td:eq(2)').text()
+        corpfilter.filter=cropfilterlist
+        if (cacheshowfilters.length>0){
+            var flag=1
+            $.each(cacheshowfilters,function (i,showfilters) {
+
+                if (showfilters.corpid==corpfilter.corpid){
+                    cacheshowfilters[i].filter=corpfilter.filter;
+                    flag=0
+                    return false
+                }
+            })
+
+            debugger
+            if (flag==1){
+                cacheshowfilters.push(corpfilter)
+                }
+
+        }else {
+        cacheshowfilters.push(corpfilter)
+        }
+        //显示团队表隐藏字段表
+        //隐藏字段选项
+        $("#datasharefilter").css("display", "none")
+        $("#savefilter").css("display","none")
+        //显示团队表
+        $("#userCorp").css("display","")
+        $("#save_sharecorp").css("display","")
+
+
+
+
+
+    }
+    function cancelfilter() {
+        //隐藏字段选项
+        $("#datasharefilter").css("display", "none")
+        $("#savefilter").css("display","none")
+        //显示团队表
+        $("#userCorp").css("display","")
+        $("#save_sharecorp").css("display","")
+
+    }
+    var fomdata=new FormData()
+    function save_sharecorp() {
+        debugger
+        var sendshowfilters = []
+
+        $.each($(".sharecorplist"),function (i,td) {
+            var flag = $(td).prop("checked");
+            if(flag==true){
+                if($($(td).parent().parent().children('td:eq(3)')).find('option:selected').val()=="0"){
+                    $.each(cacheshowfilters, function (i, cacheshowfilter) {
+                        if (cacheshowfilter.corpid == $(td).parent().parent().children('td:eq(4)').text()) {
+                            sendshowfilters.push(cacheshowfilter)
+                        }
+
+                    })
+                }else {
+                   var corpfilter={
+                       filter:'',
+                       corpid:''
+                   }
+                   corpfilter.filter="1"
+                    corpfilter.corpid=$(td).parent().parent().children('td:eq(4)').text()
+                    sendshowfilters.push(corpfilter)
+                }
+
+
+
+        }
+
+        })
+        datasourcefilter.args=sendshowfilters
+        datasourcefilter.datasourceid=$("#datashareid").val()
+        datasourcefilter.datasourcename=$("#datashareid").attr("name")
+        fomdata.append("data",JSON.stringify(datasourcefilter))
+
+        $.ajax({
+            processData: false,
+            contentType: false,
+            async: false,
+            type: 'post',
+            url: "/admin/sourceshare/savesharecorp",
+            data: fomdata,
+            success: function (data) {
+                if (data.code==200){
+
+                    window.location.reload(true);
+                }
+                else {
+                       alert(data.msg)
+                }
+            }
+        })
+
+    }
+    function checkcorp() {
+        //判断哪个团队是被选取的，依次要自动checked
+        $.each($(".sharecorplist"),function () {
+
+            var status = $(this).attr("flagstatus")
+            if (status=='2'||status=='0'){
+                debugger
+                $(this).attr("checked",true);
+            }
+            if(status=='0'){
+                var cachesfilter=""
+                var corpfilter={
+                    filter:'',
+                    corpid:''
+                }
+                cachesfilter=$(this).attr("filter")
+                corpfilter.corpid=$(this).parent().parent().find('td:eq(4)').text()
+                corpfilter.filter=cachesfilter
+                cacheshowfilters.push(corpfilter)
+                console.log(cachesfilter)
+            }
+        })
+    }
+    //判断显示的字段
+function savafield() {
+
+    $(".fitershow").change(function () {
+        var flag = $(this).val()
+        if (flag=='0'){
+            $(this).parent().next().next().css("display","")
+
+            debugger
+        }else {
+            $($(this).parent().next().next()).find("input").attr("value","")
+            $(this).parent().next().next().css("display","none")
+        }
+    })
+
+
+}
+
+
+    window.onload = checkcorp();
+
+    window.onload = showfilter();
+</script>

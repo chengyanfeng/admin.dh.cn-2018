@@ -99,6 +99,7 @@ func (c *DatasourcePubController) List() {
 			DiDatasourceType := new(models.DiDatasourceType).Find(DiDatasourceTypefilter)
 			dhdatasource := utils.P{}
 			dhdatasource["ObjectId"] = info.ObjectId
+			dhdatasource["DisourceObjectId"] = info.DiDatasourceId
 			if DiDatasourceType == nil {
 				dhdatasource["TypeName"] = ""
 			} else {
@@ -191,7 +192,8 @@ func (c *DatasourcePubController) ListRemove() {
 
 }
 func (c *DatasourcePubController) ShowData() {
-
+	c.Data["url"]=c.GetString("id")
+	fmt.Print(c.GetString("id"))
 	c.TplName = "datasource_pub/showData.html"
 }
 func (c *DatasourcePubController) Remove() {
