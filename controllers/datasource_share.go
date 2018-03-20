@@ -50,7 +50,7 @@ corplist:=new(models.DhUserCorp).List(userid)
 				mpurl = mpurl + "&status=" + shareflag
 				qs=qs.Filter("share_flag",int)
 			} else {
-				c.Data["status"] = "nil"
+				c.Data["shareflag"] = "nil"
 			}
 
 			number, _ := qs.Filter("group_id__in",corp_id_list).Offset((page - 1) * page_size).Limit(page_size).OrderBy("-create_time").All(&list)
@@ -71,7 +71,7 @@ corplist:=new(models.DhUserCorp).List(userid)
 
 			mpurl = mpurl + "&status=" + shareflag
 		} else {
-			c.Data["share_flag"] = "nil"
+			c.Data["shareflag"] = "nil"
 		}
 		number, _ := new(models.DiDatasource).Query().Filter("group_id__in",corp_id_list).Offset((page - 1) * page_size).Limit(page_size).OrderBy("-create_time").All(&list)
 		total, _ = new(models.DiDatasource).Query().Filter("group_id__in",corp_id_list).Count()
