@@ -105,7 +105,7 @@ type AdminController struct {
 func (c *AdminController)getList()([]utils.P){
 	filter:=utils.P{}
 	FListMap:=[]utils.P{}
-	list:=new(models.DhList).List(filter)
+	list:=new(models.DhMenu).List(filter)
 	for _,fv :=range list{
 		if fv.FObjectId==""{
 			childmapList:=[]utils.P{}
