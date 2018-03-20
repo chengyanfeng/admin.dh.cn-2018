@@ -28,8 +28,8 @@ func (c *SourceShareController) List() {
 	userid["user_id"]=c.GetSession("Object_id")
 
 	//获取user的团队id
-	 corp_id_list:=[]string{}
-corplist:=new(models.DhUserCorp).List(userid)
+	corp_id_list:=[]string{}
+	corplist:=new(models.DhUserCorp).List(userid)
 	corp_id_list=append(corp_id_list,utils.ToString(userid["user_id"]))
 	for _,v :=range corplist{
 		corp_id_list=append(corp_id_list,v.CorpId )
@@ -37,20 +37,20 @@ corplist:=new(models.DhUserCorp).List(userid)
 	}
 
 	search := c.GetString("search")
-	status := c.GetString("status")
+	shareflag := c.GetString("status")
 	if len(search) > 0 {
 		qs:=new(models.DiDatasource).Query()
 		if len(search) > 0 {
 			c.Data["search"] = search
 			mpurl = mpurl + "&search=" + search
 			qs=qs.Filter("name__icontains",search)
-			if len(status) > 0 {
-				c.Data["status"] = status
-				int, _ := strconv.Atoi(status)
-				mpurl = mpurl + "&status=" + status
-				qs=qs.Filter("status",int)
+			if len(shareflag) > 0 {
+				c.Data["shareflag"] = shareflag
+				int, _ := strconv.Atoi(shareflag)
+				mpurl = mpurl + "&status=" + shareflag
+				qs=qs.Filter("share_flag",int)
 			} else {
-				c.Data["status"] = "nil"
+				c.Data["shareflag"] = "nil"
 			}
 
 			number, _ := qs.Filter("group_id__in",corp_id_list).Offset((page - 1) * page_size).Limit(page_size).OrderBy("-create_time").All(&list)
@@ -64,14 +64,14 @@ corplist:=new(models.DhUserCorp).List(userid)
 		}
 
 	} else {
-		if len(status) > 0 {
-			c.Data["status"] = status
-			int, _ := strconv.Atoi(status)
-			filters["status"] = int
+	if len(shareflag) > 0 {
+			c.Data["shareflag"] = shareflag
+			int, _ := strconv.Atoi(shareflag)
+			filters["share_flag"] = int
 
-			mpurl = mpurl + "&status=" + status
+			mpurl = mpurl + "&status=" + shareflag
 		} else {
-			c.Data["status"] = "nil"
+			c.Data["shareflag"] = "nil"
 		}
 		number, _ := new(models.DiDatasource).Query().Filter("group_id__in",corp_id_list).Offset((page - 1) * page_size).Limit(page_size).OrderBy("-create_time").All(&list)
 		total, _ = new(models.DiDatasource).Query().Filter("group_id__in",corp_id_list).Count()
@@ -229,7 +229,12 @@ func (c *SourceShareController) ShareCorp() {
 	//获取数据源name
 	didatasource:=new(models.DiDatasource).Find(id)
 	c.Data["DatasourceName"]=didatasource.Name
-
+//更新数据源分享状态
+	if didatasource.ShareFlag!=1{
+		didatasource.ShareFlag=1
+	flag:=didatasource.Save()
+	fmt.Println(flag)
+	}
 	//获取所有的团队
 	 dhcorps:=[]models.DhCorp{}
 	filtersAllUser := map[string]interface{}{}
