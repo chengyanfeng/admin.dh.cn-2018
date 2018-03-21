@@ -257,29 +257,33 @@
 
 
 
-                        if (head.type == "varchar") {
+                        if (head.type == "varchar"||head.type=="string"||head.type=="varchar2"||head.type=="series") {
                             headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ head.o +"\""+ " value=" +"\""+ head.o +"\""+ "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='series' selected>字符</option>\n" +
                                     "<option value='number'>数值</option>\n" +
-                                    "<option value='date'>时间</option>\n" +
+                                    "<option value='time'>时间</option>\n" +
+                                    "<option value='location'>地理位置</option>\n" +
                                     "</select></span>" + "</td>"
-                        } else if (head.type == "int") {
+                        } else if (head.type == "int"||head.type=="long"||head.type=="float"||head.type=="integer"||head.type=="int8"||head.type=="int32"||head.type=="int16") {
                             headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o= " +"\""+ head.o +"\""+ " value=" +"\""+ head.o +"\""+ "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='series' >字符</option>\n" +
                                     "<option value='number' selected>数值</option>\n" +
-                                    "<option value='date'>时间</option>\n" +
+                                    "<option value='time'>时间</option>\n" +
+                                    "<option value='location'>地理位置</option>\n" +
                                     "</select></span>" + "</td>"
-                        } else if (head.type == "date") {
+                        } else if (head.type == "datetime"||head.type=="date"||head.type=="timestamp") {
                             headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ head.o+"\"" + " value =" +"\""+ head.o +"\""+ "> <select id='selectType' class='sheelselect'  style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='series' >字符</option>\n" +
                                     "<option value='number'>数值</option>\n" +
-                                    "<option value='date' selected>时间</option>\n" +
+                                    "<option value='time' selected>时间</option>\n" +
+                                    "<option value='location'>地理位置</option>\n" +
                                     "</select></span>" + "</td>"
                         }else{
                             headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" +"\""+ head.o +"\""+ " value=" +"\""+ head.o +"\""+ "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='series' selected>字符</option>\n" +
                                     "<option value='number'>数值</option>\n" +
-                                    "<option value='date'>时间</option>\n" +
+                                    "<option value='time'>时间</option>\n" +
+                                    "<option value='location'>地理位置</option>\n" +
                                     "</select></span>" + "</td>"
                         }
                     })
