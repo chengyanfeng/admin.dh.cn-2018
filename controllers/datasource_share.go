@@ -25,7 +25,7 @@ func (c *SourceShareController) List() {
 	var mpurl = "/admin/sourceshare/list?"
 	c.init(5)
 	var total, total_page int64
-	var list []*models.DiDatasource
+
 	var Dhlist []*models.DhRelation
 	c.TplName = "datasource_share/index.html"
 	page, _ := c.GetInt64("page", 1)
@@ -73,7 +73,6 @@ func (c *SourceShareController) List() {
 			c.Data["shareflag"] = "nil"
 		}
 		total, total_page, Dhlist=	new(models.DhRelation).OrderPager(page, page_size, filters, "-create_time")
-		fmt.Println(list, "---------------------list--------------------")
 	}
 	data := []utils.P{}
 	if len(Dhlist) > 0 {
@@ -283,7 +282,7 @@ func (c *SourceShareController) SaveShareCorp() {
 		for _, v := range DhUserCorp {
 			disourceshare := new(models.DiDataSourceShare)
 			disourceshare.DatasourceId = utils.ToString(datasourceid);
-			disourceshare.UserId = v.ObjectId
+			disourceshare.UserId = v.UserId
 			disourceshare.CorpId = v.CorpId
 			disourceshare.Name = utils.ToString(datasourcename)
 			disourceshare.Fields = utils.ToString(parameter)
