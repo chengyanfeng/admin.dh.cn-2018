@@ -1,16 +1,16 @@
 package controllers
 
 import (
+	"bytes"
 	"fmt"
-	_ "github.com/astaxie/beego/httplib"
+	"io"
+	"io/ioutil"
+	"mime/multipart"
+	"net/http"
+
 	"common.dh.cn/def"
 	"common.dh.cn/utils"
-	"io/ioutil"
-	"net/http"
-	"bytes"
-	"mime/multipart"
-	"io"
-
+	_ "github.com/astaxie/beego/httplib"
 )
 
 type IndexController struct {
@@ -19,6 +19,10 @@ type IndexController struct {
 
 func (c *IndexController) Get() {
 	c.init(0)
+	license, _ := utils.GetLicense()
+	c.Data["Address"] = license.Address
+	c.Data["Number"] = license.Number
+	c.Data["Expire"] = license.Expire.Format("2006-01-02 15:04:05")
 	c.TplName = "index/index.html"
 }
 
@@ -47,19 +51,20 @@ func (c *IndexController) FileUploader() {
 	}
 	c.EchoJson(result)
 }
+
 //从接口中获取信息
 func (c *IndexController) Filetest() {
-		data,filename,_:= c.GetFile("data")
-		var b bytes.Buffer
-		w:=multipart.NewWriter(&b)
-		file1,_:=w.CreateFormFile("bin",filename.Filename)
-		io.Copy(file1,data)
-		fw,err:=w.CreateFormField("auth")
-		fw.Write([]byte("2f6f0ce5c7ca6ea09a2818f72ce4851d"))
-		w.Close()
-		req, err := http.NewRequest("POST", "https://dev.datahunter.cn/v2/api/upload", &b)
-		req.Header.Set("Content-Type", w.FormDataContentType())
-		req.Body=ioutil.NopCloser(&b)
+	data, filename, _ := c.GetFile("data")
+	var b bytes.Buffer
+	w := multipart.NewWriter(&b)
+	file1, _ := w.CreateFormFile("bin", filename.Filename)
+	io.Copy(file1, data)
+	fw, err := w.CreateFormField("auth")
+	fw.Write([]byte("2f6f0ce5c7ca6ea09a2818f72ce4851d"))
+	w.Close()
+	req, err := http.NewRequest("POST", "https://dev.datahunter.cn/v2/api/upload", &b)
+	req.Header.Set("Content-Type", w.FormDataContentType())
+	req.Body = ioutil.NopCloser(&b)
 	if err != nil {
 		// handle error
 	}
