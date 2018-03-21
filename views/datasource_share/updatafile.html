@@ -151,6 +151,7 @@
 
     //获取每个sheet的数据
     function get_sheet_data(name, url) {
+        debugger
         //清空表
         $('#urltables').html("")
 
@@ -176,27 +177,32 @@
             success: function (data) {
                 if (data.code == 200) {
                     console.log(data.msg.head, 'head')
+                    debugger
                     //获取头字段
                     console
                     var headtr = "<tr id='headtr' style='width: 100%' >"
                     $.each(data.msg.head, function (i, head) {
-                        if (dataSource[i].th[b].type == "string"||dataSource[i].th[b].type=='varchar'||dataSource[i].th[b].type=='series'||varchar2) {
+                        if (head.type == "string"||head.type=='varchar'||head.type=='series'||head.type=='varchar2') {
+                           debugger
                             headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname' sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + head.o + " value=" + head.n + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='string' selected>字符</option>\n" +
                                     "<option value='number'>数值</option>\n" +
                                     "<option value='time'>时间</option>\n" +
+                                    "<option value='location'>地理位置</option>\n" +
                                     "</select></span>" + "</td>"
-                        } else if (dataSource[i].th[b].type == "number"||dataSource[i].th[b].type == "long"||dataSource[i].th[b].type == "float"||dataSource[i].th[b].type == "integer"||dataSource[i].th[b].type == "int"||dataSource[i].th[b].type == "int8"||dataSource[i].th[b].type == "int16"||dataSource[i].th[b].type == "int32") {
+                        } else if (head.type == "number"||head.type == "long"||head.type == "float"||head.type == "integer"||head.type == "int"||head.type == "int8"||head.type == "int16"||head.type == "int32") {
                             headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o= " + head.o + " value=" + head.n + "> <select id='selectType' class='sheelselect' style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='string' >字符</option>\n" +
                                     "<option value='number' selected>数值</option>\n" +
                                     "<option value='time'>时间</option>\n" +
+                                    "<option value='location'>地理位置</option>\n" +
                                     "</select></span>" + "</td>"
-                        } else if (dataSource[i].th[b].type == "datetime"||dataSource[i].th[b].type == "date"||dataSource[i].th[b].type == "timestamp") {
+                        } else if (head.type == "datetime"||head.type == "date"||head.type == "timestamp") {
                             headtr += "<td  style='border: 2px solid #F0F0F0;background-color: #d0e9c6;height: 41px'>" + "<span style='font-size:12pt;font-weight:bold; color: #080808; font-family:新宋体'> <input  id='name' class='filedsname'  sheetname=" + name + " style='border: 0px;min-width: 30px;max-width: 100px;background-color: #d0e9c6;' o=" + head.o + "value=" + head.n + "> <select id='selectType' class='sheelselect'  style='background-color: #d0e9c6;width: 65px;height: 27px;margin: 0px'>\n" +
                                     "<option value='string' >字符</option>\n" +
                                     "<option value='number'>数值</option>\n" +
                                     "<option value='time' selected>时间</option>\n" +
+                                    "<option value='location'>地理位置</option>\n" +
                                     "</select></span>" + "</td>"
                         }
                     })
