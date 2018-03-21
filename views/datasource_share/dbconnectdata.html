@@ -174,7 +174,7 @@
                     }
                     headtr = headtr + "</tr>"
                     $("#urltables").append(headtr);
-                    debugger
+
                     //保存字段头信息到字段头列表中
                     var th = []
                     var sourcehead = {
@@ -484,14 +484,14 @@ $.each(sheellist, function (i, file) {
 
     //绑定点击tables左边tables事件
     $(".sheetname").bind('click', function () {
-        debugger
+
         get_sheet_datasource_data($(this).attr("name"))
         inputclick ();
         selectclick ();
     });
     //修改表的参数名的事件
     function inputclick (){  $(".filedsname").bind('blur', function () {
-        debugger
+
         var th = []
         th = get_sheet_head(th)
         for (var i = 0; i < dataSource.length; i++)

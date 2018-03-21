@@ -265,7 +265,7 @@
     function save_data() {
         // console.log(get_data())
         console.log(JSON.stringify(get_data()), 'post')
-        debugger
+
         $.ajax({
             processData: false,
             contentType: false,
@@ -279,7 +279,7 @@
 
                 }
                 if (data.code == 405) {
-                    debugger
+
                     var a = data.msg[0]
                     alert("保存失败，" + data.msg[0].name + "的" + data.msg[0].err + "请修改后重新保存")
                 }
@@ -414,7 +414,7 @@
 
         var th = []
         th = get_sheet_head(th)
-        debugger
+
         for (var i = 0; i < dataSource.length; i++)
             if (dataSource[i].name == th[0].name) {
                 dataSource[i].th = th

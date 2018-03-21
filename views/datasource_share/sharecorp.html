@@ -188,7 +188,6 @@
                 }
             })
 
-            debugger
             if (flag==1){
                 cacheshowfilters.push(corpfilter)
                 }
@@ -220,7 +219,7 @@
     }
     var fomdata=new FormData()
     function save_sharecorp() {
-        debugger
+
         var sendshowfilters = []
 
         $.each($(".sharecorplist"),function (i,td) {
@@ -278,7 +277,7 @@
 
             var status = $(this).attr("flagstatus")
             if (status=='2'||status=='0'){
-                debugger
+
                 $(this).attr("checked",true);
             }
             if(status=='0'){
@@ -303,7 +302,7 @@ function savafield() {
         if (flag=='0'){
             $(this).parent().next().next().css("display","")
 
-            debugger
+
         }else {
             $($(this).parent().next().next()).find("input").attr("value","")
             $(this).parent().next().next().css("display","none")
