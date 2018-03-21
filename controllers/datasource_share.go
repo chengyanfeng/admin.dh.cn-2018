@@ -14,6 +14,13 @@ type SourceShareController struct {
 }
 
 func (c *SourceShareController) List() {
+	defer func(){ // 必须要先声明defer，否则不能捕获到panic异常
+		fmt.Println("c")
+		if err:=recover();err!=nil{
+			fmt.Println(err) // 这里的err其实就是panic传入的内容，55
+		}
+		fmt.Println("d")
+	}()
 	var mpurl = "/admin/sourceshare/list?"
 	c.init(5)
 	var total, total_page int64
@@ -63,8 +70,8 @@ func (c *SourceShareController) List() {
 		} else {
 			c.Data["shareflag"] = "nil"
 		}
-		number, _ := new(models.DhRelation).Query().Filter("user_id", userid["user_id"]).GroupBy("relate_id").Offset((page - 1) * page_size).Limit(page_size).All(&Dhlist,"relate_id")
-		total, _ = new(models.DhRelation).Query().Filter("user_id", userid["user_id"]).GroupBy("relate_id").Count()
+		number, _ := new(models.DhRelation).Query().Filter("user_id", userid["user_id"]).Filter("relate_type", "di_datasource").GroupBy("relate_id").Offset((page - 1) * page_size).Limit(page_size).All(&Dhlist,"relate_id")
+		total, _ = new(models.DhRelation).Query().Filter("user_id", userid["user_id"]).Filter("relate_type", "di_datasource").GroupBy("relate_id").Count()
 		if total%page_size != 0 {
 			total_page = total/page_size + 1
 		} else {
@@ -79,16 +86,23 @@ func (c *SourceShareController) List() {
 				Screen := utils.P{}
 				DhRelation_corp := map[string]interface{}{}
 				DhRelation_corp["relate_id"] = info.RelateId
-				DhRelation_corp["user_id"]=c.GetSession("Object_id")
 				//通过数据源和user_id 再再查出来所有的corpid
 					var corpNameArry=[]string{}
 					DhRelationCorpid:=new(models.DhRelation).List(DhRelation_corp)
 					for _,v:=range DhRelationCorpid {
-						dhcorp:=new(models.DhCorp).Find(v.CorpId)
-						corpNameArry=append(corpNameArry,dhcorp.Name)
+						if v.CorpId==c.GetSession("Object_id"){
+							corpNameArry=append(corpNameArry,"---")
+						}else {
+							dhcorp:=new(models.DhCorp).Find(v.CorpId)
+							if dhcorp !=nil{
+							corpNameArry=append(corpNameArry,dhcorp.Name)
+							}
+						}
+
 					}
 						Screen["CorpName"] = utils.ToString(corpNameArry)
 						disource:=new(models.DiDatasource).Find(info.RelateId)
+						if disource!=nil{
 						Screen["Status"] = 0
 						Screen["ObjectId"] = disource.ObjectId
 						Screen["Url"] = disource.Url
@@ -97,6 +111,7 @@ func (c *SourceShareController) List() {
 						Screen["CreateTime"] = disource.CreateTime.Format("2006-01-02 15:04:05")
 						Screen["UpdateTime"] = disource.UpdateTime.Format("2006-01-02 15:04:05")
 						data = append(data, Screen)
+						}
 						}
 	}
 	c.Data["List"] = data
@@ -305,7 +320,7 @@ func (c *SourceShareController) SaveShareCorp() {
 				dhrelation.UserId = v.UserId
 				dhrelation.RelateId = v.ObjectId
 				dhrelation.Auth = "Hshare"
-				dhrelation.RelateType = utils.ToString(datasourceid)
+				dhrelation.RelateType = "di_datasource"
 
 				shareflag := dhrelation.Save()
 				if shareflag == true {
