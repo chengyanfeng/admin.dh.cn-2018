@@ -129,7 +129,7 @@
                     $("#datasharefilter").empty()
                     console.log(data.msg.th)
                     $.each(data.msg.th, function (i, th) {
-
+                        debugger
                         tr = "<tr class=\"datafilter\"> <td style=\"border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" + th.n + "</td> " +
                                 "<td style=\"border-style:none;width:115px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" +
                                 "<select   class='fitershow' style=\"height:28px;width:90px;\"  > " +
@@ -139,6 +139,7 @@
                                 "</td>" +
                                 " <td style='display: none'>" + corpid + "</td>" +
                                 "<td style='display: none;border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;'>字段:<input class='field'  placeholder='字段用,隔开' style='width: 117px;float: none;'></input> " +
+                                "<td style='display: none;'>"+th.o+" </td>' " +
                                 "</tr>"
                         $("#datasharefilter").append(tr)
                     })
@@ -165,6 +166,7 @@
         }
         $.each($("#datasharefilter tr"), function (i, tr) {
             var showfilter = {
+                o:'',
                 n: '',
                 show: '',
                 field:''
@@ -173,6 +175,7 @@
             showfilter.n = $(this).find('td:eq(0)').text()
             showfilter.show = $($(this).find('td:eq(1)')).find('option:selected').val()
             showfilter.field = $($(this).find('td:eq(3)')).find(':input').val()
+            showfilter.o=$(this).find('td:eq(4)').text()
             cropfilterlist.push(showfilter)
           })
         corpfilter.corpid=$(tr).find('td:eq(2)').text()
@@ -251,7 +254,7 @@
         datasourcefilter.datasourceid=$("#datashareid").val()
         datasourcefilter.datasourcename=$("#datashareid").attr("name")
         fomdata.append("data",JSON.stringify(datasourcefilter))
-
+        debugger
         $.ajax({
             processData: false,
             contentType: false,
