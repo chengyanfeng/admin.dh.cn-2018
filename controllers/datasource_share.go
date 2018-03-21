@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
 )
 
 type SourceShareController struct {
@@ -32,7 +33,8 @@ func (c *SourceShareController) List() {
 	filters := map[string]interface{}{}
 	userid := utils.P{}
 	userid["user_id"] = c.GetSession("Object_id")
-
+	filters["user_id"]=c.GetSession("Object_id")
+	filters["corp_id"]=c.GetSession("Object_id")
 	search := c.GetString("search")
 	shareflag := c.GetString("status")
 	if len(search) > 0 { /*
@@ -70,46 +72,34 @@ func (c *SourceShareController) List() {
 		} else {
 			c.Data["shareflag"] = "nil"
 		}
-		number, _ := new(models.DhRelation).Query().Filter("user_id", userid["user_id"]).Filter("relate_type", "di_datasource").GroupBy("relate_id").Offset((page - 1) * page_size).Limit(page_size).All(&Dhlist,"relate_id")
-		total, _ = new(models.DhRelation).Query().Filter("user_id", userid["user_id"]).Filter("relate_type", "di_datasource").GroupBy("relate_id").Count()
-		if total%page_size != 0 {
-			total_page = total/page_size + 1
-		} else {
-			total_page = total / page_size
-		}
-		fmt.Print(number)
+		total, total_page, Dhlist=	new(models.DhRelation).OrderPager(page, page_size, filters, "-create_time")
 		fmt.Println(list, "---------------------list--------------------")
 	}
 	data := []utils.P{}
 	if len(Dhlist) > 0 {
 		for _, info := range Dhlist {
 				Screen := utils.P{}
-				DhRelation_corp := map[string]interface{}{}
-				DhRelation_corp["relate_id"] = info.RelateId
-				//通过数据源和user_id 再再查出来所有的corpid
-					var corpNameArry=[]string{}
-					DhRelationCorpid:=new(models.DhRelation).List(DhRelation_corp)
-					for _,v:=range DhRelationCorpid {
-						if v.CorpId==c.GetSession("Object_id"){
-							corpNameArry=append(corpNameArry,"---")
-						}else {
+				didatasource:=new(models.DiDatasource).Find(info.RelateId)
+				if didatasource!=nil{
+					if didatasource.ShareFlag==1{
+						var corpNameArry =[]string{}
+						var dhsharelist []*models.DiDataSourceShare
+						new(models.DiDataSourceShare).Query().Filter("datasource_id",didatasource.ObjectId).GroupBy("corp_id").All(&dhsharelist,"corp_id")
+						for _,v:=range dhsharelist{
 							dhcorp:=new(models.DhCorp).Find(v.CorpId)
-							if dhcorp !=nil{
-							corpNameArry=append(corpNameArry,dhcorp.Name)
-							}
+							corpNameArry=append(corpNameArry, dhcorp.Name)
 						}
-
-					}
 						Screen["CorpName"] = utils.ToString(corpNameArry)
-						disource:=new(models.DiDatasource).Find(info.RelateId)
-						if disource!=nil{
+					}else {
+						Screen["CorpName"] = utils.ToString("---")
+					}
 						Screen["Status"] = 0
-						Screen["ObjectId"] = disource.ObjectId
-						Screen["Url"] = disource.Url
-						Screen["Name"] = disource.Name
-						Screen["Format"] = disource.Format
-						Screen["CreateTime"] = disource.CreateTime.Format("2006-01-02 15:04:05")
-						Screen["UpdateTime"] = disource.UpdateTime.Format("2006-01-02 15:04:05")
+						Screen["ObjectId"] = didatasource.ObjectId
+						Screen["Url"] = didatasource.Url
+						Screen["Name"] = didatasource.Name
+						Screen["Format"] = didatasource.Format
+						Screen["CreateTime"] = didatasource.CreateTime.Format("2006-01-02 15:04:05")
+						Screen["UpdateTime"] = didatasource.UpdateTime.Format("2006-01-02 15:04:05")
 						data = append(data, Screen)
 						}
 						}
@@ -314,18 +304,24 @@ func (c *SourceShareController) SaveShareCorp() {
 				//再把这条数据保存到DhRelation
 				//先查询出数据源的name
 				didatasource:=new(models.DiDatasource).Find(utils.ToString(datasourceid))
-				dhrelation := new(models.DhRelation)
-				dhrelation.Name = didatasource.Name
-				dhrelation.CorpId = v.CorpId
-				dhrelation.UserId = v.UserId
-				dhrelation.RelateId = v.ObjectId
-				dhrelation.Auth = "Hshare"
-				dhrelation.RelateType = "di_datasource"
+				didatasource.ShareFlag=1
+				//更改分享字段
+				flag:= didatasource.Save()
+				  if flag==true{
+					  dhrelation := new(models.DhRelation)
+					  dhrelation.Name = didatasource.Name
+					  dhrelation.CorpId = v.CorpId
+					  dhrelation.UserId = v.UserId
+					  dhrelation.RelateId =utils.ToString(datasourceid)
+					  dhrelation.Auth = "admin_share"
+					  dhrelation.RelateType = "di_datasource"
 
-				shareflag := dhrelation.Save()
-				if shareflag == true {
-					//暂时不做处理
-				}
+					  shareflag := dhrelation.Save()
+					  if shareflag == true {
+						  //暂时不做处理
+					  }
+				  }
+
 			}
 
 		}
