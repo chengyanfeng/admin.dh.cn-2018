@@ -3,11 +3,9 @@ package controllers
 import (
 	"common.dh.cn/utils"
 	"common.dh.cn/models"
-
 	"fmt"
 	"strconv"
 	"strings"
-
 )
 
 type SourceShareController struct {
@@ -25,8 +23,8 @@ func (c *SourceShareController) List() {
 	var mpurl = "/admin/sourceshare/list?"
 	c.init(5)
 	var total, total_page int64
-
 	var Dhlist []*models.DhRelation
+	var DiDataSourcelist []*models.DiDatasource
 	c.TplName = "datasource_share/index.html"
 	page, _ := c.GetInt64("page", 1)
 	page_size, _ := c.GetInt64("page_size", 10)
@@ -35,9 +33,10 @@ func (c *SourceShareController) List() {
 	userid["user_id"] = c.GetSession("Object_id")
 	filters["user_id"]=c.GetSession("Object_id")
 	filters["corp_id"]=c.GetSession("Object_id")
+	filters["relate_type"]="di_datasource"
 	search := c.GetString("search")
 	shareflag := c.GetString("status")
-	if len(search) > 0 { /*
+	if len(search) > 0 {
 		qs:=new(models.DiDatasource).Query()
 		if len(search) > 0 {
 			c.Data["search"] = search
@@ -51,28 +50,50 @@ func (c *SourceShareController) List() {
 			} else {
 				c.Data["shareflag"] = "nil"
 			}
+			var DiDataSourceIdList []string
 
-			number, _ := qs.Filter("user_id",corp_id_list).Offset((page - 1) * page_size).Limit(page_size).OrderBy("-create_time").All(&Dhlist)
-			total, _ = qs.Filter("group_id__in",corp_id_list).Count()
+			number, _ := qs.All(&DiDataSourcelist)
+			for _,v:=range DiDataSourcelist{
+				DiDataSourceIdList=	append(DiDataSourceIdList,
+					v.ObjectId)
+			}
+			fmt.Println(number)
+			//查询Dhrelation 的数据
+			DhRelationQs:=new(models.DhRelation).Query()
+			num,_:=DhRelationQs.Filter("user_id",c.GetSession("Object_id")).Filter("relate_type","di_datasource").Filter("relate_id__in",DiDataSourceIdList).OrderBy("-create_time").Offset((page - 1) * page_size).Limit(page_size).All(&Dhlist)
+			total,_=DhRelationQs.Filter("user_id",c.GetSession("Object_id")).Filter("relate_type","di_datasource").Filter("relate_id__in",DiDataSourceIdList).Count()
 			if total%page_size != 0 {
 				total_page = total/page_size + 1
 			} else {
 				total_page = total / page_size
 			}
-			fmt.Println(number)
+			fmt.Println(num)
 		}
 
-	*/} else {
+	} else {
 		if len(shareflag) > 0 {
+
 			c.Data["shareflag"] = shareflag
 			int, _ := strconv.Atoi(shareflag)
-			filters["status"] = int
 
 			mpurl = mpurl + "&status=" + shareflag
+			var DiDataSourceIdList []string
+
+			DiDataSourcelist:=new(models.DiDatasource).List(map[string]interface{}{"shareflag":int})
+			for _,v:=range DiDataSourcelist{
+				DiDataSourceIdList=append(DiDataSourceIdList, v.ObjectId)
+			}
+			filters["relate_id__in"]=DiDataSourceIdList
+			total, total_page, Dhlist=	new(models.DhRelation).OrderPager(page, page_size, filters, "-create_time")
+
 		} else {
 			c.Data["shareflag"] = "nil"
+			total, total_page, Dhlist=	new(models.DhRelation).OrderPager(page, page_size, filters, "-create_time")
+
 		}
-		total, total_page, Dhlist=	new(models.DhRelation).OrderPager(page, page_size, filters, "-create_time")
+
+
+
 	}
 	data := []utils.P{}
 	if len(Dhlist) > 0 {
@@ -88,11 +109,13 @@ func (c *SourceShareController) List() {
 							dhcorp:=new(models.DhCorp).Find(v.CorpId)
 							corpNameArry=append(corpNameArry, dhcorp.Name)
 						}
+						Screen["Status"] = 1
 						Screen["CorpName"] = utils.ToString(corpNameArry)
 					}else {
 						Screen["CorpName"] = utils.ToString("---")
-					}
 						Screen["Status"] = 0
+					}
+
 						Screen["ObjectId"] = didatasource.ObjectId
 						Screen["Url"] = didatasource.Url
 						Screen["Name"] = didatasource.Name
@@ -190,6 +213,7 @@ func (c *SourceShareController) ShowData() {
 }
 
 func (c *SourceShareController) ShareCorp() {
+
 	id := c.GetString("id")
 	corpidlist := c.GetString("corpIdlist")
 	corplist := strings.Split(corpidlist, ",")
@@ -218,7 +242,7 @@ func (c *SourceShareController) ShareCorp() {
 					diSourceSharefilter["corpid"] = corp
 					DiSourceShare := new(models.DiDataSourceShare).List(diSourceSharefilter)
 					//由于查询出的成员是一样的分享状态，和字段控制，所以只取第一个就行了
-					if DiSourceShare[0].Fields == "1" {
+					if DiSourceShare[0].IsFullShow == "1" {
 						dhcorp.Status = 2
 						break
 					} else {
@@ -274,7 +298,10 @@ func (c *SourceShareController) SaveShareCorp() {
 			flag := new(models.DiDataSourceShare).Delete(v.ObjectId)
 			fmt.Print(flag)
 		}
-
+		//把标志位置为0
+		didatasourceflag:=new(models.DiDatasource).Find(utils.ToString(datasourceid))
+		didatasourceflag.ShareFlag=0
+		 didatasourceflag.Save()
 		parameter := fiter["filter"]
 		//查询出团队的所有成员
 		DhUserCorp := new(models.DhUserCorp).OrderList(corp, "-create_time")
