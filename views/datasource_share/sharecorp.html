@@ -133,14 +133,14 @@
                         tr = "<tr class=\"datafilter\"> <td style=\"border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" + th.n + "</td> " +
                                 "<td style=\"border-style:none;width:115px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;\">" +
                                 "<select   class='fitershow' style=\"height:28px;width:90px;\"  > " +
-                                "<option value='0' selected> 显示</option>" +
-                                "<option value='1'>不显示</option>" +
+                                "<option value=0 selected> 显示</option>" +
+                                "<option value=1 >不显示</option>" +
                                 "</select>" +
                                 "</td>" +
                                 " <td style='display: none'>" + corpid + "</td>" +
                                 "<td style='display: none;border-style:none;width:160px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;float:left;height:43px;'>字段:<input class='field'  placeholder='字段用,隔开' style='width: 117px;float: none;'></input> " +
-                                "<td style='display: none;'>"+th.o+" </td>' " +
-                                "<td style='display: none;'>"+th.type+" </td>' \"" +
+                                "<td style='display: none;'>"+th.o+"</td>' " +
+                                "<td style='display: none;'>"+th.type+"</td>' \"" +
                                 "</tr>"
                         $("#datasharefilter").append(tr)
                     })
@@ -175,7 +175,7 @@
 
             }
             showfilter.n = $(this).find('td:eq(0)').text()
-            showfilter.hide = $($(this).find('td:eq(1)')).find('option:selected').val()
+            showfilter.hide = parseInt($($(this).find('td:eq(1)')).find('option:selected').val())
             showfilter.field = $($(this).find('td:eq(3)')).find(':input').val()
             showfilter.o=$(this).find('td:eq(4)').text()
             showfilter.type=$(this).find('td:eq(5)').text()
@@ -305,7 +305,7 @@ function savafield() {
 
     $(".fitershow").change(function () {
         var flag = $(this).val()
-        if (flag=='1'){
+        if (flag==1){
             $(this).parent().next().next().css("display","")
 
 
