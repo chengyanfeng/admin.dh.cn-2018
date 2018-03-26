@@ -103,14 +103,17 @@ func (c *SourceShareController) List() {
 				if didatasource!=nil{
 					if didatasource.ShareFlag==1{
 						var corpNameArry =[]string{}
+						var corpIdListArry=[]string{}
 						var dhsharelist []*models.DiDataSourceShare
 						new(models.DiDataSourceShare).Query().Filter("datasource_id",didatasource.ObjectId).GroupBy("corp_id").All(&dhsharelist,"corp_id")
 						for _,v:=range dhsharelist{
 							dhcorp:=new(models.DhCorp).Find(v.CorpId)
 							corpNameArry=append(corpNameArry, dhcorp.Name)
+							corpIdListArry=append(corpIdListArry,dhcorp.ObjectId)
 						}
 						Screen["Status"] = 1
 						Screen["CorpName"] = utils.ToString(corpNameArry)
+						Screen["CorpIdList"]=utils.ToString(corpIdListArry)
 					}else {
 						Screen["CorpName"] = utils.ToString("---")
 						Screen["Status"] = 0
@@ -216,7 +219,9 @@ func (c *SourceShareController) ShareCorp() {
 
 	id := c.GetString("id")
 	corpidlist := c.GetString("corpIdlist")
+	c.Data["corpIdlist"]=corpidlist
 	corplist := strings.Split(corpidlist, ",")
+
 	fmt.Print(corpidlist)
 	//数据源id
 	c.Data["id"] = id
@@ -228,6 +233,65 @@ func (c *SourceShareController) ShareCorp() {
 	dhcorps := []models.DhCorp{}
 	filtersAllUser := map[string]interface{}{}
 	filtersAllUser["status__gte"] = 0
+	if len(c.GetString("SearchCorpName"))>0{
+	filtersAllUser["name__icontains"]=c.GetString("SearchCorpName")
+	}
+	list := new(models.DhCorp).OrderList(filtersAllUser, "-create_time")
+	for _, v := range list {
+		dhcorp := models.DhCorp{}
+		dhcorp.ObjectId = v.ObjectId
+		dhcorp.Email = v.Email
+		dhcorp.Name = v.Name
+		if len(corplist) > 0 {
+			for _, corp := range corplist {
+				if v.ObjectId == corp {
+					diSourceSharefilter := utils.P{}
+					diSourceSharefilter["datasource_id"] = id
+					diSourceSharefilter["corpid"] = corp
+					DiSourceShare := new(models.DiDataSourceShare).List(diSourceSharefilter)
+					//由于查询出的成员是一样的分享状态，和字段控制，所以只取第一个就行了
+					if DiSourceShare[0].IsFullShow == "1" {
+						dhcorp.Status = 2
+						break
+					} else {
+						//由于创建dhcorp 时候没有创建多余字段，所以我暂时利用vcode 字段来存储东西
+						dhcorp.Vcode = DiSourceShare[0].Fields
+						dhcorp.Status = 0
+						break
+					}
+				} else {
+					dhcorp.Status = 1
+
+				}
+			}
+			dhcorps = append(dhcorps, dhcorp)
+		} else {
+			dhcorp.Status = 1
+			dhcorps = append(dhcorps, dhcorp)
+		}
+
+	}
+
+	c.Data["dhcorps"] = dhcorps
+	c.TplName = "datasource_share/sharecorp.html"
+}
+/*
+func (c *SourceShareController) SearchShareCorp() {
+
+	sharedata := c.GetString("sharedata")
+	searchCorp:=*utils.JsonDecode([]byte(utils.ToString(sharedata)))
+	id:=searchCorp["id"]
+	//数据源id
+	c.Data["id"] = id
+	corpName:=searchCorp["searchCorpName"]
+	//获取数据源name
+	didatasource := new(models.DiDatasource).Find(id)
+	c.Data["DatasourceName"] = didatasource.Name
+	//获取所有的团队
+	dhcorps := []models.DhCorp{}
+	filtersAllUser := map[string]interface{}{}
+	filtersAllUser["status__gte"] = 0
+	filtersAllUser["name__icontains"]=corpName
 	list := new(models.DhCorp).OrderList(filtersAllUser, "-create_time")
 	for _, v := range list {
 		dhcorp := models.DhCorp{}
@@ -266,6 +330,8 @@ func (c *SourceShareController) ShareCorp() {
 	c.Data["dhcorps"] = dhcorps
 	c.TplName = "datasource_share/sharecorp.html"
 }
+*/
+
 
 func (c *SourceShareController) DbConnect() {
 
