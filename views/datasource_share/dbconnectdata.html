@@ -45,7 +45,7 @@
             contentType: false,
             async: false,
             type: 'post',
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamicUrl,
             data: JSON.stringify(data),
             success: function (data) {
 
@@ -97,7 +97,7 @@
             contentType: false,
             async: false,
             type: 'post',
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamicUrl,
             data: JSON.stringify(data),
             success: function (data) {
                 if (data.code == 200) {
@@ -182,24 +182,33 @@
                         th: '',
                         name: ''
                     }
-                    //获取sheet的表头并且保存
-                    th = get_sheet_head(th)
-                    sourcehead.th = th
-                    sourcehead.name = name
-                    dataSource.push(sourcehead)
-
+                    var info=0
+                    for (var i=0;i<dataSource.length;i++){
+                        if (dataSource[i].name==name){
+                            info=1
+                            break
+                        }
+                    }
+                   //获取sheet的表头并且保存
+                    if (info==0) {
+                        th = get_sheet_head(th)
+                        sourcehead.th = th
+                        sourcehead.name = name
+                        //删除缓存的表头信息
+                        dataSource.push(sourcehead)
+                    }
 
                     //获取数据字段
 
                     if (data.msg.body != null) {
-
+                        debugger
                         $.each(data.msg.body, function (i, lis) {
                             //获取每列
                             var tr = "<tr>"
                             $.each($("#headtr td"), function (t, headli) {
                                 $.each(lis, function (t, li) {
 
-                                    if($(headli).find("input").val()==t) {
+                                    if($($(headli).find("input")).attr("o")==t) {
 
                                         if (i % 2 == 1) {
                                             tr += "<td style='border: 1px solid #F0F0F0;background-color: #d9d9d9'>" + li + "</td>"
@@ -246,7 +255,7 @@
             contentType: false,
             async: false,
             type: 'post',
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamicUrl,
             data: JSON.stringify(data),
             success: function (data) {
                 if (data.code == 200) {
@@ -304,7 +313,7 @@
 
                             $.each(lis, function (t, li) {
 
-                                if($(headli).find("input").val()==t){
+                                if($($(headli).find("input")).attr("o")==t){
                                 if (i % 2 == 1) {
                                     tr += "<td style='border: 1px solid #F0F0F0;background-color: #d9d9d9'>" + li + "</td>"
                                 } else {
@@ -366,7 +375,7 @@
             contentType: false,
             async: false,
             type: 'post',
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamicUrl,
             data: JSON.stringify(get_data()),
             success: function (data) {
                 if (data.code == 200) {
