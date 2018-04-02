@@ -3,6 +3,26 @@
  */
 var auth_userid=$("#Auth").attr("auth_id")
 var user_id=$("#Auth").attr("user_id")
+var  dynamichost=window.location.href
+var dynamicUrl=""
+var objectupurl=""
+if (dynamichost.indexOf("dev")>0){
+    dynamicUrl="https://dev.datahunter.cn/rpc"
+    objectupurl="/https://dev.datahunter.cn/v2/api/upload/"
+}
+if (dynamichost.indexOf("www")>0){
+    dynamicUrl="https://www.datahunter.cn/rpc"
+    objectupurl="/https://www.datahunter.cn/v2/api/upload/"
+}
+if (dynamichost.indexOf("test")>0){
+    dynamicUrl="https://test.datahunter.cn/rpc"
+    objectupurl="/https://test.datahunter.cn/v2/api/upload/"
+}
+if (dynamichost.indexOf("localhost")>0){
+    dynamicUrl="https://dev.datahunter.cn/rpc"
+    objectupurl="/https://dev.datahunter.cn/v2/api/upload/"
+}
+
 
 /**
  * 获取当前宽度和屏幕总宽度，弹层居中
