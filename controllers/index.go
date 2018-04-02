@@ -11,6 +11,8 @@ import (
 	"common.dh.cn/def"
 	"common.dh.cn/utils"
 	_ "github.com/astaxie/beego/httplib"
+
+	"strings"
 )
 
 type IndexController struct {
@@ -54,6 +56,23 @@ func (c *IndexController) FileUploader() {
 
 //从接口中获取信息
 func (c *IndexController) Filetest() {
+	//判断当前路径
+	var url="https://www.datahunter.cn/v2/api/upload"
+	var host=c.Ctx.Request.Host
+	 dynamicurl:=utils.ToString(host)
+	if strings.Index(dynamicurl,"test")>-1{
+		url="https://test.datahunter.cn/v2/api/upload"
+	}
+	if strings.Index(dynamicurl,"dev")>-1{
+		url="https://dev.datahunter.cn/v2/api/upload"
+	}
+	if strings.Index(dynamicurl,"localhost")>-1{
+		url="https://test.datahunter.cn/v2/api/upload"
+	}
+	 if strings.Index(dynamicurl,"www")>-1{
+		url="https://www.datahunter.cn/v2/api/upload"
+	}
+
 	data, filename, _ := c.GetFile("data")
 	var b bytes.Buffer
 	w := multipart.NewWriter(&b)
@@ -62,7 +81,7 @@ func (c *IndexController) Filetest() {
 	fw, err := w.CreateFormField("auth")
 	fw.Write([]byte("2f6f0ce5c7ca6ea09a2818f72ce4851d"))
 	w.Close()
-	req, err := http.NewRequest("POST", "https://dev.datahunter.cn/v2/api/upload", &b)
+	req, err := http.NewRequest("POST", url, &b)
 	req.Header.Set("Content-Type", w.FormDataContentType())
 	req.Body = ioutil.NopCloser(&b)
 	if err != nil {
