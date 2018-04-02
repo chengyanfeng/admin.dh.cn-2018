@@ -7,6 +7,7 @@ import (
 	"common.dh.cn/models"
 	"common.dh.cn/utils"
 	"github.com/astaxie/beego/orm"
+
 )
 
 type CorpController struct {
@@ -113,9 +114,24 @@ func (c *CorpController) Update() {
 
 	}
 	result := corp.Save()
+
 	if !result {
 		c.EchoJsonErr("更新失败")
 	} else {
+		if c.GetString("status") != "" {
+			int, err := strconv.Atoi(c.GetString("status"))
+			if err == nil {
+				if int==1{
+					url := fmt.Sprintf("https://%v", "www.datahunter.cn")
+					data := utils.P{"name": corp.Name, "url": url,"corp":"北京数猎天下科技有限公司"}
+					body := c.GetMailString("./views/templet/corp_invite.tpl", data)
+					if body != "" {
+						go utils.Mail(corp.Email, utils.JoinStr("DataHunter注册验证 ", utils.DateTimeStr()), body)
+					}
+				}
+			}
+
+		}
 		c.EchoJsonOk()
 	}
 }
