@@ -73,7 +73,7 @@
             contentType: false,
             async: false,
             type: 'post',
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamicUrl,
             data: JSON.stringify(data),
             success: function (data) {
                 if (data.code == 200) {
@@ -172,7 +172,7 @@
             contentType: false,
             async: false,
             type: 'post',
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamicUrl,
             data: JSON.stringify(data),
             success: function (data) {
                 if (data.code == 200) {
@@ -277,7 +277,7 @@
             contentType: false,
             async: false,
             type: 'post',
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamicUrl,
             data: JSON.stringify(get_data()),
             success: function (data) {
                 if (data.code == 200) {
