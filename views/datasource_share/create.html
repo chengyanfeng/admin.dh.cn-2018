@@ -1,6 +1,6 @@
 <div id="" class="">
     <div class="row-fluid form-wrapper" style="margin-bottom: 0px;">
-        <form operation="add" object="/https://dev.datahunter.cn/v2/api/upload/" id="dataform">
+        <form operation="add" object="" id="dataform">
             <span id="tip" class="color:red"></span>
             <div style="">
                 工作表类型：<select class="" id="select" style="margin-left:0px;width:75px;height:30px">
@@ -106,6 +106,10 @@
         }
     });
 
+    function changeUrl(){
 
+        $("#dataform").attr("object",objectupurl)
+    };
+    window.onload = changeUrl()
 </script>
 
