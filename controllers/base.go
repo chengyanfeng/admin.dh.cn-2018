@@ -7,7 +7,8 @@ import (
 	"common.dh.cn/controllers"
 	"common.dh.cn/utils"
 
-
+	"bytes"
+	"html/template"
 )
 
 var accountSub = []utils.P{
@@ -102,6 +103,7 @@ var Menu = []utils.P{
 type AdminController struct {
 	controllers.BaseController
 }
+
 func (c *AdminController)getList()([]utils.P){
 	filter:=utils.P{}
 	FListMap:=[]utils.P{}
@@ -130,6 +132,21 @@ func (c *AdminController)getList()([]utils.P){
 		}
 	}
 	return FListMap
+}
+
+func (c *AdminController)GetMailString(tplPath string, data interface{}) string {
+	tmpl, err := template.ParseFiles(tplPath)
+	if err != nil {
+		utils.Error(err)
+		return ""
+	}
+	var doc bytes.Buffer
+	err = tmpl.Execute(&doc, data)
+	if err != nil {
+		utils.Error(err)
+		return ""
+	}
+	return doc.String()
 }
 
 
