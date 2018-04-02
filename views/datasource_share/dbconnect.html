@@ -1,13 +1,16 @@
 <div id="" class="">
     <div class="row-fluid form-wrapper" style="margin-bottom: 0px;">
-        <form operation="add" object="/https://dev.datahunter.cn/v2/api/upload/" id="dataform">
+        <form operation="add" object="" id="dataform">
             <span id="tip" class="color:red"></span>
             <div style="">
                 工作表类型：<select class="" id="select" style="margin-left:0px;width:75px;height:30px">
                 <option value="已有连接">已有连接</option>
                 <option value="mysql">mysql</option>
                 <option value="orcle">orcle</option>
-
+                <option value="hive">hive</option>
+                <option value="postgresql">postgresql</option>
+                <option value="sqlserver">sqlserver</option>
+                <option value="greenplum">greenplum</option>
             </select>
             </div>
             <input value="" id="filename" name="filename" type="hidden"/>
@@ -36,7 +39,7 @@
             contentType: false,
             async: false,
             type: 'post',
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamicUrl,
             data: JSON.stringify(data),
             success: function (data) {
                 if (data.code == 200) {
@@ -157,7 +160,7 @@
             contentType: false,
             async: false,
             type: 'post',
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamicUrl,
             data: JSON.stringify(dbconnectsave),
             success: function (data) {
                 if (data.code == 200) {
@@ -175,4 +178,11 @@
         });
 
     }
+
+
+    function changeUrl(){
+        debugger
+        $("#dataform").attr("object",objectupurl)
+    };
+    window.onload = changeUrl();
 </script>
