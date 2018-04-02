@@ -34,7 +34,7 @@
 
         $.each(response1.msg.files, function (i, file) {
 
-            $("#sheet").append("<span> <input type=\"checkbox\" id=\"child\" name="+file.name+"  url= " + file.url + " \" class=\"Tlist_delect\">\n <li style='list-style:none' url=" + file.url + " class='sheetname' name=" + file.name + ">" + file.name + "</li> </span>");
+            $("#sheet").append("<span> <input type=\"checkbox\" id=\"child\" name="+file.name+"  url= " + file.url + " \" class=\"Tlist_delect\">\n <li style='cursor:pointer;list-style:none' url=" + file.url + " class='sheetname' onmouseover=\"this.style.cursor='hand'\" name=" + file.name + ">" + file.name + "</li> </span>");
             //获取数据源
             var th = []
             var sourcehead = {
@@ -428,5 +428,6 @@
 
     });
   }
+
 
 </script>
