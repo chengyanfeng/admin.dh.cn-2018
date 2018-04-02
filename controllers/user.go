@@ -9,6 +9,7 @@ import (
 	"common.dh.cn/models"
 	"common.dh.cn/utils"
 	"github.com/astaxie/beego/orm"
+
 )
 
 type UserController struct {
@@ -241,6 +242,13 @@ func (c *UserController) UpdateStatusAva() {
 	if !result {
 		c.EchoJsonErr("更新失败")
 	} else {
+		url := fmt.Sprintf("https://%v", "www.datahunter.cn")
+		data := utils.P{"name": user.Name, "url": url,"corp":"北京数猎天下科技有限公司"}
+		body := c.GetMailString("./views/templet/corp_invite.tpl", data)
+		if body != "" {
+			go utils.Mail(user.Email, utils.JoinStr("DataHunter注册验证 ", utils.DateTimeStr()), body)
+		}
+
 		c.EchoJsonOk()
 	}
 }
