@@ -82,7 +82,7 @@
 function getColumns() {
 // 加载动态表格
         $.ajax({
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamicUrl,
             data:JSON.stringify(dataname),
             type: 'post',
             dataType: "json",
@@ -113,7 +113,7 @@ function getColumns() {
                     $table.bootstrapTable(
                             "refreshOptions",
                             {
-                                url: "https://dev.datahunter.cn/rpc", // 获取数据的地址
+                                url: dynamicUrl, // 获取数据的地址
                                 queryParams:JSON.stringify(datadate) ,
                                 columns:myColumns,
 
