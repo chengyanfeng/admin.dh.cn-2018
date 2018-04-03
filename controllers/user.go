@@ -126,6 +126,13 @@ func (c *UserController) Add() {
 	user.Mobile = c.GetString("mobile")
 	user.Password = utils.Md5(c.GetString("password"), def.Md5Salt)
 	user.Auth = utils.Md5(c.GetString("email"), c.GetString("password"), rand.Intn(1000)*rand.Intn(1000))
+	dhuser:=new(models.DhUser).Find(map[string]interface{}{"email":user.Email})
+
+	if dhuser!=nil{
+		c.EchoJsonErr("用户已经存在")
+
+	}
+	
 	if c.GetString("status") == "1" {
 		user.Status = 1
 	} else {
