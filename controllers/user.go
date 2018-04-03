@@ -328,7 +328,7 @@ func (c *UserController) DelectAndAddCorp() {
 		if UserCorp.Role == "1" {
 			UserCorpadminCount := map[string]interface{}{}
 			UserCorpadminCount["corp_id"] = corp_id
-			UserCorpadminCount["role"] = 1
+			UserCorpadminCount["role"] = "admin"
 			adminCount := new(models.DhUserCorp).Count(UserCorpadminCount)
 			if adminCount < 2 {
 				c.EchoJsonErr("管理员唯一不可删除")
@@ -353,7 +353,7 @@ func (c *UserController) DelectAndAddCorp() {
 		}
 
 		DhUserCorp := new(models.DhUserCorp)
-		DhUserCorp.Role = "0"
+		DhUserCorp.Role = "user"
 		DhUserCorp.CorpId = Corp.ObjectId
 		DhUserCorp.UserId = user_id
 		DhUserCorpfilter["corpid"] = Corp.ObjectId
@@ -378,7 +378,7 @@ func (c *UserController) DelectAndAddCorp() {
 			c.StopRun()
 		}
 		userCorpfilterrole := map[string]interface{}{}
-		userCorpfilterrole["role"] = "1"
+		userCorpfilterrole["role"] = "admin"
 		userCorpfilterrole["object_id"] = object_id
 		if role == "0" {
 
