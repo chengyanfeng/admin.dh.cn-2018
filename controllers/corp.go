@@ -242,6 +242,7 @@ func (c *CorpController) GetUserCorp() {
 
 }
 func (c *CorpController) RemoveAndUser() {
+	//remove 为0 是删除，为1 是添加用户
 	c.Require("id")
 	id := c.GetString("id")
 	user_id := c.GetString("user_id")
@@ -257,15 +258,18 @@ func (c *CorpController) RemoveAndUser() {
 	if removed == "0" {
 		dhusercorp := new(models.DhUserCorp).Find(userCorp)
 		if dhusercorp == nil {
-
+			c.EchoJsonErr("团队不存在")
+			c.StopRun()
 		} else {
 			DhUserCorpCount := map[string]interface{}{}
 			DhUserCorpCount["corp_id"] = id
-			DhUserCorpCount["role"] = 3
+			DhUserCorpCount["role"] = "admin"
+			if dhusercorp.Role=="admin"{
 			adminCount := new(models.DhUserCorp).Count(DhUserCorpCount)
 			if adminCount < 2 {
 				c.EchoJsonErr("管理员唯一不可删除")
 				c.StopRun()
+			}
 			}
 			result := dhusercorp.Delete(userCorp)
 			if result != true {
@@ -278,7 +282,7 @@ func (c *CorpController) RemoveAndUser() {
 		usercorp := new(models.DhUserCorp)
 		usercorp.UserId = user_id
 		usercorp.CorpId = id
-		usercorp.Role = "1"
+		usercorp.Role = "user"
 		usercorpfilter["userid"] = user_id
 		usercorpfilter["corpid"] = id
 		usercorpflag := new(models.DhUserCorp).Find(usercorpfilter)
@@ -296,15 +300,15 @@ func (c *CorpController) ChangeUserRole() {
 	c.Require("id")
 	id := c.GetString("id")
 	role := c.GetString("role")
-	corp := new(models.DhUserCorp).Find(id)
-	if corp == nil {
+	dh_user_corp := new(models.DhUserCorp).Find(id)
+	if dh_user_corp == nil {
 
 		c.EchoJsonErr("团队不存在")
 		c.StopRun()
 	}
 	userCorpfilterrole := map[string]interface{}{}
-	userCorpfilterrole["role"] = "3"
-	userCorpfilterrole["object_id"] = id
+	userCorpfilterrole["role"] = "admin"
+	userCorpfilterrole["corp_id"] = dh_user_corp.CorpId
 	if role == "0" {
 
 		number := new(models.DhUserCorp).Count(userCorpfilterrole)
@@ -314,9 +318,14 @@ func (c *CorpController) ChangeUserRole() {
 
 		}
 	}
+	if role=="0"{
+		dh_user_corp.Role = "user"
+	}
+	if role=="1"{
+		dh_user_corp.Role = "admin"
+	}
 
-	corp.Role = role
-	result := corp.Save()
+	result := dh_user_corp.Save()
 	if !result {
 
 		c.EchoJsonErr("修改失败")
