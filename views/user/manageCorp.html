@@ -22,10 +22,10 @@
 
                         <td style="border-style:none;width: 116px;overflow: hidden;text-overflow: ellipsis;float:left;height:43px;">
                             <select  name="userRole" id="userRole" title="改变用户角色" class="userRole" style="height:28px;width:90px;">
-                                {{ if eq  .Role "0"}}
+                                {{ if eq  .Role "user"}}
                                 <option value="1" >管理员</option>
                                 <option value="0" selected>普通成员</option>
-                                {{ else }}
+                                {{ else if eq  .Role "admin" }}
                                 <option value="1" selected>管理员</option>
                                 <option value="0">普通成员</option>
                                 {{ end }}
