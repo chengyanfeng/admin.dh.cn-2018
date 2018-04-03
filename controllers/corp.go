@@ -370,6 +370,8 @@ func (c *CorpController) ListRemove() {
 	}
 	if len(argerr[0]) > 0 {
 		c.EchoJsonErr("部分更新失败")
+		c.StopRun()
+
 	}
 	c.EchoJsonOk()
 
