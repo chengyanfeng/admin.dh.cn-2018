@@ -48,8 +48,8 @@
                     <option value="is_dataX_user">Data-X</option>
                     {{  else  if eq .businesstype "is_dataX_user"  }}
                     <option value="" >全部</option>
-                    <option value="is_dataI_user" selected="selected">Data-I</option>
-                    <option value="is_dataX_user">Data-X</option>
+                    <option value="is_dataI_user" >Data-I</option>
+                    <option value="is_dataX_user" selected="selected" >Data-X</option>
                     {{end }}
                 </select>
             </div>
@@ -133,7 +133,7 @@
             {{ if   eq  0 (.List|len)  }}
             {{else}}
 
-            <input type="button" id="listdelect" class="btn btn-lg" value="删除"  disabled="disabled" >
+            <input type="button" id="listdelect" class="btn btn-lg" value="批量停用"  disabled="disabled" >
             <input type="button" id="listchangetype" class="btn btn-lg"  title="批量修改业务类型" value="批量修改业务" disabled="disabled" >
             {{end}}
         </div>
