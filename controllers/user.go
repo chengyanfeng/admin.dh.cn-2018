@@ -389,7 +389,14 @@ func (c *UserController) DelectAndAddCorp() {
 
 			}
 		}
-		UserCorp.Role = role
+		if role=="1"{
+			UserCorp.Role = "admin"
+
+		}
+		if role=="0"{
+			UserCorp.Role = "user"
+
+		}
 		result := UserCorp.Save()
 
 		if !result {
