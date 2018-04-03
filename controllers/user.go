@@ -130,6 +130,8 @@ func (c *UserController) Add() {
 
 	if dhuser!=nil{
 		c.EchoJsonErr("用户已经存在")
+		c.StopRun()
+
 
 	}
 	
@@ -225,6 +227,7 @@ func (c *UserController) Listremove() {
 	}
 	if len(argerr[0]) > 0 {
 		c.EchoJsonErr("删除失败")
+		c.StopRun()
 	}
 	c.EchoJsonOk()
 
