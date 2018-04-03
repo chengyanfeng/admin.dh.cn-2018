@@ -7,6 +7,7 @@ import (
 	"common.dh.cn/models"
 	"common.dh.cn/utils"
 	"github.com/astaxie/beego/orm"
+
 )
 
 type DatasourcePubController struct {
@@ -82,7 +83,8 @@ func (c *DatasourcePubController) List() {
 		}
 		if len(sourceType) > 0 {
 			c.Data["sourceType"] = sourceType
-			filters["datasource_type_id"] = sourceType
+			diDaType:=new(models.DiDatasourceType).Find(map[string]interface{}{"name":sourceType})
+			filters["datasource_type_id"] = diDaType.ObjectId
 			mpurl = mpurl + "&sourceType=" + sourceType
 
 		} else {
