@@ -379,7 +379,7 @@ func (c *UserController) DelectAndAddCorp() {
 		}
 		userCorpfilterrole := map[string]interface{}{}
 		userCorpfilterrole["role"] = "admin"
-		userCorpfilterrole["object_id"] = object_id
+		userCorpfilterrole["corp_id"] = UserCorp.CorpId
 		if role == "0" {
 
 			number := new(models.DhUserCorp).Count(userCorpfilterrole)
