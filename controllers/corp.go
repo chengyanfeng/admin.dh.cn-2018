@@ -152,7 +152,11 @@ func (c *CorpController) Add() {
 	Corp.Name = c.GetString("name")
 	Corp.Email = c.GetString("email")
 	Corp.Mobile = c.GetString("mobile")
-
+	FindCorp:=new(models.DhCorp).Find(map[string]interface{}{"email":Corp.Email})
+	if FindCorp!=nil{
+		c.EchoJsonErr("邮箱已经存在")
+		c.StopRun()
+	}
 	if c.GetString("status") == "1" {
 		Corp.Status = 1
 	} else {
@@ -163,7 +167,18 @@ func (c *CorpController) Add() {
 	if !result {
 		c.EchoJsonErr("注册失败")
 	} else {
+		dhCorp:=new(models.DhCorp).Find(map[string]interface{}{"email":Corp.Email})
+		dhUserCorp:=new(models.DhUserCorp)
+		dhUserCorp.Role="admin"
+		dhUserCorp.UserId=utils.ToString(c.GetSession("Object_id"))
+		dhUserCorp.CorpId=dhCorp.ObjectId
+
+	result:=dhUserCorp.Save()
+	if !result{
+		c.EchoJsonErr("管理员创建失败")
+	}else {
 		c.EchoJsonOk()
+	}
 	}
 }
 
