@@ -95,7 +95,14 @@ func (c *DatasourceTypeController) Update() {
 		c.StopRun()
 	}
 	if name != "" {
+		 DiDa:=[]*models.DiDatasourceType{}
+	new(models.DiDatasourceType).Query().Exclude("object_id",id).Filter("name",name).All(&DiDa)
+	if len(DiDa) >0{
+		c.EchoJsonErr("数据分类已经存在，请重新输入")
+		c.StopRun()
+	}else {
 		DiDatasourceType.Name = name
+	}
 	}
 	if c.GetString("status") == "1" {
 		int, _ := strconv.Atoi(c.GetString("status"))
@@ -146,6 +153,11 @@ func (c *DatasourceTypeController) Add() {
 	DiDatasourceType := new(models.DiDatasourceType)
 	DiDatasourceType.Name = c.GetString("name")
 	DiDatasourceType.Status = 0
+	findDatasourceType:=new(models.DiDatasourceType).Find(map[string]interface{}{"name":DiDatasourceType.Name})
+	if findDatasourceType!=nil{
+		c.EchoJsonErr("分类已经存在")
+		c.StopRun()
+	}
 	result := DiDatasourceType.Save()
 	if !result {
 		c.EchoJsonErr("创建失败")
