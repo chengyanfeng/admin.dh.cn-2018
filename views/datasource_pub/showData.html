@@ -15,7 +15,7 @@
     var myColumns = []
     var arg = {
         corp_id:"5850c142f502ec42a7000023",
-        auth:"2f6f0ce5c7ca6ea09a2818f72ce4851d",
+        auth:auth_userid,
         _id:$("#dataurl").val()
     }
     var dataname = {
@@ -83,7 +83,7 @@
     function getColumns() {
 // 加载动态表格
         $.ajax({
-            url: "https://dev.datahunter.cn/rpc",
+            url: dynamichost,
             data:JSON.stringify(dataname),
             type: 'post',
             dataType: "json",
@@ -114,7 +114,7 @@
                     $table.bootstrapTable(
                             "refreshOptions",
                             {
-                                url: "https://dev.datahunter.cn/rpc", // 获取数据的地址
+                                url: dynamichost, // 获取数据的地址
                                 queryParams:JSON.stringify(datadate) ,
                                 columns:myColumns,
 
