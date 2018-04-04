@@ -190,6 +190,10 @@ func (c *SourceShareController) Remove() {
 			c.EchoJsonErr("删除失败")
 
 		}else {
+			//把di_datasource_share 表里面的关联都删除
+			diDataSourceShare:=new(models.DiDataSourceShare)
+			flag:=diDataSourceShare.Delete(map[string]interface{}{"datasource_id":id})
+			fmt.Println(flag)
 			c.EchoJsonOk()
 
 		}
@@ -212,6 +216,10 @@ func (c *SourceShareController) ListRemove() {
 			}
 			dhrelation:=new(models.DhRelation)
 			flag:=dhrelation.Delete(map[string]interface{}{"user_id":c.GetSession("Object_id"),"relate_id":v["object_id"].(string),"relate_type":"di_datasource","auth":"owner"})
+			//把di_datasource_share 表里面的关联都删除
+			diDataSourceShare:=new(models.DiDataSourceShare)
+			SourceFlag:=diDataSourceShare.Delete(map[string]interface{}{"datasource_id":v["object_id"]})
+			fmt.Println(SourceFlag)
 			fmt.Println(flag)
 		}
 	}
