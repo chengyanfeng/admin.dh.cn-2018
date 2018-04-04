@@ -152,11 +152,7 @@ func (c *CorpController) Add() {
 	Corp.Name = c.GetString("name")
 	Corp.Email = c.GetString("email")
 	Corp.Mobile = c.GetString("mobile")
-	FindCorp:=new(models.DhCorp).Find(map[string]interface{}{"email":Corp.Email})
-	if FindCorp!=nil{
-		c.EchoJsonErr("邮箱已经存在")
-		c.StopRun()
-	}
+
 	if c.GetString("status") == "1" {
 		Corp.Status = 1
 	} else {
