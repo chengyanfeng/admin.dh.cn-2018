@@ -183,7 +183,16 @@ func (c *SourceShareController) Remove() {
 	if !result {
 		c.EchoJsonErr("删除失败")
 	} else {
-		c.EchoJsonOk()
+		//把DhRealtion中的关联删除
+		dhrelation:=new(models.DhRelation)
+		flag:=dhrelation.Delete(map[string]interface{}{"user_id":c.GetSession("Object_id"),"relate_id":id,"relate_type":"di_datasource","auth":"owner"})
+		if !flag{
+			c.EchoJsonErr("删除失败")
+
+		}else {
+			c.EchoJsonOk()
+
+		}
 	}
 }
 
@@ -201,6 +210,9 @@ func (c *SourceShareController) ListRemove() {
 			if !result {
 				argerr = append(argerr, v["object_id"].(string))
 			}
+			dhrelation:=new(models.DhRelation)
+			flag:=dhrelation.Delete(map[string]interface{}{"user_id":c.GetSession("Object_id"),"relate_id":v["object_id"].(string),"relate_type":"di_datasource","auth":"owner"})
+			fmt.Println(flag)
 		}
 	}
 	if len(argerr[0]) > 0 {
