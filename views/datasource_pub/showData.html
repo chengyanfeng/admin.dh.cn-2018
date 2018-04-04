@@ -83,7 +83,7 @@
     function getColumns() {
 // 加载动态表格
         $.ajax({
-            url: dynamichost,
+            url: dynamicUrl,
             data:JSON.stringify(dataname),
             type: 'post',
             dataType: "json",
@@ -114,7 +114,7 @@
                     $table.bootstrapTable(
                             "refreshOptions",
                             {
-                                url: dynamichost, // 获取数据的地址
+                                url: dynamicUrl, // 获取数据的地址
                                 queryParams:JSON.stringify(datadate) ,
                                 columns:myColumns,
 
