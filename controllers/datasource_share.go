@@ -359,77 +359,91 @@ func (c *SourceShareController) SaveShareCorp() {
 	datasourceid := a["datasourceid"]
 	datasourcename := a["datasourcename"]
 	fmt.Print(datasourceid)
-	args := a["args"]
-	fmt.Print(args)
+	args:= a["args"]
 	m := args.([]interface{})
+	//清空di_datasource_share表id为datasourceid 的所有相关信息
+	flg:=new(models.DiDataSourceShare).Delete(map[string]interface{}{"datasource_id":datasourceid})
+	fmt.Println(flg,"-------------------------------------")
+	//清空dh_reletion表参数为di_datasource_share,user_id,relation_type
+	flge:=new(models.DhRelation).Delete(map[string]interface{}{"relate_id":datasourceid,"auth":"admin_share","relate_type":"di_datasource"})
+	fmt.Println(flge,"-------------------------------------")
+
+	//把标志位置为0
+	didatasourceflag:=new(models.DiDatasource).Find(utils.ToString(datasourceid))
+	didatasourceflag.ShareFlag=0
+	didatasourceflag.Save()
+
 	for _, v := range m {
-		deletefilter := utils.P{}
-		corp := make(map[string]interface{})
-		fiter := v.(map[string]interface{})
-		corp["corp_id"] = fiter["corpid"]
-		deletefilter["corp_id"] = fiter["corpid"]
-		deletefilter["datasource_id"] = datasourceid
-		delectlist := new(models.DiDataSourceShare).OrderList(deletefilter)
-		fmt.Print(delectlist)
-		for _, v := range delectlist {
-			//先全部删除团队和数据源的信息
-			flag := new(models.DiDataSourceShare).Delete(v.ObjectId)
-			fmt.Print(flag)
-		}
-		//把标志位置为0
-		didatasourceflag:=new(models.DiDatasource).Find(utils.ToString(datasourceid))
-		didatasourceflag.ShareFlag=0
-		 didatasourceflag.Save()
-		parameter := fiter["filter"]
-		//查询出团队的所有成员
-		DhUserCorp := new(models.DhUserCorp).OrderList(corp, "-create_time")
-		fmt.Print(DhUserCorp)
-		for _, v := range DhUserCorp {
-			disourceshare := new(models.DiDataSourceShare)
-			disourceshare.DatasourceId = utils.ToString(datasourceid);
-			disourceshare.UserId = v.UserId
-			disourceshare.CorpId = v.CorpId
-			disourceshare.Name = utils.ToString(datasourcename)
-			disourceshare.Fields = utils.ToString(parameter)
-			//如果字段不是为1 的话，说明是部分显示
-			if parameter == "1" {
-				disourceshare.IsFullShow = "1"
-			} else {
-				disourceshare.IsFullShow = "0"
-			}
-			flag := disourceshare.Save()
-			if flag == true {
-				//保存到关联表中
-				//先把上面保存的数据，根据uerid,和corpid,和dataource_id 三个条件确定一个数据 查询出来
-				dhrelationmap := map[string]interface{}{}
-				dhrelationmap["user_id"] = v.UserId
-				dhrelationmap["corp_id"] = v.CorpId
-				dhrelationmap["datasource_id"] = utils.ToString(datasourceid)
-				//再把这条数据保存到DhRelation
-				//先查询出数据源的name
-				didatasource:=new(models.DiDatasource).Find(utils.ToString(datasourceid))
-				didatasource.ShareFlag=1
-				//更改分享字段
-				flag:= didatasource.Save()
-				  if flag==true{
-					  dhrelation := new(models.DhRelation)
-					  dhrelation.Name = didatasource.Name
-					  dhrelation.CorpId = v.CorpId
-					  dhrelation.UserId = v.UserId
-					  dhrelation.RelateId =utils.ToString(datasourceid)
-					  dhrelation.Auth = "admin_share"
-					  dhrelation.RelateType = "di_datasource"
-
-					  shareflag := dhrelation.Save()
-					  if shareflag == true {
-						  //暂时不做处理
-					  }
-				  }
-
+			deletefilter := utils.P{}
+			corp := make(map[string]interface{})
+			fiter := v.(map[string]interface{})
+			corp["corp_id"] = fiter["corpid"]
+			deletefilter["corp_id"] = fiter["corpid"]
+			deletefilter["datasource_id"] = datasourceid
+			delectlist := new(models.DiDataSourceShare).OrderList(deletefilter)
+			fmt.Print(delectlist)
+			for _, v := range delectlist {
+				//先全部删除团队和数据源的信息
+				flag := new(models.DiDataSourceShare).Delete(v.ObjectId)
+				fmt.Print(flag)
 			}
 
+			//把标志位置为0
+			didatasourceflag:=new(models.DiDatasource).Find(utils.ToString(datasourceid))
+			didatasourceflag.ShareFlag=0
+			didatasourceflag.Save()
+			parameter := fiter["filter"]
+			//查询出团队的所有成员
+			DhUserCorp := new(models.DhUserCorp).OrderList(corp, "-create_time")
+			fmt.Print(DhUserCorp)
+			for _, v := range DhUserCorp {
+				disourceshare := new(models.DiDataSourceShare)
+				disourceshare.DatasourceId = utils.ToString(datasourceid);
+				disourceshare.UserId = v.UserId
+				disourceshare.CorpId = v.CorpId
+				disourceshare.Name = utils.ToString(datasourcename)
+				disourceshare.Fields = utils.ToString(parameter)
+				//如果字段不是为1 的话，说明是部分显示
+				if parameter == "1" {
+					disourceshare.IsFullShow = "1"
+				} else {
+					disourceshare.IsFullShow = "0"
+				}
+				flag := disourceshare.Save()
+				if flag == true {
+					//保存到关联表中
+					//先把上面保存的数据，根据uerid,和corpid,和dataource_id 三个条件确定一个数据 查询出来
+					dhrelationmap := map[string]interface{}{}
+					dhrelationmap["user_id"] = v.UserId
+					dhrelationmap["corp_id"] = v.CorpId
+					dhrelationmap["datasource_id"] = utils.ToString(datasourceid)
+					//再把这条数据保存到DhRelation
+					//先查询出数据源的name
+					didatasource:=new(models.DiDatasource).Find(utils.ToString(datasourceid))
+					didatasource.ShareFlag=1
+					//更改分享字段
+					flag:= didatasource.Save()
+					if flag==true{
+						dhrelation := new(models.DhRelation)
+						dhrelation.Name = didatasource.Name
+						dhrelation.CorpId = v.CorpId
+						dhrelation.UserId = v.UserId
+						dhrelation.RelateId =utils.ToString(datasourceid)
+						dhrelation.Auth = "admin_share"
+						dhrelation.RelateType = "di_datasource"
+
+						shareflag := dhrelation.Save()
+						if shareflag == true {
+							//暂时不做处理
+						}
+					}
+
+				}
+
+			}
+
 		}
 
-	}
+
 	c.EchoJsonOk()
 }
