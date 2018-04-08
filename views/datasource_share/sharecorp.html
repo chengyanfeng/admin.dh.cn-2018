@@ -1,7 +1,9 @@
 <div id="pad-wrapper" class="form-page">
     <div class="row-fluid form-wrapper">
         <input   id="searchCropName" style="margin-left:16px;border-right-width: 0px;border-left-width: 0px;border-top-width:0px;margin-bottom:5px;border-bottom-width: 1px;border-bottom-color: #d9d9d9;outline: none" placeholder="请输入团队名称........"/>
-        <input type="button" value="搜索"  class="btn btn-lg" style="margin-top:-5px;width:50px;height: 28px"  onclick="searchCorpName()"/>
+        <input type="button" value="搜索" id="searchCrop" class="btn btn-lg" style="margin-top:-5px;width:50px;height: 28px"  onclick="searchCorpName()"/>
+        <input   id="corpName" style="display:none;border: 0px;outline:none;cursor: pointer;outline: none" type="text" />
+
         <div class="span12 column" style="overflow: auto;height: 350px;width:490px;float:left;border: 1px solid;border-color:#F8F8FF" id="userCorp" >
             <input id="datashareid" style="display: none" corpIdlist="{{.corpIdlist}}" name="{{.DatasourceName}}" value="{{.id}}"/>
             <table operation="update" object="admin/datasource"  class="table table-bordered table-hover"
@@ -53,6 +55,7 @@
         <div id="savefilter" style="display:none ">
             <input type="button" value="保存" style="margin-left:200px;margin-top: 20px"
                    onclick="savefilter()" class="btn-flat default"/>
+            <input type="button" value="取消" style="margin-top: 20px" class="btn btn-lg"   onclick="cancelfilter()"/>
         </div>
         <div id="save_sharecorp" style="">
             <input type="button" value="保存" id="savesharedata"  class="btn-flat default" style="margin-left:300px; "
@@ -85,14 +88,21 @@
     $(".sharecorp").change(function () {
         var flag = $(this).attr("value")
         var corpid = $(this).parent().parent().children('td:eq(4)').text()
+        var corpName = $(this).parent().parent().children('td:eq(1)').text()+"团队"
         if (flag == 0) {
 
             //显示字段选项
             $("#datasharefilter").css("display", "")
             $("#savefilter").css("display","")
+            $("#corpName").css("display","")
+            $("#corpName").attr("value",corpName)
            //隐藏团队表
            $("#userCorp").css("display","none")
             $("#save_sharecorp").css("display","none")
+            //隐藏搜索团队
+            $("#searchCropName").css("display","none")
+            $("#searchCrop").css("display","none")
+
             var dataid = $("#datashareid").val()
             getfilterlist(dataid, corpid);
             //给上面添加进去的元素绑定筛选事件
@@ -245,9 +255,16 @@
         //隐藏字段选项
         $("#datasharefilter").css("display", "none")
         $("#savefilter").css("display","none")
+        //隐藏显示字段
+        $("#corpName").css("display","none")
         //显示团队表
         $("#userCorp").css("display","")
         $("#save_sharecorp").css("display","")
+        //显示搜索团队表
+        $("#searchCropName").css("display","")
+        $("#searchCrop").css("display","")
+
+
 
 
 
@@ -258,9 +275,13 @@
         //隐藏字段选项
         $("#datasharefilter").css("display", "none")
         $("#savefilter").css("display","none")
+        $("#corpName").css("display","none")
+
         //显示团队表
         $("#userCorp").css("display","")
         $("#save_sharecorp").css("display","")
+        $("#searchCropName").css("display","")
+        $("#searchCrop").css("display","")
 
     }
     var fomdata=new FormData()
@@ -366,6 +387,7 @@ function searchCorpName() {
     center("600px")
     common_open_dialog("分享团队",url,"modal")
 }
+
 
 
     window.onload = checkcorp();
