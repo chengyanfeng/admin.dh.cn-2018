@@ -19,8 +19,8 @@ if (dynamichost.indexOf("test")>-1){
     objectupurl="/https://test.datahunter.cn/v2/api/upload/"
 }
 if (dynamichost.indexOf("localhost")>-1){
-    dynamicUrl="https://test.datahunter.cn/rpc"
-    objectupurl="/https://test.datahunter.cn/v2/api/upload/"
+    dynamicUrl="https://dev.datahunter.cn/rpc"
+    objectupurl="/https://dev.datahunter.cn/v2/api/upload/"
 }
 
 
@@ -721,7 +721,8 @@ ShareDataSourceArgs={
     table:'',
     _id:'',
     url:'',
-    format:''
+    format:'',
+
 
 }
 
