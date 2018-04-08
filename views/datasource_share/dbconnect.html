@@ -113,7 +113,7 @@
 
     })
     function save_connect() {
-
+        debugger
         var dbconnectsave={
             act:'',
             args:''
@@ -132,17 +132,21 @@
             username:'',
             password:''
         }
-       if($("#host").attr("value").length=0){
+       if($("#host").attr("value").length==0){
            alert("请输入服务器地址");
+           return
        }
-        if($("#port").attr("value").length=0){
+        if($("#port").attr("value").length==0){
             alert("请输入端口号");
+            return
         }
-        if($("#username").attr("value").length=0){
+        if($("#username").attr("value").length==0){
             alert("请输入用户名");
+            return
         }
-        if($("#password").attr("value").length=0){
+        if($("#password").attr("value").length==0){
             alert("请输入密码");
+            return
         }
         dbs.name=$("#name").attr("value")
         dbs.username=$("#username").attr("value")
